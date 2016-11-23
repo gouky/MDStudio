@@ -1,0 +1,225 @@
+<?xml version="1.0"?>
+
+<!-- Syntaxdefinition for SQL, v0.1 Rev 1 by Jochen Wezel -->
+<!-- Updated 2010 by Jochen Wezel -->
+
+<SyntaxDefinition name = "SQL" extensions = ".sql">
+
+  <Properties>
+    <Property name="LineComment" value="--"/>
+    <Property name="BlockCommentBegin" value="/*"/>
+    <Property name="BlockCommentEnd" value="*/"/>
+  </Properties>
+
+  <Digits name = "Digits"   bold = "false" italic = "false" color = "Black"/>
+
+  <RuleSets>
+    <RuleSet ignorecase = "true">
+
+      <Delimiters>~!@%^*()-+=|\#/{}[]:;'&lt;&gt;,.?</Delimiters>
+
+      <Span name = "BlockComment" rule = "CommentMarkerSet" bold = "false" italic = "false" color = "Green" stopateol = "false">
+        <Begin>/*</Begin>
+        <End>*/</End>
+      </Span>
+
+      <Span name = "STRING" bold = "false" italic = "false" color = "Black" stopateol = "true" escapecharacter='"'>
+        <Begin>'</Begin>
+        <End>'</End>
+      </Span>
+      <!--
+		    <Span name = "LINECOMMENT" rule = "DocumentSet" bold = "false" italic = "false" color = "Green" stopateol = "true">
+		        <Begin>'</Begin>
+		    </Span>
+		
+		    <Span name = "LINECOMMENT" rule = "DocumentSet" bold = "false" italic = "false" color = "Green" stopateol = "true">
+		        <Begin>REM</Begin>
+		    </Span>
+-->
+      <!--<Span name = "PREPROCESSORDIRECTIVE" rule = "PreprocessorSet" bold = "false" italic = "false" color = "Maroon" stopateol = "true">
+				<Begin startofline="true">#</Begin>
+			</Span>
+			
+			<Span name = "DATELITERAL" bold = "false" italic = "false" color = "Blue" stopateol = "true">
+				<Begin startofline="false">#</Begin>
+				<End>#</End>
+			</Span>-->
+
+      <Span name = "LINECOMMENT" bold = "false" italic = "false" color = "Green" stopateol = "true">
+        <Begin>--</Begin>
+      </Span>
+
+      <!--<Span name = "LINECOMMENT" bold = "false" italic = "false" color = "Green" stopateol = "true">
+				<Begin singleword="true">REM@C</Begin>
+			</Span>-->
+
+      <KeyWords name = "DataTypes" bold="false" italic="false" color="#6F002F">
+        <Key word = "bit" />
+        <Key word = "tinyint" />
+        <Key word = "int" />
+        <Key word = "bigint" />
+        <Key word = "decimal" />
+        <Key word = "float" />
+        <Key word = "varchar" />
+        <Key word = "char" />
+        <Key word = "nvarchar" />
+        <Key word = "nchar" />
+        <Key word = "datetime" />
+        <Key word = "text" />
+        <Key word = "ntext" />
+        <Key word = "binary" />
+        <Key word = "image" />
+      </KeyWords>
+
+      <KeyWords name = "Operators" bold="false" italic="false" color="#8515EA">
+        <Key word = "And" />
+        <Key word = "Is" />
+        <Key word = "Like" />
+        <Key word = "Mod" />
+        <Key word = "Between" />
+        <Key word = "Not" />
+        <Key word = "Or" />
+        <Key word = "Xor" />
+      </KeyWords>
+
+      <KeyWords name = "Constants" bold="false" italic="false" color="Blue">
+        <Key word = "NULL" />
+      </KeyWords>
+
+      <KeyWords name = "CommonKeywords" bold="false" italic="false" color="Blue">
+        <Key word = "As" />
+        <Key word = "Begin" />
+        <Key word = "End" />
+      </KeyWords>
+
+      <KeyWords name = "FunctionKeywords" bold="false" italic="false" color="Blue">
+        <Key word = "SELECT" />
+        <Key word = "WHERE" />
+        <Key word = "FROM" />
+        <Key word = "ORDER" />
+        <Key word = "GROUP" />
+        <Key word = "BY" />
+        <Key word = "UPDATE" />
+        <Key word = "DELETE" />
+        <Key word = "INSERT" />
+        <Key word = "INTO" />
+        <Key word = "TOP" />
+        <Key word = "Cast" />
+        <Key word = "Convert" />
+        <Key word = "IsNull" />
+      </KeyWords>
+
+      <KeyWords name = "ParamModifiers" bold="false" italic="false" color="Blue">
+        <Key word = "input" />
+        <Key word = "output" />
+        <Key word = "returnvalue" />
+        <Key word = "return" />
+      </KeyWords>
+
+      <KeyWords name = "AccessModifiers" bold="false" italic="false" color="Blue">
+      </KeyWords>
+
+      <KeyWords name = "OtherModifiers" bold="false" italic="false" color="Blue">
+        <Key word = "WITH ENCRYPTION" />
+      </KeyWords>
+
+      <KeyWords name = "Statements" bold="false" italic="false" color="Blue">
+        <Key word = "Begin Trans" />
+        <Key word = "Begin Transaction" />
+        <Key word = "CREATE" />
+        <Key word = "ALTER" />
+        <Key word = "DROP" />
+        <Key word = "GO" />
+        <Key word = "Throw" />
+        <Key word = "Stop" />
+        <Key word = "Return" />
+        <Key word = "Resume" />
+        <Key word = "RaiseEvent" />
+        <Key word = "Option" />
+        <Key word = "Set" />
+        <Key word = "GoTo" />
+        <Key word = "Continue" />
+        <Key word = "Declare" />
+        <Key word = "On" />
+        <Key word = "Error" />
+        <Key word = "Exit" />
+      </KeyWords>
+
+      <KeyWords name = "GlobalConstructs" bold="false" italic="false" color="Blue">
+        <!--<Key word = "Namespace" />
+				<Key word = "Class" />
+				<Key word = "Imports" />
+				<Key word = "Implements" />
+				<Key word = "Inherits" />
+				<Key word = "Interface" />
+				<Key word = "Delegate" />
+				<Key word = "Module" />
+				<Key word = "Structure" />
+				<Key word = "Enum" />-->
+      </KeyWords>
+
+      <KeyWords name = "TypeLevelConstructs" bold="false" italic="false" color="Blue">
+        <Key word = "PROC" />
+        <Key word = "PROCEDURE" />
+        <Key word = "VIEW" />
+        <Key word = "TABLE" />
+        <Key word = "FUNCTION" />
+        <Key word = "TRIGGER" />
+      </KeyWords>
+
+      <KeyWords name = "Constructs" bold="false" italic="false" color="Blue">
+        <Key word = "With" />
+        <Key word = "While" />
+        <Key word = "End While" />
+
+        <Key word = "Try" />
+        <Key word = "Catch" />
+        <Key word = "Finally" />
+
+        <Key word = "If" />
+        <Key word = "Then" />
+        <Key word = "Else" />
+        <Key word = "ElseIf" />
+        <Key word = "EndIf" />
+
+        <Key word = "For" />
+        <Key word = "To" />
+        <Key word = "Next" />
+
+        <Key word = "Case" />
+        <Key word = "When" />
+      </KeyWords>
+
+      <KeyWords name = "ContextKeywords" bold="false" italic="false" color="Blue">
+        <!--<Key word = "Ansi" />
+				<Key word = "Auto" />
+				<Key word = "Unicode" />
+				<Key word = "Preserve" />
+				<Key word = "Until" />-->
+      </KeyWords>
+    </RuleSet>
+
+    <RuleSet name = "CommentMarkerSet" ignorecase = "false">
+      <Delimiters>&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' ,	.?</Delimiters>
+      <KeyWords name = "ErrorWords" bold="true" italic="false" color="Red">
+      </KeyWords>
+      <KeyWords name = "WarningWords" bold="true" italic="false" color="#EEE0E000">
+      </KeyWords>
+    </RuleSet>
+
+    <!--<RuleSet name = "PreprocessorSet" ignorecase = "true">
+      <Delimiters>~!@%^*()-+=|\#/{}[]:;"'&lt;&gt;,.?</Delimiters>
+
+      <KeyWords name = "PreProcessor" bold="true" italic="false" color="Maroon">
+        --><!--<Key word = "Const" />
+				<Key word = "If" />
+				<Key word = "ElseIf" /> 
+				<Key word = "Else" />
+				<Key word = "End" />
+				<Key word = "ExternalSource" />
+				<Key word = "Region" />
+				<Key word = "ExternalChecksum" />--><!--
+      </KeyWords>
+    </RuleSet>-->
+  </RuleSets>
+</SyntaxDefinition>

@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\dz80">
+      <UniqueIdentifier>{f0c003bf-1e3c-4b19-8c13-74f32ccaff0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\linenoise">
+      <UniqueIdentifier>{899d3bce-af4e-4c51-b9c3-585d1e2f9562}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\musa">
+      <UniqueIdentifier>{00fdf477-af56-41a3-8dde-dfc8e91b7ea0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sdl">
+      <UniqueIdentifier>{eecb98d2-1456-4934-bbc5-5110b29f63f2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="decode.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dgen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dz80\config.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dz80\dissz80.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dz80\example.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dz80\loadfile.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dz80\noscript.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dz80\parsecmd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dz80\script.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dz80\tables.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="graph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="joystick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="md.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mdfr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="musa\m68kcpu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="musa\m68kdasm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="musa\m68kops.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="myfm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ras.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="romload.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="save.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn76496.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="system.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vdp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linenoise\linenoise.c">
+      <Filter>Source Files\linenoise</Filter>
+    </ClCompile>
+    <ClCompile Include="linenoise\utf8.c">
+      <Filter>Source Files\linenoise</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ckvp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="decode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dgen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dz80\types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="md.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ras-drawplane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rc-vars.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="romload.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sdl\pd-defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sn76496.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dz80\dissz80.h">
+      <Filter>Source Files\dz80</Filter>
+    </ClInclude>
+    <ClInclude Include="dz80\dissz80p.h">
+      <Filter>Source Files\dz80</Filter>
+    </ClInclude>
+    <ClInclude Include="musa\m68k.h">
+      <Filter>Source Files\musa</Filter>
+    </ClInclude>
+    <ClInclude Include="musa\m68kcpu.h">
+      <Filter>Source Files\musa</Filter>
+    </ClInclude>
+    <ClInclude Include="musa\m68kops.h">
+      <Filter>Source Files\musa</Filter>
+    </ClInclude>
+    <ClInclude Include="memcpy.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="linenoise\linenoise.h">
+      <Filter>Source Files\linenoise</Filter>
+    </ClInclude>
+    <ClInclude Include="linenoise\utf8.h">
+      <Filter>Source Files\linenoise</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="linenoise\README.markdown" />
+  </ItemGroup>
+</Project>

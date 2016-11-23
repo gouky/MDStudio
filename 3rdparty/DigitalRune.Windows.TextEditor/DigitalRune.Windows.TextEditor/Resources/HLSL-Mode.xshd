@@ -1,0 +1,2457 @@
+<?xml version="1.0"?>
+<!-- Syntax definition for HLSL and DirectX Effect Files by Martin Garstenauer -->
+
+<SyntaxDefinition name = "HLSL" extensions = ".fx;.fxh;.hlsl">
+
+  <Environment>
+    <Custom name="TypeReference" bold="false" italic="false" color="#04ABAB" />
+    <Custom name="UnknownEntity" bold="false" italic="false" color="#AB0404" />
+  </Environment>
+
+  <Properties>
+    <Property name="LineComment" value="//"/>
+    <Property name="BlockCommentBegin" value="/*"/>
+    <Property name="BlockCommentEnd" value="*/"/>
+  </Properties>
+
+  <Digits name = "Digits" bold = "false" italic = "false" color = "DarkRed"/>
+
+  <RuleSets>
+    <RuleSet ignorecase="false">
+      <Delimiters>&amp;&lt;&gt;~!%^*()-+=|\/{}[]:;"' , .?</Delimiters>
+
+      <Span name = "LineComment" rule = "CommentMarkerSet" bold = "false" italic = "false" color = "Green" stopateol = "true">
+        <Begin>//</Begin>
+      </Span>
+
+      <Span name = "BlockComment" rule = "CommentMarkerSet" bold = "false" italic = "false" color = "Green" stopateol = "false">
+        <Begin>/*</Begin>
+        <End>*/</End>
+      </Span>
+
+      <Span name = "include" rule = "IncludeStatemetSet" bold = "false" italic = "false" color = "Black" stopateol = "true" escapecharacter="\">
+        <Begin startofline="true" color = "Blue">#include</Begin>
+      </Span>
+
+      <Span name = "technique" rule = "TechniquesAndPassesSet" bold = "false" italic = "false" color = "Black" stopateol = "false">
+        <Begin singleword = "true" bold = "false" italic = "false" color = "BlueViolet">technique</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "technique" rule = "TechniquesAndPassesSet" bold = "false" italic = "false" color = "Black" stopateol = "false">
+        <Begin singleword = "true" bold = "false" italic = "false" color = "BlueViolet">Technique</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "technique10" rule = "TechniquesAndPassesSet" bold = "false" italic = "false" color = "Black" stopateol = "false">
+        <Begin singleword = "true" bold = "false" italic = "false" color = "BlueViolet">technique10</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "sampler_state" rule = "TechniquesAndPassesSet" bold = "false" italic = "false" color = "Black" stopateol = "false">
+        <Begin singleword = "true" bold = "false" italic = "false" color = "Blue">sampler_state</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "SamplerState" rule = "TechniquesAndPassesSet" bold = "false" italic = "false" color = "Black" stopateol = "false">
+        <Begin singleword = "true" bold = "false" italic = "false" color = "Blue">SamplerState</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "SamplerComparisonState" rule = "TechniquesAndPassesSet" bold = "false" italic = "false" color = "Black" stopateol = "false">
+        <Begin singleword = "true" bold = "false" italic = "false" color = "Blue">SamplerComparisonState</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "StateBlock" rule = "TechniquesAndPassesSet" bold = "false" italic = "false" color = "Black" stopateol = "false">
+        <Begin singleword = "true" bold = "false" italic = "false" color = "Blue">stateblock_state</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "BlendState" rule = "TechniquesAndPassesSet" bold = "false" italic = "false" color = "Black" stopateol = "false">
+        <Begin singleword = "true" bold = "false" italic = "false" color = "Blue">BlendState</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "DepthStencilState" rule = "TechniquesAndPassesSet" bold = "false" italic = "false" color = "Black" stopateol = "false">
+        <Begin singleword = "true" bold = "false" italic = "false" color = "Blue">DepthStencilState</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "RasterizerState" rule = "TechniquesAndPassesSet" bold = "false" italic = "false" color = "Black" stopateol = "false">
+        <Begin singleword = "true" bold = "false" italic = "false" color = "Blue">RasterizerState</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "asm" rule = "AssemblerSet" bold = "false" italic = "false" color = "Black" stopateol = "false">
+        <Begin singleword = "true" bold = "false" italic = "false" color = "Blue">asm</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "String" bold = "false" italic = "false" color = "DarkRed" stopateol = "true" escapecharacter="\">
+        <Begin>"</Begin>
+        <End>"</End>
+      </Span>
+
+      <Span name = "Char" bold = "false" italic = "false" color = "DarkRed" stopateol = "true" escapecharacter="\">
+        <Begin>&apos;</Begin>
+        <End>&apos;</End>
+      </Span>
+
+      <!-- Functions 
+      <MarkPrevious bold = "true" italic = "false" color = "MidnightBlue">(</MarkPrevious>
+      -->
+
+      <!-- Semantics -->
+      <MarkFollowing bold = "true" italic = "false" color = "Gray">:</MarkFollowing>
+
+      <KeyWords name = "Punctuation" bold = "false" italic = "false" color = "Black">
+        <Key word = "?" />
+        <Key word = "," />
+        <Key word = "." />
+        <Key word = ";" />
+        <Key word = "(" />
+        <Key word = ")" />
+        <Key word = "[" />
+        <Key word = "]" />
+        <Key word = "{" />
+        <Key word = "}" />
+        <Key word = "+" />
+        <Key word = "-" />
+        <Key word = "/" />
+        <Key word = "%" />
+        <Key word = "*" />
+        <Key word = "&lt;" />
+        <Key word = "&gt;" />
+        <Key word = "^" />
+        <Key word = "=" />
+        <Key word = "~" />
+        <Key word = "!" />
+        <Key word = "|" />
+        <Key word = "&amp;" />
+      </KeyWords>
+
+      <KeyWords name = "StorageClass" bold="false" italic="false" color="Brown">
+        <Key word = "const" />
+        <Key word = "extern" />
+        <Key word = "nointerpolation" />
+        <Key word = "register" />
+        <Key word = "shared" />
+        <Key word = "static" />
+        <Key word = "uniform" />
+        <Key word = "volatile" />
+      </KeyWords>
+
+      <KeyWords name = "InterpolationModifiers" bold="false" italic="false" color="Brown">
+        <Key word = "_linear" />
+        <Key word = "_centroid" />
+        <Key word = "_nointerpolation" />
+        <Key word = "_noperspective" />
+      </KeyWords>
+
+      <KeyWords name = "TypeModifiers" bold="false" italic="false" color="Brown">
+        <Key word = "row_major" />
+        <Key word = "column_major" />
+        <Key word = "snorm" />
+        <Key word = "unorm" />
+      </KeyWords>
+
+      <KeyWords name = "DataTypes" bold="false" italic="false" color="Blue">
+        <Key word = "Buffer" />
+
+        <Key word = "bool" />
+        <Key word = "bool1" />
+        <Key word = "bool2" />
+        <Key word = "bool3" />
+        <Key word = "bool4" />
+        <Key word = "bool1x1" />
+        <Key word = "bool1x2" />
+        <Key word = "bool1x3" />
+        <Key word = "bool1x4" />
+        <Key word = "bool2x1" />
+        <Key word = "bool2x2" />
+        <Key word = "bool2x3" />
+        <Key word = "bool2x4" />
+        <Key word = "bool3x1" />
+        <Key word = "bool3x2" />
+        <Key word = "bool3x3" />
+        <Key word = "bool3x4" />
+        <Key word = "bool4x1" />
+        <Key word = "bool4x2" />
+        <Key word = "bool4x3" />
+        <Key word = "bool4x4" />
+
+        <Key word = "int" />
+        <Key word = "int1" />
+        <Key word = "int2" />
+        <Key word = "int3" />
+        <Key word = "int4" />
+        <Key word = "int1x1" />
+        <Key word = "int1x2" />
+        <Key word = "int1x3" />
+        <Key word = "int1x4" />
+        <Key word = "int2x1" />
+        <Key word = "int2x2" />
+        <Key word = "int2x3" />
+        <Key word = "int2x4" />
+        <Key word = "int3x1" />
+        <Key word = "int3x2" />
+        <Key word = "int3x3" />
+        <Key word = "int3x4" />
+        <Key word = "int4x1" />
+        <Key word = "int4x2" />
+        <Key word = "int4x3" />
+        <Key word = "int4x4" />
+
+        <Key word = "uint" />
+        <Key word = "uint1" />
+        <Key word = "uint2" />
+        <Key word = "uint3" />
+        <Key word = "uint4" />
+        <Key word = "uint1x1" />
+        <Key word = "uint1x2" />
+        <Key word = "uint1x3" />
+        <Key word = "uint1x4" />
+        <Key word = "uint2x1" />
+        <Key word = "uint2x2" />
+        <Key word = "uint2x3" />
+        <Key word = "uint2x4" />
+        <Key word = "uint3x1" />
+        <Key word = "uint3x2" />
+        <Key word = "uint3x3" />
+        <Key word = "uint3x4" />
+        <Key word = "uint4x1" />
+        <Key word = "uint4x2" />
+        <Key word = "uint4x3" />
+        <Key word = "uint4x4" />
+
+        <Key word = "half" />
+        <Key word = "half1" />
+        <Key word = "half2" />
+        <Key word = "half3" />
+        <Key word = "half4" />
+        <Key word = "half1x1" />
+        <Key word = "half1x2" />
+        <Key word = "half1x3" />
+        <Key word = "half1x4" />
+        <Key word = "half2x1" />
+        <Key word = "half2x2" />
+        <Key word = "half2x3" />
+        <Key word = "half2x4" />
+        <Key word = "half3x1" />
+        <Key word = "half3x2" />
+        <Key word = "half3x3" />
+        <Key word = "half3x4" />
+        <Key word = "half4x1" />
+        <Key word = "half4x2" />
+        <Key word = "half4x3" />
+        <Key word = "half4x4" />
+
+        <Key word = "float" />
+        <Key word = "float1" />
+        <Key word = "float2" />
+        <Key word = "float3" />
+        <Key word = "float4" />
+        <Key word = "float1x1" />
+        <Key word = "float1x2" />
+        <Key word = "float1x3" />
+        <Key word = "float1x4" />
+        <Key word = "float2x1" />
+        <Key word = "float2x2" />
+        <Key word = "float2x3" />
+        <Key word = "float2x4" />
+        <Key word = "float3x1" />
+        <Key word = "float3x2" />
+        <Key word = "float3x3" />
+        <Key word = "float3x4" />
+        <Key word = "float4x1" />
+        <Key word = "float4x2" />
+        <Key word = "float4x3" />
+        <Key word = "float4x4" />
+
+        <Key word = "double" />
+        <Key word = "double1" />
+        <Key word = "double2" />
+        <Key word = "double3" />
+        <Key word = "double4" />
+        <Key word = "double1x1" />
+        <Key word = "double1x2" />
+        <Key word = "double1x3" />
+        <Key word = "double1x4" />
+        <Key word = "double2x1" />
+        <Key word = "double2x2" />
+        <Key word = "double2x3" />
+        <Key word = "double2x4" />
+        <Key word = "double3x1" />
+        <Key word = "double3x2" />
+        <Key word = "double3x3" />
+        <Key word = "double3x4" />
+        <Key word = "double4x1" />
+        <Key word = "double4x2" />
+        <Key word = "double4x3" />
+        <Key word = "double4x4" />
+       
+        <Key word = "vector" />
+        <Key word = "matrix" />
+
+        <Key word = "void" />
+        <Key word = "struct" />
+        <Key word = "cbuffer" />
+        <Key word = "tbuffer" />
+
+        <Key word = "string" />
+
+        <Key word = "vertexfragment" />
+        <Key word = "pixelfragment" />
+      </KeyWords>
+
+      <KeyWords name = "SamplerTypes" bold="false" italic="false" color="Blue">
+        <Key word = "sampler" />
+        <Key word = "sampler1D" />
+        <Key word = "sampler2D" />
+        <Key word = "sampler3D" />
+        <Key word = "samplerCUBE" />
+        <Key word = "sampler_state" />
+        <Key word = "SamplerState" />
+        <Key word = "SamplerComparisonState" />
+      </KeyWords>
+
+      <KeyWords name = "StateBlock" bold="false" italic="false" color="Blue">
+        <Key word = "STATEBLOCK" />
+        <Key word = "StateBlock" />
+        <Key word = "stateblock" />
+        <Key word = "stateblock_state" />
+      </KeyWords>
+
+      <KeyWords name = "TextureTypes" bold="false" italic="false" color="Blue">
+        <Key word = "texture" />
+        <Key word = "Texture1D" />
+        <Key word = "texture1D" />
+        <Key word = "texture1d" />
+        <Key word = "Texture1DArray" />
+        <Key word = "texture1DArray" />
+        <Key word = "Texture1dArray" />
+        <Key word = "texture1darray" />
+        <Key word = "Texture2D" />
+        <Key word = "texture2D" />
+        <Key word = "texture2d" />
+        <Key word = "Texture2DArray" />
+        <Key word = "texture2DArray" />
+        <Key word = "Texture2dArray" />
+        <Key word = "texture2darray" />
+        <Key word = "Texture2DMS" />
+        <Key word = "texture2DMS" />
+        <Key word = "Texture2dMs" />
+        <Key word = "texture2dms" />
+        <Key word = "Texture2DMSArray" />
+        <Key word = "texture2DMSArray" />
+        <Key word = "Texture2dMsArray" />
+        <Key word = "texture2DMsArray" />
+        <Key word = "texture2dmsarray" />
+        <Key word = "Texture3D" />
+        <Key word = "texture3D" />
+        <Key word = "texture3d" />
+        <Key word = "TextureCUBE" />
+        <Key word = "textureCUBE" />
+        <Key word = "TextureCube" />
+        <Key word = "textureCube" />
+        <Key word = "texturecube" />
+      </KeyWords>
+
+      <KeyWords name = "UserDefinedTypes" bold="false" italic="false" color="Blue">
+        <Key word = "typedef" />
+      </KeyWords>
+
+      <KeyWords name = "SelectionStatements" bold="false" italic="false" color="Blue">
+        <Key word = "else" />
+        <Key word = "if" />
+        <Key word = "switch" />
+        <Key word = "case" />
+        <Key word = "default" />
+      </KeyWords>
+
+      <KeyWords name = "StatementModifiers" bold="false" italic="false" color="Brown">
+        <Key word = "unroll" />
+        <Key word = "loop" />
+        <Key word = "branch" />
+        <Key word = "flatten" />
+      </KeyWords>
+
+      <KeyWords name = "IterationStatements" bold="false" italic="false" color="Blue">
+        <Key word = "do" />
+        <Key word = "for" />
+        <Key word = "while" />
+      </KeyWords>
+
+      <KeyWords name = "JumpStatements" bold="false" italic="false" color="Blue">
+        <Key word = "break" />
+        <Key word = "continue" />
+        <Key word = "discard" />
+        <Key word = "stop" />
+        <Key word = "return" />
+      </KeyWords>
+
+      <KeyWords name = "FunctionStorageClass" bold="false" italic="false" color="Brown">
+        <Key word = "inline" />
+        <Key word = "target" />
+      </KeyWords>
+
+      <KeyWords name = "InputModifiers" bold="false" italic="false" color="Brown">
+        <Key word = "in" />
+        <Key word = "inout" />
+        <Key word = "out" />
+      </KeyWords>
+
+      <KeyWords name = "Literals" bold="false" italic="false" color="Blue">
+        <Key word = "true" />
+        <Key word = "false" />
+        <Key word = "NULL" />
+      </KeyWords>
+
+      <KeyWords name = "Macros" bold="true" italic="false" color="Black">
+        <Key word = "__LINE__" />
+        <Key word = "__FILE__" />
+      </KeyWords>
+
+      <KeyWords name = "GeometryShaderAttributes" bold="false" italic="false" color="Brown">
+        <Key word = "maxvertexcount" />
+      </KeyWords>
+
+      <KeyWords name = "PrimitiveType" bold="false" italic="false" color="Brown">
+        <Key word = "point" />
+        <Key word = "line" />
+        <Key word = "triangle" />
+        <Key word = "lineadj" />
+        <Key word = "triangleadj" />
+      </KeyWords>
+
+      <KeyWords name = "StreamOutputObjectTypes" bold="false" italic="false" color="Blue">
+        <Key word = "PointStream" />
+        <Key word = "LineStream" />
+        <Key word = "TriangleStream" />
+      </KeyWords>
+
+      <KeyWords name = "IntrinsicFunctions" bold="false" italic="false" color="Blue">
+        <Key word = "Append" />
+        <Key word = "RestartStrip" />
+        <Key word = "abs" />
+        <Key word = "acos" />
+        <Key word = "all" />
+        <Key word = "any" />
+        <Key word = "asfloat" />
+        <Key word = "asin" />
+        <Key word = "asint" />
+        <Key word = "asuint" />
+        <Key word = "atan" />
+        <Key word = "atan2" />
+        <Key word = "ceil" />
+        <Key word = "clamp" />
+        <Key word = "clip" />
+        <Key word = "cos" />
+        <Key word = "cosh" />
+        <Key word = "cross" />
+        <Key word = "D3DCOLORtoUBYTE4" />
+        <Key word = "ddx" />
+        <Key word = "ddy" />
+        <Key word = "degrees" />
+        <Key word = "determinant" />
+        <Key word = "distance" />
+        <Key word = "dot" />
+        <Key word = "exp" />
+        <Key word = "exp2" />
+        <Key word = "faceforward" />
+        <Key word = "floor" />
+        <Key word = "fmod" />
+        <Key word = "frac" />
+        <Key word = "frexp" />
+        <Key word = "fwidth" />
+        <Key word = "GetRenderTargetSampleCount" />
+        <Key word = "GetRenderTargetSamplePosition" />
+        <Key word = "isfinite" />
+        <Key word = "isinf" />
+        <Key word = "isnan" />
+        <Key word = "ldexp" />
+        <Key word = "length" />
+        <Key word = "lerp" />
+        <Key word = "lit" />
+        <Key word = "log" />
+        <Key word = "log10" />
+        <Key word = "log2" />
+        <Key word = "max" />
+        <Key word = "min" />
+        <Key word = "modf" />
+        <Key word = "mul" />
+        <Key word = "noise" />
+        <Key word = "normalize" />
+        <Key word = "pow" />
+        <Key word = "radians" />
+        <Key word = "reflect" />
+        <Key word = "refract" />
+        <Key word = "round" />
+        <Key word = "rsqrt" />
+        <Key word = "saturate" />
+        <Key word = "sign" />
+        <Key word = "sin" />
+        <Key word = "sincos" />
+        <Key word = "sinh" />
+        <Key word = "smoothstep" />
+        <Key word = "sqrt" />
+        <Key word = "step" />
+        <Key word = "tan" />
+        <Key word = "tanh" />
+        <Key word = "tex1D" />
+        <Key word = "tex1Dbias" />
+        <Key word = "tex1Dgrad" />
+        <Key word = "tex1Dlod" />
+        <Key word = "tex1Dproj" />
+        <Key word = "tex2D" />
+        <Key word = "tex2Dbias" />
+        <Key word = "tex2Dgrad" />
+        <Key word = "tex2Dlod" />
+        <Key word = "tex2Dproj" />
+        <Key word = "tex3D" />
+        <Key word = "tex3Dbias" />
+        <Key word = "tex3Dgrad" />
+        <Key word = "tex3Dlod" />
+        <Key word = "tex3Dproj" />
+        <Key word = "texCUBE" />
+        <Key word = "texCUBEbias" />
+        <Key word = "texCUBEgrad" />
+        <Key word = "texCUBElod" />
+        <Key word = "texCUBEproj" />
+        <Key word = "transpose" />
+        <Key word = "trunc" />
+      </KeyWords>
+
+      <KeyWords name = "TextureMethods" bold="false" italic="false" color="Blue">
+        <Key word = "CalculateLevelOfDetail" />
+        <Key word = "CalculateLevelOfDetailUnclamped" />
+        <Key word = "Gather" />
+        <Key word = "GetDimensions" />
+        <Key word = "GetSamplePosition" />
+        <Key word = "Load" />
+        <Key word = "Sample" />
+        <Key word = "SampleBias" />
+        <Key word = "SampleCmp" />
+        <Key word = "SampleCmpLevelZero" />
+        <Key word = "SampleGrad" />
+        <Key word = "SampleLevel" />
+      </KeyWords>
+
+      <KeyWords name = "ShaderModels" bold="false" italic="false" color="Blue">
+        <Key word = "vs_1_1" />
+        <Key word = "vs_2_0" />
+        <Key word = "vs_2_sw" />
+        <Key word = "vs_2_x" />
+        <Key word = "vs_3_0" />
+        <Key word = "vs_3_sw" />
+        <Key word = "vs_4_0" />
+        <Key word = "ps_1_1" />
+        <Key word = "ps_1_2" />
+        <Key word = "ps_1_3" />
+        <Key word = "ps_1_4" />
+        <Key word = "ps_2_0" />
+        <Key word = "ps_2_sw" />
+        <Key word = "ps_2_x" />
+        <Key word = "ps_3_0" />
+        <Key word = "ps_3_sw" />
+        <Key word = "ps_4_0" />
+        <Key word = "ps_4_1" />
+        <Key word = "gs_4_0" />
+        <Key word = "gs_4_1" />
+        <Key word = "fx_4_0" />
+        <Key word = "fx_4_1" />
+      </KeyWords>
+
+      <KeyWords name = "ShaderType" bold="false" italic="false" color="Blue">
+        <Key word = "VertexShader" />
+        <Key word = "GeometryShader" />
+        <Key word = "PixelShader" />
+        <Key word = "compile" />
+        <Key word = "compile_fragment" />
+        <Key word = "CompileShader" />
+      </KeyWords>
+
+      <KeyWords name = "PreprocessorDirectives" bold="false" italic="false" color="Blue">
+        <Key word = "#define" />
+        <Key word = "#elif" />
+        <Key word = "#else" />
+        <Key word = "#endif" />
+        <Key word = "#error" />
+        <Key word = "#if" />
+        <Key word = "#ifdef" />
+        <Key word = "#ifndef" />
+        <Key word = "#include" />
+        <Key word = "#line" />
+        <Key word = "#undef" />
+      </KeyWords>
+    </RuleSet>
+    
+
+    <RuleSet name = "TechniquesAndPassesSet" ignorecase = "false" highlightDigits = "true">
+      <Delimiters>&amp;&lt;&gt;~!%^*()-+=|\/{}[]:;"' , .?</Delimiters>
+
+      <Span name = "LineComment" rule = "CommentMarkerSet" bold = "false" italic = "false" color = "Green" stopateol = "true">
+        <Begin>//</Begin>
+      </Span>
+
+      <Span name = "BlockComment" rule = "CommentMarkerSet" bold = "false" italic = "false" color = "Green" stopateol = "false">
+        <Begin>/*</Begin>
+        <End>*/</End>
+      </Span>
+
+      <Span name = "pass" rule = "TechniquesAndPassesSet" bold = "false" italic = "false" color = "Black" stopateol = "false">
+        <Begin singleword = "true" bold = "false" italic = "false" color = "BlueViolet">pass</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "pass" rule = "TechniquesAndPassesSet" bold = "false" italic = "false" color = "Black" stopateol = "false">
+        <Begin singleword = "true" bold = "false" italic = "false" color = "BlueViolet">Pass</Begin>
+        <End>}</End>
+      </Span>
+
+      <!-- 
+        Some effect files (mainly CgFX files) sometimes use array initializers for effect states, e.g. "ColorMask = { 1, 1, 1, 1 };"
+        But we assume that a '}' closes the current pass.
+        To ignore such initializers, we add the following rule.
+      -->
+      <Span name = "Initializer1" rule = "TechniquesAndPassesSet" bold = "false" italic = "false" color = "Black" stopateol = "true">
+        <Begin>={</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "Initializer2" rule = "TechniquesAndPassesSet" bold = "false" italic = "false" color = "Black" stopateol = "true">
+        <Begin>= {</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "sampler_state" rule = "TechniquesAndPassesSet" bold = "false" italic = "false" color = "Black" stopateol = "false">
+        <Begin singleword = "true" bold = "false" italic = "false" color = "Blue">sampler_state</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "StateBlock" rule = "TechniquesAndPassesSet" bold = "false" italic = "false" color = "Black" stopateol = "false">
+        <Begin singleword = "true" bold = "false" italic = "false" color = "Blue">stateblock_state</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "asm" rule = "AssemblerSet" bold = "false" italic = "false" color = "Black" stopateol = "false">
+        <Begin singleword = "true" bold = "false" italic = "false" color = "Blue">asm</Begin>
+        <End>}</End>
+      </Span>
+
+      <Span name = "String" bold = "false" italic = "false" color = "DarkRed" stopateol = "true" escapecharacter="\">
+        <Begin>"</Begin>
+        <End>"</End>
+      </Span>
+
+      <Span name = "Char" bold = "false" italic = "false" color = "DarkRed" stopateol = "true" escapecharacter="\">
+        <Begin>&apos;</Begin>
+        <End>&apos;</End>
+      </Span>
+
+      <!-- Functions 
+      <MarkPrevious bold = "true" italic = "false" color = "MidnightBlue">(</MarkPrevious>
+      -->
+
+      <!-- Technique -->
+      <MarkFollowing bold = "true" italic = "false" color = "MidnightBlue">technique</MarkFollowing>
+      <MarkFollowing bold = "true" italic = "false" color = "MidnightBlue">Technique</MarkFollowing>
+      <MarkFollowing bold = "true" italic = "false" color = "MidnightBlue">technique10</MarkFollowing>
+      <MarkFollowing bold = "true" italic = "false" color = "MidnightBlue">Technique10</MarkFollowing>
+
+      <!-- Pass -->
+      <MarkFollowing bold = "true" italic = "false" color = "MidnightBlue">pass</MarkFollowing>
+      <MarkFollowing bold = "true" italic = "false" color = "MidnightBlue">Pass</MarkFollowing>
+
+      <!-- Semantics -->
+      <MarkFollowing bold = "true" italic = "false" color = "Gray">:</MarkFollowing>
+
+      <KeyWords name = "Punctuation" bold = "false" italic = "false" color = "Black">
+        <Key word = "?" />
+        <Key word = "," />
+        <Key word = "." />
+        <Key word = ";" />
+        <Key word = "(" />
+        <Key word = ")" />
+        <Key word = "[" />
+        <Key word = "]" />
+        <Key word = "{" />
+        <Key word = "}" />
+        <Key word = "+" />
+        <Key word = "-" />
+        <Key word = "/" />
+        <Key word = "%" />
+        <Key word = "*" />
+        <Key word = "&lt;" />
+        <Key word = "&gt;" />
+        <Key word = "^" />
+        <Key word = "=" />
+        <Key word = "~" />
+        <Key word = "!" />
+        <Key word = "|" />
+        <Key word = "&amp;" />
+      </KeyWords>
+
+      <KeyWords name = "Literals" bold="false" italic="false" color="Blue">
+        <Key word = "true" />
+        <Key word = "false" />
+        <Key word = "NULL" />
+      </KeyWords>
+
+      <KeyWords name = "Macros" bold="true" italic="false" color="Black">
+        <Key word = "__LINE__" />
+        <Key word = "__FILE__" />
+      </KeyWords>
+
+      <KeyWords name = "ShaderModels" bold="false" italic="false" color="Blue">
+        <Key word = "vs_1_1" />
+        <Key word = "vs_2_0" />
+        <Key word = "vs_2_sw" />
+        <Key word = "vs_2_x" />
+        <Key word = "vs_3_0" />
+        <Key word = "vs_3_sw" />
+        <Key word = "vs_4_0" />
+        <Key word = "ps_1_1" />
+        <Key word = "ps_1_2" />
+        <Key word = "ps_1_3" />
+        <Key word = "ps_1_4" />
+        <Key word = "ps_2_0" />
+        <Key word = "ps_2_sw" />
+        <Key word = "ps_2_x" />
+        <Key word = "ps_3_0" />
+        <Key word = "ps_3_sw" />
+        <Key word = "ps_4_0" />
+        <Key word = "ps_4_1" />
+        <Key word = "gs_4_0" />
+        <Key word = "gs_4_1" />
+        <Key word = "fx_4_0" />
+        <Key word = "fx_4_1" />
+      </KeyWords>
+
+      <KeyWords name = "DataTypes" bold="false" italic="false" color="Blue">
+        <Key word = "bool" />
+        <Key word = "bool1" />
+        <Key word = "bool2" />
+        <Key word = "bool3" />
+        <Key word = "bool4" />
+        <Key word = "bool1x1" />
+        <Key word = "bool1x2" />
+        <Key word = "bool1x3" />
+        <Key word = "bool1x4" />
+        <Key word = "bool2x1" />
+        <Key word = "bool2x2" />
+        <Key word = "bool2x3" />
+        <Key word = "bool2x4" />
+        <Key word = "bool3x1" />
+        <Key word = "bool3x2" />
+        <Key word = "bool3x3" />
+        <Key word = "bool3x4" />
+        <Key word = "bool4x1" />
+        <Key word = "bool4x2" />
+        <Key word = "bool4x3" />
+        <Key word = "bool4x4" />
+
+        <Key word = "int" />
+        <Key word = "int1" />
+        <Key word = "int2" />
+        <Key word = "int3" />
+        <Key word = "int4" />
+        <Key word = "int1x1" />
+        <Key word = "int1x2" />
+        <Key word = "int1x3" />
+        <Key word = "int1x4" />
+        <Key word = "int2x1" />
+        <Key word = "int2x2" />
+        <Key word = "int2x3" />
+        <Key word = "int2x4" />
+        <Key word = "int3x1" />
+        <Key word = "int3x2" />
+        <Key word = "int3x3" />
+        <Key word = "int3x4" />
+        <Key word = "int4x1" />
+        <Key word = "int4x2" />
+        <Key word = "int4x3" />
+        <Key word = "int4x4" />
+
+        <Key word = "uint" />
+        <Key word = "uint1" />
+        <Key word = "uint2" />
+        <Key word = "uint3" />
+        <Key word = "uint4" />
+        <Key word = "uint1x1" />
+        <Key word = "uint1x2" />
+        <Key word = "uint1x3" />
+        <Key word = "uint1x4" />
+        <Key word = "uint2x1" />
+        <Key word = "uint2x2" />
+        <Key word = "uint2x3" />
+        <Key word = "uint2x4" />
+        <Key word = "uint3x1" />
+        <Key word = "uint3x2" />
+        <Key word = "uint3x3" />
+        <Key word = "uint3x4" />
+        <Key word = "uint4x1" />
+        <Key word = "uint4x2" />
+        <Key word = "uint4x3" />
+        <Key word = "uint4x4" />
+
+        <Key word = "half" />
+        <Key word = "half1" />
+        <Key word = "half2" />
+        <Key word = "half3" />
+        <Key word = "half4" />
+        <Key word = "half1x1" />
+        <Key word = "half1x2" />
+        <Key word = "half1x3" />
+        <Key word = "half1x4" />
+        <Key word = "half2x1" />
+        <Key word = "half2x2" />
+        <Key word = "half2x3" />
+        <Key word = "half2x4" />
+        <Key word = "half3x1" />
+        <Key word = "half3x2" />
+        <Key word = "half3x3" />
+        <Key word = "half3x4" />
+        <Key word = "half4x1" />
+        <Key word = "half4x2" />
+        <Key word = "half4x3" />
+        <Key word = "half4x4" />
+
+        <Key word = "float" />
+        <Key word = "float1" />
+        <Key word = "float2" />
+        <Key word = "float3" />
+        <Key word = "float4" />
+        <Key word = "float1x1" />
+        <Key word = "float1x2" />
+        <Key word = "float1x3" />
+        <Key word = "float1x4" />
+        <Key word = "float2x1" />
+        <Key word = "float2x2" />
+        <Key word = "float2x3" />
+        <Key word = "float2x4" />
+        <Key word = "float3x1" />
+        <Key word = "float3x2" />
+        <Key word = "float3x3" />
+        <Key word = "float3x4" />
+        <Key word = "float4x1" />
+        <Key word = "float4x2" />
+        <Key word = "float4x3" />
+        <Key word = "float4x4" />
+        
+        <Key word = "double" />
+        <Key word = "double1" />
+        <Key word = "double2" />
+        <Key word = "double3" />
+        <Key word = "double4" />
+        <Key word = "double1x1" />
+        <Key word = "double1x2" />
+        <Key word = "double1x3" />
+        <Key word = "double1x4" />
+        <Key word = "double2x1" />
+        <Key word = "double2x2" />
+        <Key word = "double2x3" />
+        <Key word = "double2x4" />
+        <Key word = "double3x1" />
+        <Key word = "double3x2" />
+        <Key word = "double3x3" />
+        <Key word = "double3x4" />
+        <Key word = "double4x1" />
+        <Key word = "double4x2" />
+        <Key word = "double4x3" />
+        <Key word = "double4x4" />
+        
+        <Key word = "vector" />
+        <Key word = "matrix" />
+        <Key word = "string" />
+      </KeyWords>
+
+
+      <KeyWords name = "ShaderType" bold="false" italic="false" color="Blue">
+        <Key word = "VertexShader" />
+        <Key word = "GeometryShader" />
+        <Key word = "PixelShader" />
+        <Key word = "SetVertexShader" />
+        <Key word = "SetGeometryShader" />
+        <Key word = "SetPixelShader" />
+        <Key word = "compile" />
+        <Key word = "CompileShader" />
+        
+        <Key word = "SetBlendState" />
+        <Key word = "SetDepthStencilState" />
+        <Key word = "SetRasterizerState" />
+      </KeyWords>
+
+      <KeyWords name = "LightStates" bold="false" italic="false" color="DarkCyan">
+        <Key word = "LightAmbient" />
+        <Key word = "LightAttenuation0" />
+        <Key word = "LightAttenuation1" />
+        <Key word = "LightAttenuation2" />
+        <Key word = "LightDiffuse" />
+        <Key word = "LightDirection" />
+        <Key word = "LightEnable" />
+        <Key word = "LightFalloff" />
+        <Key word = "LightPhi" />
+        <Key word = "LightPosition" />
+        <Key word = "LightRange" />
+        <Key word = "LightSpecular" />
+        <Key word = "LightTheta" />
+        <Key word = "LightType" />
+      </KeyWords>
+
+      <KeyWords name = "LightValues" bold="true" italic="false" color="Black">
+        <Key word = "POINT" />
+        <Key word = "Point" />
+        <Key word = "point" />
+        <Key word = "SPOT" />
+        <Key word = "Spot" />
+        <Key word = "spot" />
+        <Key word = "DIRECTIONAL" />
+        <Key word = "Directional" />
+        <Key word = "directional" />
+      </KeyWords>
+
+      <KeyWords name = "MaterialStates" bold="false" italic="false" color="DarkCyan">
+        <Key word = "MaterialAmbient" />
+        <Key word = "MaterialDiffuse" />
+        <Key word = "MaterialEmissive" />
+        <Key word = "MaterialPower" />
+        <Key word = "MaterialSpecular" />
+      </KeyWords>
+
+      <KeyWords name = "PixelPipeRenderStates" bold="false" italic="false" color="DarkCyan">
+        <Key word = "AlphaBlendEnable" />
+        <Key word = "AlphaFunc" />
+        <Key word = "AlphaRef" />
+        <Key word = "AlphaTestEnable" />
+        <Key word = "BlendOp" />
+        <Key word = "ColorWriteEnable" />
+        <Key word = "DepthBias" />
+        <Key word = "DestBlend" />
+        <Key word = "DitherEnable" />
+        <Key word = "FillMode" />
+        <Key word = "LastPixel" />
+        <Key word = "ShadeMode" />
+        <Key word = "SlopeScaleDepthBias" />
+        <Key word = "SrcBlend" />
+        <Key word = "StencilEnable" />
+        <Key word = "StencilFail" />
+        <Key word = "StencilFunc" />
+        <Key word = "StencilMask" />
+        <Key word = "StencilPass" />
+        <Key word = "StencilRef" />
+        <Key word = "StencilWriteMask" />
+        <Key word = "StencilZFail" />
+        <Key word = "TextureFactor" />
+        <Key word = "Wrap0" />
+        <Key word = "Wrap1" />
+        <Key word = "Wrap2" />
+        <Key word = "Wrap3" />
+        <Key word = "Wrap4" />
+        <Key word = "Wrap5" />
+        <Key word = "Wrap6" />
+        <Key word = "Wrap7" />
+        <Key word = "Wrap8" />
+        <Key word = "Wrap9" />
+        <Key word = "Wrap10" />
+        <Key word = "Wrap11" />
+        <Key word = "Wrap12" />
+        <Key word = "Wrap13" />
+        <Key word = "Wrap14" />
+        <Key word = "Wrap15" />
+        <Key word = "ZEnable" />
+        <Key word = "ZFunc" />
+        <Key word = "ZWriteEnable" />
+      </KeyWords>
+
+      <KeyWords name = "VertexPipeRenderStates" bold="false" italic="false" color="DarkCyan">
+        <Key word = "Ambient" />
+        <Key word = "AmbientMaterialSource" />
+        <Key word = "Clipping" />
+        <Key word = "ClipPlaneEnable" />
+        <Key word = "ColorVertex" />
+        <Key word = "CullMode" />
+        <Key word = "DiffuseMaterialSource" />
+        <Key word = "EmissiveMaterialSource" />
+        <Key word = "FogColor" />
+        <Key word = "FogDensity" />
+        <Key word = "FogEnable" />
+        <Key word = "FogEnd" />
+        <Key word = "FogStart" />
+        <Key word = "FogTableMode" />
+        <Key word = "FogVertexMode" />
+        <Key word = "IndexedVertexBlendEnable" />
+        <Key word = "Lighting" />
+        <Key word = "LocalViewer" />
+        <Key word = "MultiSampleAntialias" />
+        <Key word = "MultiSampleMask" />
+        <Key word = "NormalizeNormals" />
+        <Key word = "PatchSegments" />
+        <Key word = "PointScale_A" />
+        <Key word = "PointScale_B" />
+        <Key word = "PointScale_C" />
+        <Key word = "PointScaleEnable" />
+        <Key word = "PointSize" />
+        <Key word = "PointSize_Min" />
+        <Key word = "PointSize_Max" />
+        <Key word = "PointSpriteEnable" />
+        <Key word = "RangeFogEnable" />
+        <Key word = "SpecularEnable" />
+        <Key word = "SpecularMaterialSource" />
+        <Key word = "TweenFactor" />
+        <Key word = "VertexBlend" />
+      </KeyWords>
+
+      <KeyWords name = "SamplerStates" bold="false" italic="false" color="DarkCyan">
+        <Key word = "AddressU" />
+        <Key word = "AddressV" />
+        <Key word = "AddressW" />
+        <Key word = "BorderColor" />
+        <Key word = "Filter" />
+        <Key word = "MagFilter" />
+        <Key word = "MinFilter" />
+        <Key word = "MipFilter" />
+        <Key word = "MaxAnisotropy" />
+        <Key word = "MaxMipLevel" />
+        <Key word = "MaxLOD" />
+        <Key word = "MinLOD" />
+        <Key word = "MipMapLodBias" />
+        <Key word = "MipLODBias" />
+        <Key word = "ComparisonFunc" />
+        <Key word = "ComparisonFilter" />
+        <Key word = "SRGBTexture" />
+      </KeyWords>
+
+      <KeyWords name = "ShaderConstantStates" bold="false" italic="false" color="DarkCyan">
+        <Key word = "PixelShaderConstant" />
+        <Key word = "PixelShaderConstant1" />
+        <Key word = "PixelShaderConstant2" />
+        <Key word = "PixelShaderConstant3" />
+        <Key word = "PixelShaderConstant4" />
+        <Key word = "PixelShaderConstantB" />
+        <Key word = "PixelShaderConstantI" />
+        <Key word = "PixelShaderConstantF" />
+        <Key word = "VertexShaderConstant" />
+        <Key word = "VertexShaderConstant1" />
+        <Key word = "VertexShaderConstant2" />
+        <Key word = "VertexShaderConstant3" />
+        <Key word = "VertexShaderConstant4" />
+        <Key word = "VertexShaderConstantB" />
+        <Key word = "VertexShaderConstantI" />
+        <Key word = "VertexShaderConstantF" />
+      </KeyWords>
+
+      <KeyWords name = "TextureStates" bold="false" italic="false" color="DarkCyan">
+        <Key word = "Texture" />
+        <Key word = "AlphaOp" />
+        <Key word = "AlphaArg0" />
+        <Key word = "AlphaArg1" />
+        <Key word = "AlphaArg2" />
+        <Key word = "ColorArg0" />
+        <Key word = "ColorArg1" />
+        <Key word = "ColorArg2" />
+        <Key word = "ColorOp" />
+        <Key word = "BumpEnvLScale" />
+        <Key word = "BumpEnvLOffset" />
+        <Key word = "BumpEnvMat00" />
+        <Key word = "BumpEnvMat01" />
+        <Key word = "BumpEnvMat10" />
+        <Key word = "BumpEnvMat11" />
+        <Key word = "ResultArg" />
+        <Key word = "TexCoordIndex" />
+        <Key word = "TextureTransformFlags" />
+      </KeyWords>
+
+      <KeyWords name = "TransformStates" bold="false" italic="false" color="DarkCyan">
+        <Key word = "ProjectionTransform" />
+        <Key word = "TextureTransform" />
+        <Key word = "ViewTransform" />
+        <Key word = "WorldTransform" />
+      </KeyWords>
+
+      <KeyWords name = "BlendStates10" bold="false" italic="false" color="DarkCyan">
+        <Key word = "AlphaToCoverageEnable" />
+        <Key word = "BlendEnable" />
+        <Key word = "SrcBlend" />
+        <Key word = "DestBlend" />
+        <Key word = "BlendOp" />
+        <Key word = "SrcBlendAlpha" />
+        <Key word = "DestBlendAlpha" />
+        <Key word = "BlendOpAlpha" />
+        <Key word = "RenderTargetWriteMask" />
+      </KeyWords>
+
+      <KeyWords name = "DepthAndStencilStates10" bold="false" italic="false" color="DarkCyan">
+        <Key word = "DepthEnable" />
+        <Key word = "DepthWriteMask" />
+        <Key word = "DepthFunc" />
+        <Key word = "StencilEnable" />
+        <Key word = "StencilReadMask" />
+        <Key word = "StencilWriteMask" />
+        <Key word = "FrontFaceStencilFail" />
+        <Key word = "FrontFaceStencilZFail" />
+        <Key word = "FrontFaceStencilPass" />
+        <Key word = "FrontFaceStencilFunc" />
+        <Key word = "BackFaceStencilFail" />
+        <Key word = "BackFaceStencilZFail" />
+        <Key word = "BackFaceStencilPass" />
+        <Key word = "BackFaceStencilFunc" />
+      </KeyWords>
+
+      <KeyWords name = "RasterizerStates10" bold="false" italic="false" color="DarkCyan">
+        <Key word = "FillMode" />
+        <Key word = "CullMode" />
+        <Key word = "FrontCounterClockwise" />
+        <Key word = "DepthBias" />
+        <Key word = "DepthBiasClamp" />
+        <Key word = "SlopeScaledDepthBias" />
+        <Key word = "ZClipeEable" />
+        <Key word = "ScissorEnable" />
+        <Key word = "MultisampleEnable" />
+        <Key word = "AntialiasedLineEnable" />
+      </KeyWords>
+      
+      <KeyWords name = "StateValues" bold="false" italic="false" color="Brown">
+        <Key word = "0WEIGHTS" />
+        <Key word = "0Weights" />
+        <Key word = "0weights" />
+        <Key word = "1WEIGHTS" />
+        <Key word = "2Weights" />
+        <Key word = "2weights" />
+        <Key word = "2WEIGHTS" />
+        <Key word = "2Weights" />
+        <Key word = "2weights" />
+        <Key word = "3WEIGHTS" />
+        <Key word = "3Weights" />
+        <Key word = "3weights" />
+        <Key word = "ADD" />
+        <Key word = "Add" />
+        <Key word = "add" />
+        <Key word = "ADDSIGNED" />
+        <Key word = "AddSigned" />
+        <Key word = "addsigned" />
+        <Key word = "ADDSIGNED2X" />
+        <Key word = "AddSigned2x" />
+        <Key word = "AddSigned2X" />
+        <Key word = "addsigned2x" />
+        <Key word = "ADDSMOOTH" />
+        <Key word = "AddSmooth" />
+        <Key word = "addsmooth" />
+        <Key word = "ALPHA" />
+        <Key word = "Alpha" />
+        <Key word = "alpha" />
+        <Key word = "ALPHAREPLICATE" />
+        <Key word = "AlphaReplicate" />
+        <Key word = "alphareplicate" />
+        <Key word = "ALWAYS" />
+        <Key word = "Always" />
+        <Key word = "always" />
+        <Key word = "ANISOTROPIC" />
+        <Key word = "Anisotropic" />
+        <Key word = "anisotropic" />
+        <Key word = "BLENDCURRENTALPHA" />
+        <Key word = "BlendCurrentAlpha" />
+        <Key word = "blendcurrentalpha" />
+        <Key word = "BLENDDIFFUSEALPHA" />
+        <Key word = "BlendDiffuseAlpha" />
+        <Key word = "blenddiffusealpha" />
+        <Key word = "BLENDFACTOR" />
+        <Key word = "BlendFactor" />
+        <Key word = "blendfactor" />
+        <Key word = "BLENDFACTORALPHA" />
+        <Key word = "BlendFactorAlpha" />
+        <Key word = "blendfactoralpha" />
+        <Key word = "BLENDTEXTUREALPHA" />
+        <Key word = "BlendTextureAlpha" />
+        <Key word = "blendtexturealpha" />
+        <Key word = "BLENDTEXTUREALPHAPM" />
+        <Key word = "BlendTextureAlphaPM" />
+        <Key word = "BlendTextureAlphaPm" />
+        <Key word = "blendtexturealphapm" />
+        <Key word = "BLUE" />
+        <Key word = "Blue" />
+        <Key word = "blue" />
+        <Key word = "BORDER" />
+        <Key word = "Border" />
+        <Key word = "border" />
+        <Key word = "BOTHINVSRCALPHA" />
+        <Key word = "BothInvSrcAlpha" />
+        <Key word = "bothinvsrcalpha" />
+        <Key word = "BOTHSRCALPHA" />
+        <Key word = "BothSrcAlpha" />
+        <Key word = "bothsrcalpha" />
+        <Key word = "BUMPENVMAP" />
+        <Key word = "BumpEnvMap" />
+        <Key word = "bumpenvmap" />
+        <Key word = "BUMPENVMAPLUMINANCE" />
+        <Key word = "BumpEnvMapLuminance" />
+        <Key word = "bumpenvmapluminance" />
+        <Key word = "CCW" />
+        <Key word = "Ccw" />
+        <Key word = "ccw" />
+        <Key word = "CLAMP" />
+        <Key word = "Clamp" />
+        <Key word = "clamp" />
+        <Key word = "CLIPPLANE0" />
+        <Key word = "ClipPlane0" />
+        <Key word = "Clipplane0" />
+        <Key word = "clipplane0" />
+        <Key word = "CLIPPLANE1" />
+        <Key word = "ClipPlane1" />
+        <Key word = "Clipplane1" />
+        <Key word = "clipplane1" />
+        <Key word = "CLIPPLANE2" />
+        <Key word = "ClipPlane2" />
+        <Key word = "Clipplane2" />
+        <Key word = "clipplane2" />
+        <Key word = "CLIPPLANE3" />
+        <Key word = "ClipPlane3" />
+        <Key word = "Clipplane3" />
+        <Key word = "clipplane3" />
+        <Key word = "CLIPPLANE4" />
+        <Key word = "ClipPlane4" />
+        <Key word = "Clipplane4" />
+        <Key word = "clipplane4" />
+        <Key word = "CLIPPLANE5" />
+        <Key word = "ClipPlane5" />
+        <Key word = "Clipplane5" />
+        <Key word = "clipplane5" />
+        <Key word = "COLOR" />
+        <Key word = "Color" />
+        <Key word = "color" />
+        <Key word = "COLOR1" />
+        <Key word = "Color1" />
+        <Key word = "color1" />
+        <Key word = "COMPLEMENT" />
+        <Key word = "Complement" />
+        <Key word = "complement" />
+        <Key word = "CONSTANT" />
+        <Key word = "Constant" />
+        <Key word = "constant" />
+        <Key word = "CONVOLUTIONMONO" />
+        <Key word = "ConvolutionMono" />
+        <Key word = "convolutionmono" />
+        <Key word = "COORD0" />
+        <Key word = "Coord0" />
+        <Key word = "coord0" />
+        <Key word = "COORD1" />
+        <Key word = "Coord1" />
+        <Key word = "coord1" />
+        <Key word = "COORD2" />
+        <Key word = "Coord2" />
+        <Key word = "coord2" />
+        <Key word = "COORD3" />
+        <Key word = "Coord3" />
+        <Key word = "coord3" />
+        <Key word = "COUNT1" />
+        <Key word = "Count1" />
+        <Key word = "count1" />
+        <Key word = "COUNT2" />
+        <Key word = "Count2" />
+        <Key word = "count2" />
+        <Key word = "COUNT3" />
+        <Key word = "Count3" />
+        <Key word = "count3" />
+        <Key word = "COUNT4" />
+        <Key word = "Count4" />
+        <Key word = "count4" />
+        <Key word = "CURRENT" />
+        <Key word = "Current" />
+        <Key word = "current" />
+        <Key word = "CW" />
+        <Key word = "Cw" />
+        <Key word = "cw" />
+        <Key word = "DECR" />
+        <Key word = "Decr" />
+        <Key word = "decr" />
+        <Key word = "DECRSAT" />
+        <Key word = "DecrSat" />
+        <Key word = "decrsat" />
+        <Key word = "DESTALPHA" />
+        <Key word = "DestAlpha" />
+        <Key word = "destalpha" />
+        <Key word = "DESTCOLOR" />
+        <Key word = "DestColor" />
+        <Key word = "destcolor" />
+        <Key word = "DIFFUSE" />
+        <Key word = "Diffuse" />
+        <Key word = "diffuse" />
+        <Key word = "DISABLE" />
+        <Key word = "Disable" />
+        <Key word = "disable" />
+        <Key word = "DOTPRODUCT3" />
+        <Key word = "DotProduct3" />
+        <Key word = "dotproduct3" />
+        <Key word = "EQUAL" />
+        <Key word = "Equal" />
+        <Key word = "equal" />
+        <Key word = "EXP" />
+        <Key word = "Exp" />
+        <Key word = "exp" />
+        <Key word = "EXP2" />
+        <Key word = "Exp2" />
+        <Key word = "exp2" />
+        <Key word = "FALSE" />
+        <Key word = "False" />
+        <Key word = "false" />
+        <Key word = "FLAT" />
+        <Key word = "Flat" />
+        <Key word = "flat" />
+        <Key word = "GAUSSIANQUAD" />
+        <Key word = "GaussianQuad" />
+        <Key word = "gaussianquad" />
+        <Key word = "GOURAUD" />
+        <Key word = "Gouraud" />
+        <Key word = "gouraud" />
+        <Key word = "GREATER" />
+        <Key word = "Greater" />
+        <Key word = "greater" />
+        <Key word = "GREATEREQUAL" />
+        <Key word = "GreaterEqual" />
+        <Key word = "greaterequal" />
+        <Key word = "GREEN" />
+        <Key word = "Green" />
+        <Key word = "green" />
+        <Key word = "INCR" />
+        <Key word = "Incr" />
+        <Key word = "incr" />
+        <Key word = "INCRSAT" />
+        <Key word = "IncrSat" />
+        <Key word = "incrsat" />
+        <Key word = "INVBLENDFACTOR" />
+        <Key word = "InvBlendFactor" />
+        <Key word = "invblendfactor" />
+        <Key word = "INVDESTALPHA" />
+        <Key word = "InvDestAlpha" />
+        <Key word = "invdestalpha" />
+        <Key word = "INVDESTCOLOR" />
+        <Key word = "InvDestColor" />
+        <Key word = "invdestcolor" />
+        <Key word = "INVERT" />
+        <Key word = "Invert" />
+        <Key word = "invert" />
+        <Key word = "INVSRCALPHA" />
+        <Key word = "InvSrcAlpha" />
+        <Key word = "invsrcalpha" />
+        <Key word = "INVSRCCOLOR" />
+        <Key word = "InvSrcColor" />
+        <Key word = "invsrccolor" />
+        <Key word = "INVSRCCOLOR2" />
+        <Key word = "InvsrcColor2" />
+        <Key word = "invsrccolor2" />
+        <Key word = "KEEP" />
+        <Key word = "Keep" />
+        <Key word = "keep" />
+        <Key word = "LERP" />
+        <Key word = "Lerp" />
+        <Key word = "lerp" />
+        <Key word = "LESS" />
+        <Key word = "Less" />
+        <Key word = "less" />
+        <Key word = "LESSEQUAL" />
+        <Key word = "LessEqual" />
+        <Key word = "lessequal" />
+        <Key word = "LINEAR" />
+        <Key word = "Linear" />
+        <Key word = "linear" />
+        <Key word = "MATERIAL" />
+        <Key word = "Material" />
+        <Key word = "material" />
+        <Key word = "MAX" />
+        <Key word = "Max" />
+        <Key word = "max" />
+        <Key word = "MIN" />
+        <Key word = "Min" />
+        <Key word = "min" />
+        <Key word = "MIRROR" />
+        <Key word = "Mirror" />
+        <Key word = "mirror" />
+        <Key word = "MIRRORONCE" />
+        <Key word = "MirrorOnce" />
+        <Key word = "mirroronce" />
+        <Key word = "MODULATE" />
+        <Key word = "Modulate" />
+        <Key word = "modulate" />
+        <Key word = "MODULATE2X" />
+        <Key word = "Modulate2X" />
+        <Key word = "Modulate2x" />
+        <Key word = "modulate2x" />
+        <Key word = "MODULATE4X" />
+        <Key word = "Modulate4X" />
+        <Key word = "Modulate4x" />
+        <Key word = "modulate4x" />
+        <Key word = "MODULATEALPHA_ADDCOLOR" />
+        <Key word = "ModulateAlpha_AddColor" />
+        <Key word = "modulatealpha_addcolor" />
+        <Key word = "MODULATECOLOR_ADDALPHA" />
+        <Key word = "ModulateColor_Addalpha" />
+        <Key word = "modulatecolor_addalpha" />
+        <Key word = "MODULATEINVALPHA_ADDCOLOR" />
+        <Key word = "ModulateInvAlpha_AddColor" />
+        <Key word = "modulateinvalpha_addcolor" />
+        <Key word = "MODULATEINVCOLOR_ADDALPHA" />
+        <Key word = "ModulateInvColor_AddAlpha" />
+        <Key word = "modulateinvcolor_addalpha" />
+        <Key word = "MULTIPLYADD" />
+        <Key word = "MultiplyAdd" />
+        <Key word = "multiplyadd" />
+        <Key word = "NEVER" />
+        <Key word = "Never" />
+        <Key word = "never" />
+        <Key word = "NONE" />
+        <Key word = "None" />
+        <Key word = "none" />
+        <Key word = "NOTEQUAL" />
+        <Key word = "NotEqual" />
+        <Key word = "notequal" />
+        <Key word = "ONE" />
+        <Key word = "One" />
+        <Key word = "one" />
+        <Key word = "PHONG" />
+        <Key word = "Phong" />
+        <Key word = "phong" />
+        <Key word = "POINT" />
+        <Key word = "Point" />
+        <Key word = "point" />
+        <Key word = "PREMODULATE" />
+        <Key word = "PreModulate" />
+        <Key word = "Premodulate" />
+        <Key word = "premodulate" />
+        <Key word = "PROJECTED" />
+        <Key word = "Projected" />
+        <Key word = "projected" />
+        <Key word = "PROJECTION" />
+        <Key word = "Projection" />
+        <Key word = "projection" />
+        <Key word = "PYRAMIDALQUAD" />
+        <Key word = "PyramidalQuad" />
+        <Key word = "pyramidalquad" />
+        <Key word = "RED" />
+        <Key word = "Red" />
+        <Key word = "red" />
+        <Key word = "REPLACE" />
+        <Key word = "Replace" />
+        <Key word = "replace" />
+        <Key word = "REVSUBTRACT" />
+        <Key word = "RevSubtract" />
+        <Key word = "revsubtract" />
+        <Key word = "SELECTARG1" />
+        <Key word = "SelectArg1" />
+        <Key word = "selectarg1" />
+        <Key word = "SELECTARG2" />
+        <Key word = "SelectArg2" />
+        <Key word = "selectarg2" />
+        <Key word = "SELECTMASK" />
+        <Key word = "SelectMask" />
+        <Key word = "selectmask" />
+        <Key word = "SOLID" />
+        <Key word = "Solid" />
+        <Key word = "solid" />
+        <Key word = "SPECULAR" />
+        <Key word = "Specular" />
+        <Key word = "specular" />
+        <Key word = "SRCALPHA" />
+        <Key word = "SrcAlpha" />
+        <Key word = "srcalpha" />
+        <Key word = "SRCALPHASAT" />
+        <Key word = "SrcAlphaSat" />
+        <Key word = "srcalphasat" />
+        <Key word = "SRCCOLOR" />
+        <Key word = "SrcColor" />
+        <Key word = "srccolor" />
+        <Key word = "SRCCOLOR2" />
+        <Key word = "SrcColor2" />
+        <Key word = "srccolor2" />
+        <Key word = "SUBTRACT" />
+        <Key word = "Subtract" />
+        <Key word = "subtract" />
+        <Key word = "TEMP" />
+        <Key word = "Temp" />
+        <Key word = "temp" />
+        <Key word = "TEXTURE0" />
+        <Key word = "Texture0" />
+        <Key word = "texture0" />
+        <Key word = "TEXTURE1" />
+        <Key word = "Texture1" />
+        <Key word = "texture1" />
+        <Key word = "TEXTURE2" />
+        <Key word = "Texture2" />
+        <Key word = "texture2" />
+        <Key word = "TEXTURE3" />
+        <Key word = "Texture3" />
+        <Key word = "texture3" />
+        <Key word = "TEXTURE4" />
+        <Key word = "Texture4" />
+        <Key word = "texture4" />
+        <Key word = "TEXTURE5" />
+        <Key word = "Texture5" />
+        <Key word = "texture5" />
+        <Key word = "TEXTURE6" />
+        <Key word = "Texture6" />
+        <Key word = "texture6" />
+        <Key word = "TEXTURE7" />
+        <Key word = "Texture7" />
+        <Key word = "texture7" />
+        <Key word = "TFACTOR" />
+        <Key word = "TFactor" />
+        <Key word = "Tfactor" />
+        <Key word = "tfactor" />
+        <Key word = "TRUE" />
+        <Key word = "True" />
+        <Key word = "true" />
+        <Key word = "TWEENING" />
+        <Key word = "Tweening" />
+        <Key word = "tweening" />
+        <Key word = "U" />
+        <Key word = "u" />
+        <Key word = "USEW" />
+        <Key word = "UseW" />
+        <Key word = "usew" />
+        <Key word = "V" />
+        <Key word = "v" />
+        <Key word = "W" />
+        <Key word = "w" />
+        <Key word = "WIREFRAME" />
+        <Key word = "Wireframe" />
+        <Key word = "WireFrame" />
+        <Key word = "wireframe" />
+        <Key word = "WRAP" />
+        <Key word = "Wrap" />
+        <Key word = "wrap" />
+        <Key word = "ZERO" />
+        <Key word = "Zero" />
+        <Key word = "zero" />
+      </KeyWords>
+
+      <KeyWords name = "AdditionalStateValues10" bold="false" italic="false" color="Brown">
+        <Key word = "REV_SUBTRACT" />
+        <Key word = "Rev_Subtract" />
+        <Key word = "rev_subtract" />
+        <Key word = "SRC_COLOR" />
+        <Key word = "Src_Color" />
+        <Key word = "src_color" />
+        <Key word = "INV_SRC_COLOR" />
+        <Key word = "Inv_Src_Color" />
+        <Key word = "inv_src_color" />
+        <Key word = "SRC_ALPHA" />
+        <Key word = "Src_Alpha" />
+        <Key word = "src_alpha" />
+        <Key word = "INV_SRC_ALPHA" />
+        <Key word = "Inv_Src_Alpha" />
+        <Key word = "inv_src_alpha" />
+        <Key word = "DEST_ALPHA" />
+        <Key word = "Dest_Alpha" />
+        <Key word = "dest_alpha" />
+        <Key word = "INV_DEST_ALPHA" />
+        <Key word = "Inv_Dest_Alpha" />
+        <Key word = "inv_dest_alpha" />
+        <Key word = "DEST_COLOR" />
+        <Key word = "Dest_Color" />
+        <Key word = "dest_color" />
+        <Key word = "INV_DEST_COLOR" />
+        <Key word = "Inv_Dest_Color" />
+        <Key word = "inv_dest_color" />
+        <Key word = "SRC_ALPHA_SAT" />
+        <Key word = "Src_Alpha_Sat" />
+        <Key word = "src_alpha_sat" />
+        <Key word = "BLEND_FACTOR" />
+        <Key word = "Blend_Factor" />
+        <Key word = "blend_factor" />
+        <Key word = "INV_BLEND_FACTOR" />
+        <Key word = "Inv_Blend_Factor" />
+        <Key word = "inv_blend_factor" />
+        <Key word = "SRC1_COLOR" />
+        <Key word = "Src1_Color" />
+        <Key word = "src1_color" />
+        <Key word = "INV_SRC1_COLOR" />
+        <Key word = "Inv_Src1_Color" />
+        <Key word = "inv_src1_color" />
+        <Key word = "SRC1_ALPHA" />
+        <Key word = "Src1_Alpha" />
+        <Key word = "src1_alpha" />
+        <Key word = "INV_SRC1_ALPHA" />
+        <Key word = "Inv_Src1_Alpha" />
+        <Key word = "inv_src1_alpha" />
+
+        <Key word = "ALL" />
+        <Key word = "All" />
+        <Key word = "all" />
+        <Key word = "LESS_EQUAL" />
+        <Key word = "Less_Equal" />
+        <Key word = "less_equal" />
+        <Key word = "NOT_EQUAL" />
+        <Key word = "Not_Equal" />
+        <Key word = "not_equal" />
+        <Key word = "GREATER_EQUAL" />
+        <Key word = "Greater_Equal" />
+        <Key word = "greater_equal" />
+
+        <Key word = "INCR_SAT" />
+        <Key word = "Incr_Sat" />
+        <Key word = "incr_sat" />
+        <Key word = "DECR_SAT" />
+        <Key word = "Decr_Sat" />
+        <Key word = "decr_sat" />
+
+        <Key word = "FRONT" />
+        <Key word = "Front" />
+        <Key word = "front" />
+        <Key word = "BACK" />
+        <Key word = "Back" />
+        <Key word = "back" />
+
+        <Key word = "MIRROR_ONCE" />
+        <Key word = "Mirror_Once" />
+        <Key word = "mirror_once" />
+
+        <Key word = "MAX_ANISOTROPY" />
+        <Key word = "Max_Anisotropy" />
+        <Key word = "max_anisotropy" />
+
+        <Key word = "MIN_MAG_MIP_POINT" />
+        <Key word = "Min_Mag_Mip_Point" />
+        <Key word = "min_mag_mip_point" />
+        <Key word = "MIN_MAG_POINT_MIP_LINEAR" />
+        <Key word = "Min_Mag_Point_Mip_Linear" />
+        <Key word = "min_mag_point_mip_linear" />
+        <Key word = "MIN_POINT_MAG_LINEAR_MIP_POINT" />
+        <Key word = "Min_Point_Mag_Linear_Mip_Point" />
+        <Key word = "min_point_mag_linear_mip_point" />
+        <Key word = "MIN_POINT_MAG_MIP_LINEAR" />
+        <Key word = "Min_Point_Mag_Mip_Linear" />
+        <Key word = "min_point_mag_mip_linear" />
+        <Key word = "MIN_LINEAR_MAG_MIP_POINT" />
+        <Key word = "Min_Linear_Mag_Mip_Point" />
+        <Key word = "min_linear_mag_mip_point" />
+        <Key word = "MIN_LINEAR_MAG_POINT_MIP_LINEAR" />
+        <Key word = "Min_Linear_Mag_Point_Mip_Linear" />
+        <Key word = "min_linear_mag_point_mip_linear" />
+        <Key word = "MIN_MAG_LINEAR_MIP_POINT" />
+        <Key word = "Min_Mag_Linear_Mip_Point" />
+        <Key word = "min_mag_linear_mip_point" />
+        <Key word = "MIN_MAG_MIP_LINEAR" />
+        <Key word = "Min_Mag_Mip_Linear" />
+        <Key word = "min_mag_mip_linear" />
+        <Key word = "COMPARISON_MIN_MAG_MIP_POINT" />
+        <Key word = "Comparison_Min_Mag_Mip_Point" />
+        <Key word = "comparison_min_mag_mip_point" />
+        <Key word = "COMPARISON_MIN_MAG_POINT_MIP_LINEAR" />
+        <Key word = "Comparison_Min_Mag_Point_Mip_Linear" />
+        <Key word = "comparison_min_mag_point_mip_linear" />
+        <Key word = "COMPARISON_MIN_POINT_MAG_LINEAR_MIP_POINT" />
+        <Key word = "Comparison_Min_Point_Mag_Linear_Mip_Point" />
+        <Key word = "comparison_min_point_mag_linear_mip_point" />
+        <Key word = "COMPARISON_MIN_POINT_MAG_MIP_LINEAR" />
+        <Key word = "Comparison_Min_Point_Mag_Mip_Linear" />
+        <Key word = "comparison_min_point_mag_mip_linear" />
+        <Key word = "COMPARISON_MIN_LINEAR_MAG_MIP_POINT" />
+        <Key word = "Comparison_Min_Linear_Mag_Mip_Point" />
+        <Key word = "comparison_min_linear_mag_mip_point" />
+        <Key word = "COMPARISON_MIN_LINEAR_MAG_POINT_MIP_LINEAR" />
+        <Key word = "Comparison_Min_Linear_Mag_Point_Mip_Linear" />
+        <Key word = "comparison_min_linear_mag_point_mip_linear" />
+        <Key word = "COMPARISON_MIN_MAG_LINEAR_MIP_POINT" />
+        <Key word = "Comparison_Min_Mag_Linear_Mip_Point" />
+        <Key word = "comparison_min_mag_linear_mip_point" />
+        <Key word = "COMPARISON_MIN_MAG_MIP_LINEAR" />
+        <Key word = "Comparison_Min_Mag_Mip_Linear" />
+        <Key word = "comparison_min_mag_mip_linear" />
+        <Key word = "COMPARISON_ANISOTROPIC" />
+        <Key word = "Comparison_Anisotropic" />
+        <Key word = "comparison_anisotropic" />
+      </KeyWords>
+
+      <KeyWords name = "PreprocessorDirectives" bold="false" italic="false" color="Blue">
+        <Key word = "#define" />
+        <Key word = "#elif" />
+        <Key word = "#else" />
+        <Key word = "#endif" />
+        <Key word = "#error" />
+        <Key word = "#if" />
+        <Key word = "#ifdef" />
+        <Key word = "#ifndef" />
+        <Key word = "#include" />
+        <Key word = "#line" />
+        <Key word = "#undef" />
+      </KeyWords>
+    </RuleSet>
+
+    
+    <RuleSet name = "AssemblerSet" ignorecase = "false" highlightDigits = "true">
+      <Delimiters>&amp;&lt;&gt;~!%^*()-+=|\/{}[]:;"' , .?</Delimiters>
+
+      <Span name = "LineComment" rule = "CommentMarkerSet" bold = "false" italic = "false" color = "Green" stopateol = "true">
+        <Begin>//</Begin>
+      </Span>
+
+      <Span name = "BlockComment" rule = "CommentMarkerSet" bold = "false" italic = "false" color = "Green" stopateol = "false">
+        <Begin>/*</Begin>
+        <End>*/</End>
+      </Span>
+
+      <Span name = "String" bold = "false" italic = "false" color = "DarkRed" stopateol = "true" escapecharacter="\">
+        <Begin>"</Begin>
+        <End>"</End>
+      </Span>
+
+      <Span name = "Char" bold = "false" italic = "false" color = "DarkRed" stopateol = "true" escapecharacter="\">
+        <Begin>&apos;</Begin>
+        <End>&apos;</End>
+      </Span>
+      
+      <KeyWords name = "Punctuation" bold = "false" italic = "false" color = "Black">
+        <Key word = "?" />
+        <Key word = "," />
+        <Key word = "." />
+        <Key word = ";" />
+        <Key word = "(" />
+        <Key word = ")" />
+        <Key word = "[" />
+        <Key word = "]" />
+        <Key word = "{" />
+        <Key word = "}" />
+        <Key word = "+" />
+        <Key word = "-" />
+        <Key word = "/" />
+        <Key word = "%" />
+        <Key word = "*" />
+        <Key word = "&lt;" />
+        <Key word = "&gt;" />
+        <Key word = "^" />
+        <Key word = "=" />
+        <Key word = "~" />
+        <Key word = "!" />
+        <Key word = "|" />
+        <Key word = "&amp;" />
+      </KeyWords>
+
+      <KeyWords name = "Macros" bold="true" italic="false" color="Black">
+        <Key word = "__LINE__" />
+        <Key word = "__FILE__" />
+      </KeyWords>
+
+      <KeyWords name = "ShaderModels" bold="false" italic="false" color="Blue">
+        <Key word = "vs_1_1" />
+        <Key word = "vs_2_0" />
+        <Key word = "vs_2_sw" />
+        <Key word = "vs_2_x" />
+        <Key word = "vs_3_0" />
+        <Key word = "vs_3_sw" />
+        <Key word = "vs_4_0" />
+        <Key word = "ps_1_1" />
+        <Key word = "ps_1_2" />
+        <Key word = "ps_1_3" />
+        <Key word = "ps_1_4" />
+        <Key word = "ps_2_0" />
+        <Key word = "ps_2_sw" />
+        <Key word = "ps_2_x" />
+        <Key word = "ps_3_0" />
+        <Key word = "ps_3_sw" />
+        <Key word = "ps_4_0" />
+        <Key word = "ps_4_1" />
+        <Key word = "gs_4_0" />
+        <Key word = "gs_4_1" />
+        <Key word = "fx_4_0" />
+        <Key word = "fx_4_1" />
+      </KeyWords>
+
+      <KeyWords name = "Assembler" bold="false" italic="false" color="Blue">
+        <Key word = "abs" />
+        <Key word = "abs_x2" />
+        <Key word = "abs_x4" />
+        <Key word = "abs_x8" />
+        <Key word = "abs_d2" />
+        <Key word = "abs_d4" />
+        <Key word = "abs_d8" />
+        <Key word = "abs_pp" />
+        <Key word = "abs_sat" />
+        <Key word = "add" />
+        <Key word = "add_x2" />
+        <Key word = "add_x4" />
+        <Key word = "add_x8" />
+        <Key word = "add_d2" />
+        <Key word = "add_d4" />
+        <Key word = "add_d8" />
+        <Key word = "add_pp" />
+        <Key word = "add_sat" />
+        <Key word = "break" />
+        <Key word = "break_gt" />
+        <Key word = "break_lt" />
+        <Key word = "break_ge" />
+        <Key word = "break_le" />
+        <Key word = "break_eq" />
+        <Key word = "break_ne" />
+        <Key word = "breakp" />
+        <Key word = "call" />
+        <Key word = "callnz" />
+        <Key word = "cmp" />
+        <Key word = "cmp_x2" />
+        <Key word = "cmp_x4" />
+        <Key word = "cmp_x8" />
+        <Key word = "cmp_d2" />
+        <Key word = "cmp_d4" />
+        <Key word = "cmp_d8" />
+        <Key word = "cmp_pp" />
+        <Key word = "cmp_sat" />
+        <Key word = "cnd" />
+        <Key word = "cnd_x2" />
+        <Key word = "cnd_x4" />
+        <Key word = "cnd_x8" />
+        <Key word = "cnd_d2" />
+        <Key word = "cnd_d4" />
+        <Key word = "cnd_d8" />
+        <Key word = "cnd_pp" />
+        <Key word = "cnd_sat" />
+        <Key word = "crs" />
+        <Key word = "crs_x2" />
+        <Key word = "crs_x4" />
+        <Key word = "crs_x8" />
+        <Key word = "crs_d2" />
+        <Key word = "crs_d4" />
+        <Key word = "crs_d8" />
+        <Key word = "crs_pp" />
+        <Key word = "crs_sat" />
+        <Key word = "dcl" />
+        <Key word = "dcl_pp" />
+        <Key word = "dcl_2d" />
+        <Key word = "dcl_cube" />
+        <Key word = "dcl_volume" />
+        <Key word = "dcl_position" />
+        <Key word = "dcl_position0" />
+        <Key word = "dcl_position1" />
+        <Key word = "dcl_position2" />
+        <Key word = "dcl_position3" />
+        <Key word = "dcl_position4" />
+        <Key word = "dcl_position5" />
+        <Key word = "dcl_position6" />
+        <Key word = "dcl_position7" />
+        <Key word = "dcl_blendweight" />
+        <Key word = "dcl_blendweight0" />
+        <Key word = "dcl_blendweight1" />
+        <Key word = "dcl_blendweight2" />
+        <Key word = "dcl_blendweight3" />
+        <Key word = "dcl_blendweight4" />
+        <Key word = "dcl_blendweight5" />
+        <Key word = "dcl_blendweight6" />
+        <Key word = "dcl_blendweight7" />
+        <Key word = "dcl_blendindices" />
+        <Key word = "dcl_blendindices0" />
+        <Key word = "dcl_blendindices1" />
+        <Key word = "dcl_blendindices2" />
+        <Key word = "dcl_blendindices3" />
+        <Key word = "dcl_blendindices4" />
+        <Key word = "dcl_blendindices5" />
+        <Key word = "dcl_blendindices6" />
+        <Key word = "dcl_blendindices7" />
+        <Key word = "dcl_normal" />
+        <Key word = "dcl_normal0" />
+        <Key word = "dcl_normal1" />
+        <Key word = "dcl_normal2" />
+        <Key word = "dcl_normal3" />
+        <Key word = "dcl_normal4" />
+        <Key word = "dcl_normal5" />
+        <Key word = "dcl_normal6" />
+        <Key word = "dcl_normal7" />
+        <Key word = "dcl_psize" />
+        <Key word = "dcl_psize0" />
+        <Key word = "dcl_psize1" />
+        <Key word = "dcl_psize2" />
+        <Key word = "dcl_psize3" />
+        <Key word = "dcl_psize4" />
+        <Key word = "dcl_psize5" />
+        <Key word = "dcl_psize6" />
+        <Key word = "dcl_psize7" />
+        <Key word = "dcl_texcoord" />
+        <Key word = "dcl_texcoord0" />
+        <Key word = "dcl_texcoord1" />
+        <Key word = "dcl_texcoord2" />
+        <Key word = "dcl_texcoord3" />
+        <Key word = "dcl_texcoord4" />
+        <Key word = "dcl_texcoord5" />
+        <Key word = "dcl_texcoord6" />
+        <Key word = "dcl_texcoord7" />
+        <Key word = "dcl_texcoord0_centroid" />
+        <Key word = "dcl_texcoord1_centroid" />
+        <Key word = "dcl_texcoord2_centroid" />
+        <Key word = "dcl_texcoord3_centroid" />
+        <Key word = "dcl_texcoord4_centroid" />
+        <Key word = "dcl_texcoord5_centroid" />
+        <Key word = "dcl_texcoord6_centroid" />
+        <Key word = "dcl_texcoord7_centroid" />
+        <Key word = "dcl_texcoord0_pp" />
+        <Key word = "dcl_texcoord1_pp" />
+        <Key word = "dcl_texcoord2_pp" />
+        <Key word = "dcl_texcoord3_pp" />
+        <Key word = "dcl_texcoord4_pp" />
+        <Key word = "dcl_texcoord5_pp" />
+        <Key word = "dcl_texcoord6_pp" />
+        <Key word = "dcl_texcoord7_pp" />
+        <Key word = "dcl_tangent" />
+        <Key word = "dcl_tangent0" />
+        <Key word = "dcl_tangent1" />
+        <Key word = "dcl_tangent2" />
+        <Key word = "dcl_tangent3" />
+        <Key word = "dcl_tangent4" />
+        <Key word = "dcl_tangent5" />
+        <Key word = "dcl_tangent6" />
+        <Key word = "dcl_tangent7" />
+        <Key word = "dcl_binormal" />
+        <Key word = "dcl_binormal0" />
+        <Key word = "dcl_binormal1" />
+        <Key word = "dcl_binormal2" />
+        <Key word = "dcl_binormal3" />
+        <Key word = "dcl_binormal4" />
+        <Key word = "dcl_binormal5" />
+        <Key word = "dcl_binormal6" />
+        <Key word = "dcl_binormal7" />
+        <Key word = "dcl_tessfactor" />
+        <Key word = "dcl_tessfactor0" />
+        <Key word = "dcl_tessfactor1" />
+        <Key word = "dcl_tessfactor2" />
+        <Key word = "dcl_tessfactor3" />
+        <Key word = "dcl_tessfactor4" />
+        <Key word = "dcl_tessfactor5" />
+        <Key word = "dcl_tessfactor6" />
+        <Key word = "dcl_tessfactor7" />
+        <Key word = "dcl_positiont" />
+        <Key word = "dcl_positiont0" />
+        <Key word = "dcl_positiont1" />
+        <Key word = "dcl_positiont2" />
+        <Key word = "dcl_positiont3" />
+        <Key word = "dcl_positiont4" />
+        <Key word = "dcl_positiont5" />
+        <Key word = "dcl_positiont6" />
+        <Key word = "dcl_positiont7" />
+        <Key word = "dcl_color" />
+        <Key word = "dcl_color0" />
+        <Key word = "dcl_color1" />
+        <Key word = "dcl_color2" />
+        <Key word = "dcl_color3" />
+        <Key word = "dcl_color4" />
+        <Key word = "dcl_color5" />
+        <Key word = "dcl_color6" />
+        <Key word = "dcl_color7" />
+        <Key word = "dcl_fog" />
+        <Key word = "dcl_fog0" />
+        <Key word = "dcl_fog1" />
+        <Key word = "dcl_fog2" />
+        <Key word = "dcl_fog3" />
+        <Key word = "dcl_fog4" />
+        <Key word = "dcl_fog5" />
+        <Key word = "dcl_fog6" />
+        <Key word = "dcl_fog7" />
+        <Key word = "dcl_depth" />
+        <Key word = "dcl_depth0" />
+        <Key word = "dcl_depth1" />
+        <Key word = "dcl_depth2" />
+        <Key word = "dcl_depth3" />
+        <Key word = "dcl_depth4" />
+        <Key word = "dcl_depth5" />
+        <Key word = "dcl_depth6" />
+        <Key word = "dcl_depth7" />
+        <Key word = "dcl_sample" />
+        <Key word = "dcl_sample0" />
+        <Key word = "dcl_sample1" />
+        <Key word = "dcl_sample2" />
+        <Key word = "dcl_sample3" />
+        <Key word = "dcl_sample4" />
+        <Key word = "dcl_sample5" />
+        <Key word = "dcl_sample6" />
+        <Key word = "dcl_sample7" />
+        <Key word = "dcl_constantBuffer" />
+        <Key word = "dcl_globalFlags" />
+        <Key word = "dcl_immediateConstantBuffer" />
+        <Key word = "dcl_indexableTemp" />
+        <Key word = "dcl_indexRange" />
+        <Key word = "dcl_input" />
+        <Key word = "dcl_input_sv" />
+        <Key word = "dcl_maxOutputVertexCount" />
+        <Key word = "dcl_output" />
+        <Key word = "dcl_output_sgv" />
+        <Key word = "dcl_output_siv" />
+        <Key word = "dcl_outputToplogy" />
+        <Key word = "dcl_resource" />
+        <Key word = "dcl_sampler" />
+        <Key word = "dcl_temps" />
+        <Key word = "def" />
+        <Key word = "def_pp" />
+        <Key word = "defb" />
+        <Key word = "defi" />
+        <Key word = "dp2add" />
+        <Key word = "dp2add_x2" />
+        <Key word = "dp2add_x4" />
+        <Key word = "dp2add_x8" />
+        <Key word = "dp2add_d2" />
+        <Key word = "dp2add_d4" />
+        <Key word = "dp2add_d8" />
+        <Key word = "dp2add_pp" />
+        <Key word = "dp2add_sat" />
+        <Key word = "dp3" />
+        <Key word = "dp3_x2" />
+        <Key word = "dp3_x4" />
+        <Key word = "dp3_x8" />
+        <Key word = "dp3_d2" />
+        <Key word = "dp3_d4" />
+        <Key word = "dp3_d8" />
+        <Key word = "dp3_pp" />
+        <Key word = "dp3_sat" />
+        <Key word = "dp4" />
+        <Key word = "dp4_x2" />
+        <Key word = "dp4_x4" />
+        <Key word = "dp4_x8" />
+        <Key word = "dp4_d2" />
+        <Key word = "dp4_d4" />
+        <Key word = "dp4_d8" />
+        <Key word = "dp4_pp" />
+        <Key word = "dp4_sat" />
+        <Key word = "dsx" />
+        <Key word = "dsx_x2" />
+        <Key word = "dsx_x4" />
+        <Key word = "dsx_x8" />
+        <Key word = "dsx_d2" />
+        <Key word = "dsx_d4" />
+        <Key word = "dsx_d8" />
+        <Key word = "dsx_pp" />
+        <Key word = "dsx_sat" />
+        <Key word = "dsy" />
+        <Key word = "dsy_x2" />
+        <Key word = "dsy_x4" />
+        <Key word = "dsy_x8" />
+        <Key word = "dsy_d2" />
+        <Key word = "dsy_d4" />
+        <Key word = "dsy_d8" />
+        <Key word = "dsy_pp" />
+        <Key word = "dsy_sat" />
+        <Key word = "dst" />
+        <Key word = "dst_sat" />
+        <Key word = "else" />
+        <Key word = "endif" />
+        <Key word = "endloop" />
+        <Key word = "endrep" />
+        <Key word = "exp" />
+        <Key word = "exp_x2" />
+        <Key word = "exp_x4" />
+        <Key word = "exp_x8" />
+        <Key word = "exp_d2" />
+        <Key word = "exp_d4" />
+        <Key word = "exp_d8" />
+        <Key word = "exp_pp" />
+        <Key word = "exp_sat" />
+        <Key word = "expp" />
+        <Key word = "expp_sat" />
+        <Key word = "frc" />
+        <Key word = "frc_x2" />
+        <Key word = "frc_x4" />
+        <Key word = "frc_x8" />
+        <Key word = "frc_d2" />
+        <Key word = "frc_d4" />
+        <Key word = "frc_d8" />
+        <Key word = "frc_pp" />
+        <Key word = "if" />
+        <Key word = "if_gt" />
+        <Key word = "if_lt" />
+        <Key word = "if_ge" />
+        <Key word = "if_le" />
+        <Key word = "if_eq" />
+        <Key word = "if_ne" />
+        <Key word = "label" />
+        <Key word = "lit" />
+        <Key word = "lit_sat" />
+        <Key word = "log" />
+        <Key word = "log_x2" />
+        <Key word = "log_x4" />
+        <Key word = "log_x8" />
+        <Key word = "log_d2" />
+        <Key word = "log_d4" />
+        <Key word = "log_d8" />
+        <Key word = "log_pp" />
+        <Key word = "log_sat" />
+        <Key word = "logp" />
+        <Key word = "logp_sat" />
+        <Key word = "loop" />
+        <Key word = "lrp" />
+        <Key word = "lrp_x2" />
+        <Key word = "lrp_x4" />
+        <Key word = "lrp_x8" />
+        <Key word = "lrp_d2" />
+        <Key word = "lrp_d4" />
+        <Key word = "lrp_d8" />
+        <Key word = "lrp_pp" />
+        <Key word = "lrp_sat" />
+        <Key word = "m3x2" />
+        <Key word = "m3x2_x2" />
+        <Key word = "m3x2_x4" />
+        <Key word = "m3x2_x8" />
+        <Key word = "m3x2_d2" />
+        <Key word = "m3x2_d4" />
+        <Key word = "m3x2_d8" />
+        <Key word = "m3x2_pp" />
+        <Key word = "m3x2_sat" />
+        <Key word = "m3x3" />
+        <Key word = "m3x3_x2" />
+        <Key word = "m3x3_x4" />
+        <Key word = "m3x3_x8" />
+        <Key word = "m3x3_d2" />
+        <Key word = "m3x3_d4" />
+        <Key word = "m3x3_d8" />
+        <Key word = "m3x3_pp" />
+        <Key word = "m3x3_sat" />
+        <Key word = "m3x4" />
+        <Key word = "m3x4_x2" />
+        <Key word = "m3x4_x4" />
+        <Key word = "m3x4_x8" />
+        <Key word = "m3x4_d2" />
+        <Key word = "m3x4_d4" />
+        <Key word = "m3x4_d8" />
+        <Key word = "m3x4_pp" />
+        <Key word = "m3x4_sat" />
+        <Key word = "m4x3" />
+        <Key word = "m4x3_x2" />
+        <Key word = "m4x3_x4" />
+        <Key word = "m4x3_x8" />
+        <Key word = "m4x3_d2" />
+        <Key word = "m4x3_d4" />
+        <Key word = "m4x3_d8" />
+        <Key word = "m4x3_pp" />
+        <Key word = "m4x3_sat" />
+        <Key word = "m4x4" />
+        <Key word = "m4x4_x2" />
+        <Key word = "m4x4_x4" />
+        <Key word = "m4x4_x8" />
+        <Key word = "m4x4_d2" />
+        <Key word = "m4x4_d4" />
+        <Key word = "m4x4_d8" />
+        <Key word = "m4x4_pp" />
+        <Key word = "m4x4_sat" />
+        <Key word = "mad" />
+        <Key word = "mad_x2" />
+        <Key word = "mad_x4" />
+        <Key word = "mad_x8" />
+        <Key word = "mad_d2" />
+        <Key word = "mad_d4" />
+        <Key word = "mad_d8" />
+        <Key word = "mad_pp" />
+        <Key word = "mad_sat" />
+        <Key word = "max" />
+        <Key word = "max_x2" />
+        <Key word = "max_x4" />
+        <Key word = "max_x8" />
+        <Key word = "max_d2" />
+        <Key word = "max_d4" />
+        <Key word = "max_d8" />
+        <Key word = "max_pp" />
+        <Key word = "max_sat" />
+        <Key word = "min" />
+        <Key word = "min_x2" />
+        <Key word = "min_x4" />
+        <Key word = "min_x8" />
+        <Key word = "min_d2" />
+        <Key word = "min_d4" />
+        <Key word = "min_d8" />
+        <Key word = "min_pp" />
+        <Key word = "min_sat" />
+        <Key word = "mov" />
+        <Key word = "mov_x2" />
+        <Key word = "mov_x4" />
+        <Key word = "mov_x8" />
+        <Key word = "mov_d2" />
+        <Key word = "mov_d4" />
+        <Key word = "mov_d8" />
+        <Key word = "mov_pp" />
+        <Key word = "mov_sat" />
+        <Key word = "mova" />
+        <Key word = "mul" />
+        <Key word = "mul_x2" />
+        <Key word = "mul_x4" />
+        <Key word = "mul_x8" />
+        <Key word = "mul_d2" />
+        <Key word = "mul_d4" />
+        <Key word = "mul_d8" />
+        <Key word = "mul_pp" />
+        <Key word = "mul_sat" />
+        <Key word = "nop" />
+        <Key word = "nrm" />
+        <Key word = "nrm_x2" />
+        <Key word = "nrm_x4" />
+        <Key word = "nrm_x8" />
+        <Key word = "nrm_d2" />
+        <Key word = "nrm_d4" />
+        <Key word = "nrm_d8" />
+        <Key word = "nrm_pp" />
+        <Key word = "nrm_sat" />
+        <Key word = "pow" />
+        <Key word = "pow_x2" />
+        <Key word = "pow_x4" />
+        <Key word = "pow_x8" />
+        <Key word = "pow_d2" />
+        <Key word = "pow_d4" />
+        <Key word = "pow_d8" />
+        <Key word = "pow_pp" />
+        <Key word = "pow_sat" />
+        <Key word = "rcp" />
+        <Key word = "rcp_x2" />
+        <Key word = "rcp_x4" />
+        <Key word = "rcp_x8" />
+        <Key word = "rcp_d2" />
+        <Key word = "rcp_d4" />
+        <Key word = "rcp_d8" />
+        <Key word = "rcp_pp" />
+        <Key word = "rcp_sat" />
+        <Key word = "rep" />
+        <Key word = "ret" />
+        <Key word = "rsq" />
+        <Key word = "rsq_x2" />
+        <Key word = "rsq_x4" />
+        <Key word = "rsq_x8" />
+        <Key word = "rsq_d2" />
+        <Key word = "rsq_d4" />
+        <Key word = "rsq_d8" />
+        <Key word = "rsq_pp" />
+        <Key word = "rsq_sat" />
+        <Key word = "setp_gt" />
+        <Key word = "setp_lt" />
+        <Key word = "setp_ge" />
+        <Key word = "setp_le" />
+        <Key word = "setp_eq" />
+        <Key word = "setp_ne" />
+        <Key word = "sge" />
+        <Key word = "sgn" />
+        <Key word = "sincos" />
+        <Key word = "sincos_x2" />
+        <Key word = "sincos_x4" />
+        <Key word = "sincos_x8" />
+        <Key word = "sincos_d2" />
+        <Key word = "sincos_d4" />
+        <Key word = "sincos_d8" />
+        <Key word = "sincos_pp" />
+        <Key word = "slt" />
+        <Key word = "sub" />
+        <Key word = "sub_x2" />
+        <Key word = "sub_x4" />
+        <Key word = "sub_x8" />
+        <Key word = "sub_d2" />
+        <Key word = "sub_d4" />
+        <Key word = "sub_d8" />
+        <Key word = "sub_pp" />
+        <Key word = "sub_sat" />
+        <Key word = "tex" />
+        <Key word = "tex_x2" />
+        <Key word = "tex_x4" />
+        <Key word = "tex_x8" />
+        <Key word = "tex_d2" />
+        <Key word = "tex_d4" />
+        <Key word = "tex_d8" />
+        <Key word = "tex_pp" />
+        <Key word = "texbem" />
+        <Key word = "texbem_x2" />
+        <Key word = "texbem_x4" />
+        <Key word = "texbem_x8" />
+        <Key word = "texbem_d2" />
+        <Key word = "texbem_d4" />
+        <Key word = "texbem_d8" />
+        <Key word = "texbem_pp" />
+        <Key word = "texbeml" />
+        <Key word = "texbeml_x2" />
+        <Key word = "texbeml_x4" />
+        <Key word = "texbeml_x8" />
+        <Key word = "texbeml_d2" />
+        <Key word = "texbeml_d4" />
+        <Key word = "texbeml_d8" />
+        <Key word = "texbeml_pp" />
+        <Key word = "texcoord" />
+        <Key word = "texcrd" />
+        <Key word = "texcrd_x2" />
+        <Key word = "texcrd_x4" />
+        <Key word = "texcrd_x8" />
+        <Key word = "texcrd_d2" />
+        <Key word = "texcrd_d4" />
+        <Key word = "texcrd_d8" />
+        <Key word = "texcrd_pp" />
+        <Key word = "texdepth" />
+        <Key word = "texdepth_x2" />
+        <Key word = "texdepth_x4" />
+        <Key word = "texdepth_x8" />
+        <Key word = "texdepth_d2" />
+        <Key word = "texdepth_d4" />
+        <Key word = "texdepth_d8" />
+        <Key word = "texdepth_pp" />
+        <Key word = "texdp3" />
+        <Key word = "texdp3_x2" />
+        <Key word = "texdp3_x4" />
+        <Key word = "texdp3_x8" />
+        <Key word = "texdp3_d2" />
+        <Key word = "texdp3_d4" />
+        <Key word = "texdp3_d8" />
+        <Key word = "texdp3_pp" />
+        <Key word = "texdp3tex" />
+        <Key word = "texdp3tex_x2" />
+        <Key word = "texdp3tex_x4" />
+        <Key word = "texdp3tex_x8" />
+        <Key word = "texdp3tex_d2" />
+        <Key word = "texdp3tex_d4" />
+        <Key word = "texdp3tex_d8" />
+        <Key word = "texdp3tex_pp" />
+        <Key word = "texkill" />
+        <Key word = "texld" />
+        <Key word = "texld_x2" />
+        <Key word = "texld_x4" />
+        <Key word = "texld_x8" />
+        <Key word = "texld_d2" />
+        <Key word = "texld_d4" />
+        <Key word = "texld_d8" />
+        <Key word = "texld_pp" />
+        <Key word = "texldb" />
+        <Key word = "texldb_x2" />
+        <Key word = "texldb_x4" />
+        <Key word = "texldb_x8" />
+        <Key word = "texldb_d2" />
+        <Key word = "texldb_d4" />
+        <Key word = "texldb_d8" />
+        <Key word = "texldb_pp" />
+        <Key word = "texldd" />
+        <Key word = "texldd_x2" />
+        <Key word = "texldd_x4" />
+        <Key word = "texldd_x8" />
+        <Key word = "texldd_d2" />
+        <Key word = "texldd_d4" />
+        <Key word = "texldd_d8" />
+        <Key word = "texldd_pp" />
+        <Key word = "texldd" />
+        <Key word = "texldd_x2" />
+        <Key word = "texldd_x4" />
+        <Key word = "texldd_x8" />
+        <Key word = "texldd_d2" />
+        <Key word = "texldd_d4" />
+        <Key word = "texldd_d8" />
+        <Key word = "texldd_pp" />
+        <Key word = "texldp" />
+        <Key word = "texldp_x2" />
+        <Key word = "texldp_x4" />
+        <Key word = "texldp_x8" />
+        <Key word = "texldp_d2" />
+        <Key word = "texldp_d4" />
+        <Key word = "texldp_d8" />
+        <Key word = "texldp_pp" />
+        <Key word = "texm3x2depth" />
+        <Key word = "texm3x2depth_x2" />
+        <Key word = "texm3x2depth_x4" />
+        <Key word = "texm3x2depth_x8" />
+        <Key word = "texm3x2depth_d2" />
+        <Key word = "texm3x2depth_d4" />
+        <Key word = "texm3x2depth_d8" />
+        <Key word = "texm3x2depth_pp" />
+        <Key word = "texm3x2pad" />
+        <Key word = "texm3x2pad_x2" />
+        <Key word = "texm3x2pad_x4" />
+        <Key word = "texm3x2pad_x8" />
+        <Key word = "texm3x2pad_d2" />
+        <Key word = "texm3x2pad_d4" />
+        <Key word = "texm3x2pad_d8" />
+        <Key word = "texm3x2pad_pp" />
+        <Key word = "texm3x2tex" />
+        <Key word = "texm3x2tex_x2" />
+        <Key word = "texm3x2tex_x4" />
+        <Key word = "texm3x2tex_x8" />
+        <Key word = "texm3x2tex_d2" />
+        <Key word = "texm3x2tex_d4" />
+        <Key word = "texm3x2tex_d8" />
+        <Key word = "texm3x2tex_pp" />
+        <Key word = "texm3x3" />
+        <Key word = "texm3x3_x2" />
+        <Key word = "texm3x3_x4" />
+        <Key word = "texm3x3_x8" />
+        <Key word = "texm3x3_d2" />
+        <Key word = "texm3x3_d4" />
+        <Key word = "texm3x3_d8" />
+        <Key word = "texm3x3_pp" />
+        <Key word = "texm3x3pad" />
+        <Key word = "texm3x3pad_x2" />
+        <Key word = "texm3x3pad_x4" />
+        <Key word = "texm3x3pad_x8" />
+        <Key word = "texm3x3pad_d2" />
+        <Key word = "texm3x3pad_d4" />
+        <Key word = "texm3x3pad_d8" />
+        <Key word = "texm3x3pad_pp" />
+        <Key word = "texm3x3spec" />
+        <Key word = "texm3x3spec_x2" />
+        <Key word = "texm3x3spec_x4" />
+        <Key word = "texm3x3spec_x8" />
+        <Key word = "texm3x3spec_d2" />
+        <Key word = "texm3x3spec_d4" />
+        <Key word = "texm3x3spec_d8" />
+        <Key word = "texm3x3spec_pp" />
+        <Key word = "texm3x3tex" />
+        <Key word = "texm3x3tex_x2" />
+        <Key word = "texm3x3tex_x4" />
+        <Key word = "texm3x3tex_x8" />
+        <Key word = "texm3x3tex_d2" />
+        <Key word = "texm3x3tex_d4" />
+        <Key word = "texm3x3tex_d8" />
+        <Key word = "texm3x3tex_pp" />
+        <Key word = "texm3x3vspec" />
+        <Key word = "texm3x3vspec_x2" />
+        <Key word = "texm3x3vspec_x4" />
+        <Key word = "texm3x3vspec_x8" />
+        <Key word = "texm3x3vspec_d2" />
+        <Key word = "texm3x3vspec_d4" />
+        <Key word = "texm3x3vspec_d8" />
+        <Key word = "texm3x3vspec_pp" />
+        <Key word = "texreg2ar" />
+        <Key word = "texreg2ar_x2" />
+        <Key word = "texreg2ar_x4" />
+        <Key word = "texreg2ar_x8" />
+        <Key word = "texreg2ar_d2" />
+        <Key word = "texreg2ar_d4" />
+        <Key word = "texreg2ar_d8" />
+        <Key word = "texreg2ar_pp" />
+        <Key word = "texreg2gb" />
+        <Key word = "texreg2gb_x2" />
+        <Key word = "texreg2gb_x4" />
+        <Key word = "texreg2gb_x8" />
+        <Key word = "texreg2gb_d2" />
+        <Key word = "texreg2gb_d4" />
+        <Key word = "texreg2gb_d8" />
+        <Key word = "texreg2gb_pp" />
+        <Key word = "texreg2rgb" />
+        <Key word = "texreg2rgb_x2" />
+        <Key word = "texreg2rgb_x4" />
+        <Key word = "texreg2rgb_x8" />
+        <Key word = "texreg2rgb_d2" />
+        <Key word = "texreg2rgb_d4" />
+        <Key word = "texreg2rgb_d8" />
+        <Key word = "texreg2rgb_pp" />
+        <Key word = "vs" />
+      </KeyWords>
+    </RuleSet>
+    
+    
+    <RuleSet name = "CommentMarkerSet" ignorecase = "false">
+      <Delimiters>&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' ,	.?</Delimiters>
+      <KeyWords name = "ErrorWords" bold="true" italic="false" color="Red">
+        <Key word = "TODO" />
+        <Key word = "FIXME" />
+      </KeyWords>
+      
+      <KeyWords name = "WarningWords" bold="true" italic="false" color="#EEE0E000">
+        <Key word = "HACK" />
+        <Key word = "UNDONE" />
+      </KeyWords>
+    </RuleSet>
+
+    
+    <RuleSet name = "IncludeStatemetSet" ignorecase = "false">
+      <Delimiters>&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' ,	.?</Delimiters>
+      <Span name = "IncludeLocalFile" bold = "false" italic = "false" color = "DarkRed" stopateol = "true" escapecharacter="\">
+        <Begin>"</Begin>
+        <End>"</End>
+      </Span>
+      <Span name = "IncludeGlobalFile" bold = "false" italic = "false" color = "DarkRed" stopateol = "true" escapecharacter="\">
+        <Begin>&lt;</Begin>
+        <End>&gt;</End>
+      </Span>
+    </RuleSet>
+
+  </RuleSets>  
+  
+</SyntaxDefinition>

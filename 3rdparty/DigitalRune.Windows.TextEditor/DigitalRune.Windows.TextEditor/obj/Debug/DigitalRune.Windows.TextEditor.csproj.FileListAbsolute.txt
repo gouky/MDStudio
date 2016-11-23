@@ -1,0 +1,6 @@
+D:\Devt\MDStudio\3rdparty\DigitalRune.Windows.TextEditor\DigitalRune.Windows.TextEditor\bin\Debug\DigitalRune.Windows.TextEditor.XML
+D:\Devt\MDStudio\3rdparty\DigitalRune.Windows.TextEditor\DigitalRune.Windows.TextEditor\bin\Debug\DigitalRune.Windows.TextEditor.dll
+D:\Devt\MDStudio\3rdparty\DigitalRune.Windows.TextEditor\DigitalRune.Windows.TextEditor\bin\Debug\DigitalRune.Windows.TextEditor.pdb
+D:\Devt\MDStudio\3rdparty\DigitalRune.Windows.TextEditor\DigitalRune.Windows.TextEditor\obj\Debug\DigitalRune.Windows.TextEditor.csprojResolveAssemblyReference.cache
+D:\Devt\MDStudio\3rdparty\DigitalRune.Windows.TextEditor\DigitalRune.Windows.TextEditor\obj\Debug\DigitalRune.Windows.TextEditor.dll
+D:\Devt\MDStudio\3rdparty\DigitalRune.Windows.TextEditor\DigitalRune.Windows.TextEditor\obj\Debug\DigitalRune.Windows.TextEditor.pdb

@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{41A0F3FD-5486-4D96-9FF7-76C50F032E76}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>DGenLib</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WITH_MUSA;WITH_DZ80;WITH_DEBUGGER;_CRT_SECURE_NO_WARNINGS;NO_COMPLETION;_DZ80_EXCLUDE_SCRIPT;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SDL2_PATH)\Include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>sdl2.lib;User32.lib</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SDL2_Path)\lib\x86</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="debug.cpp" />
+    <ClCompile Include="decode.c" />
+    <ClCompile Include="dgen.cpp" />
+    <ClCompile Include="dz80\config.c" />
+    <ClCompile Include="dz80\dissz80.c" />
+    <ClCompile Include="dz80\example.c" />
+    <ClCompile Include="dz80\loadfile.c" />
+    <ClCompile Include="dz80\noscript.c" />
+    <ClCompile Include="dz80\parsecmd.c" />
+    <ClCompile Include="dz80\script.c" />
+    <ClCompile Include="dz80\tables.c" />
+    <ClCompile Include="fm.c" />
+    <ClCompile Include="graph.cpp" />
+    <ClCompile Include="joystick.cpp" />
+    <ClCompile Include="linenoise\linenoise.c" />
+    <ClCompile Include="linenoise\utf8.c" />
+    <ClCompile Include="main.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="md.cpp" />
+    <ClCompile Include="mdfr.cpp" />
+    <ClCompile Include="mem.cpp" />
+    <ClCompile Include="musa\m68kcpu.c" />
+    <ClCompile Include="musa\m68kdasm.c" />
+    <ClCompile Include="musa\m68kops.c" />
+    <ClCompile Include="myfm.cpp" />
+    <ClCompile Include="ras.cpp" />
+    <ClCompile Include="rc.cpp" />
+    <ClCompile Include="romload.c" />
+    <ClCompile Include="save.cpp" />
+    <ClCompile Include="sn76496.c" />
+    <ClCompile Include="system.c" />
+    <ClCompile Include="vdp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ckvp.h" />
+    <ClInclude Include="debug.h" />
+    <ClInclude Include="decode.h" />
+    <ClInclude Include="dgen.h" />
+    <ClInclude Include="dz80\dissz80.h" />
+    <ClInclude Include="dz80\dissz80p.h" />
+    <ClInclude Include="dz80\types.h" />
+    <ClInclude Include="fm.h" />
+    <ClInclude Include="linenoise\linenoise.h" />
+    <ClInclude Include="linenoise\utf8.h" />
+    <ClInclude Include="md.h" />
+    <ClInclude Include="mem.h" />
+    <ClInclude Include="memcpy.h" />
+    <ClInclude Include="musa\m68k.h" />
+    <ClInclude Include="musa\m68kcpu.h" />
+    <ClInclude Include="musa\m68kops.h" />
+    <ClInclude Include="pd.h" />
+    <ClInclude Include="ras-drawplane.h" />
+    <ClInclude Include="rc-vars.h" />
+    <ClInclude Include="rc.h" />
+    <ClInclude Include="romload.h" />
+    <ClInclude Include="sdl\pd-defs.h" />
+    <ClInclude Include="sn76496.h" />
+    <ClInclude Include="system.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="linenoise\README.markdown" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,427 @@
+# This is a sample .dgenrc file
+# It simply sets everything to their default values
+# Lines that BEGIN with a hash (#) (i.e. NOTHING before it) are comments.
+# Also, everything after the "field = value" is ignored (but don't count on it)
+
+# Note that your own RC file doesn't need to include every field like this
+# one does, any ones you exclude simply have their compiled-in default values.
+
+# Also, you can have multiple RC files, and use the -r option to dgen
+# to pick the rc you want to load.
+
+# Fields beginning with "key_" take key names. The valid key names are listed
+# in the dgenrc(5) manpage.
+
+# Fields beginning with "bool_" are boolean, i.e. they take a true or false
+# value:
+#  "true", "yes", any number except 0: true 
+#  "false", "no", "0"                : false
+
+# Fields beginning with "int_" take a _positive_ integer. Simple enough, huh? ;)
+
+# The syntax and fields of this file are documented in a bit more detail in the
+# dgenrc(5) manpage.
+
+# These are the controls for pad 1
+key_pad1_up = up
+key_pad1_down = down
+key_pad1_left = left
+key_pad1_right = right
+key_pad1_a = a
+key_pad1_b = s
+key_pad1_c = d
+key_pad1_x = q
+key_pad1_y = w
+key_pad1_z = e
+key_pad1_mode = backspace
+key_pad1_start = return
+
+# If you prefer W.A.S.D type controls (again player 1):
+#key_pad1_up = w
+#key_pad1_down = s
+#key_pad1_left = a
+#key_pad1_right = d
+#key_pad1_a = j
+#key_pad1_b = k
+#key_pad1_c = l
+#key_pad1_x = u
+#key_pad1_y = i
+#key_pad1_z = o
+#key_pad1_mode = backspace
+#key_pad1_start = return
+
+# Joystick/joypad definitions for pad 1
+# Defaults are tailored for Gravis GamePad Pros. (10 button)
+joy_pad1_up = joystick0-axis1-min
+joy_pad1_down = joystick0-axis1-max
+joy_pad1_left = joystick0-axis0-min
+joy_pad1_right = joystick0-axis0-max
+joy_pad1_a = joystick0-button0
+joy_pad1_b = joystick0-button3
+joy_pad1_c = joystick0-button1
+joy_pad1_x = joystick0-button6
+joy_pad1_y = joystick0-button4
+joy_pad1_z = joystick0-button5
+joy_pad1_mode = joystick0-button9
+joy_pad1_start = joystick0-button8
+
+# The same for pad 2
+# Yes, I KNOW the default player 2 keys are awful. Pick your own!
+key_pad2_up = kp_up
+key_pad2_down = kp_down
+key_pad2_left = kp_left
+key_pad2_right = kp_right
+key_pad2_a = delete
+key_pad2_b = end
+key_pad2_c = page_down
+key_pad2_x = insert
+key_pad2_y = home
+key_pad2_z = page_up
+key_pad2_mode = kp_plus
+key_pad2_start = kp_enter
+
+# Joystick/joypad definitions for pad 2
+# Defaults are tailored for Gravis GamePad Pros. (10 button)
+joy_pad2_up = joystick1-axis1-min
+joy_pad2_down = joystick1-axis1-max
+joy_pad2_left = joystick1-axis0-min
+joy_pad2_right = joystick1-axis0-max
+joy_pad2_a = joystick1-button0
+joy_pad2_b = joystick1-button3
+joy_pad2_c = joystick1-button1
+joy_pad2_x = joystick1-button6
+joy_pad2_y = joystick1-button4
+joy_pad2_z = joystick1-button5
+joy_pad2_mode = joystick1-button9
+joy_pad2_start = joystick1-button8
+
+# Fix checksum, needed by some games with Game Genie codes
+key_fix_checksum = f1
+joy_fix_checksum = ''
+
+# Quit DGen or switch to the next ROM on the command-line.
+key_quit = escape
+joy_quit = ''
+# Toggle crap-tv
+key_craptv_toggle = f5
+joy_craptv_toggle = ''
+# Toggle scaling algorithm.
+key_scaling_toggle = f6
+joy_scaling_toggle = ''
+# Screenshot
+key_screenshot = f12
+joy_screenshot = ''
+# Reset Genesis
+key_reset = tab
+joy_reset = ''
+# Toggle fullscreen mode
+key_fullscreen_toggle = alt-enter
+joy_fullscreen_toggle = ''
+
+# Use this to toggle which CPU core to use, no need to reset!  :)
+# If you don't have multiple CPU cores, it won't do anything!
+key_cpu_toggle = f11
+joy_cpu_toggle = ''
+
+# Same as above, for Z80 core.
+key_z80_toggle = f10
+joy_z80_toggle = ''
+
+# This pauses emulation :)
+key_stop = z
+joy_stop = ''
+
+# Display interactive prompt.
+key_prompt = :
+joy_prompt = ''
+
+# This prompts for a Game Genie code.
+key_game_genie = f9
+joy_game_genie = ''
+
+# Press this to break into the debugger.
+key_debug_enter = `
+joy_debug_enter = ''
+
+# Pick save slot
+key_slot_0 = 0
+key_slot_1 = 1
+key_slot_2 = 2
+key_slot_3 = 3
+key_slot_4 = 4
+key_slot_5 = 5
+key_slot_6 = 6
+key_slot_7 = 7
+key_slot_8 = 8
+key_slot_9 = 9
+joy_slot_0 = ''
+joy_slot_1 = ''
+joy_slot_2 = ''
+joy_slot_3 = ''
+joy_slot_4 = ''
+joy_slot_5 = ''
+joy_slot_6 = ''
+joy_slot_7 = ''
+joy_slot_8 = ''
+joy_slot_9 = ''
+# Save/load game to current slot
+key_save = f2
+key_load = f3
+joy_save = ''
+joy_load = ''
+
+# VDP plane debugging.
+# Won't do anything unless VDP debugging is enabled at compile time.
+bool_vdp_hide_plane_a = no
+bool_vdp_hide_plane_b = no
+bool_vdp_hide_plane_w = no
+bool_vdp_hide_sprites = no
+# Sprites boxing also requires VDP debugging.
+bool_vdp_sprites_boxing = false
+int_vdp_sprites_boxing_fg = 0xffff00 # yellow
+int_vdp_sprites_boxing_bg = 0x00ff00 # green
+
+# There are now multiple CTV effects to try. Pick your favorite:
+#  off       - No CTV
+#  blur      - Blur bitmap (this is the CTV from older versions)
+#  scanline  - Attenuate every other scanline, by Phillip K. Hornung <redx@pknet.com>
+#  interlace - Unstable crappy television (I had one that looked like this ;), by me!
+#  swab      - Swap video output endianness.
+ctv_craptv_startup = off
+
+# M68K and Z80 cores to use at startup.
+emu_m68k_startup = musa
+emu_z80_startup = cz80
+
+# These decide whether DGen should automatically load slot 0 on startup,
+# and/or autosave to slot 0 on exit.
+bool_autoload = no
+bool_autosave = no
+
+# When true, automatically dump the current configuration to dgenrc.auto before
+# exiting. This file is always loaded before dgenrc at startup.
+bool_autoconf = yes
+
+# Skip frames to keep time? (faster, but can make things look bad)
+# This doesn't matter if you have sound enabled, since the sound code has its
+# own frameskipping
+bool_frameskip = yes
+# Show cartridge header info at startup.
+bool_show_carthead = no
+
+# Directory where DGen should look for ROMs by default. It's relative to
+# DGen's home directory, unless an absolute path is provided.
+str_rom_path = "roms"
+
+# Sound?
+bool_sound = yes
+# The sound rate to use.
+int_soundrate = 44100
+# Number of sound segments to use for sound buffering. Lower values guarantee
+# low latency. Increment this only if the sound becomes choppy.
+int_soundsegs = 8
+# Size of the system sound buffer, in samples (samples are the sound unit,
+# sound rate is how many of them are played every second).  Specifying 0
+# automatically choses the safest value. If you experience sound issues
+# int_soundsegs is unable to solve, try to change this. Increasing it will
+# cause noticeable audio lag (it is unfortunately often required on slower
+# machines).
+int_soundsamples = 0
+
+# MJazz option - puts 2 more FM chips in the Megadrive for a sort of 22 channel
+# sound boost. Can sound good. Slows things down a lot.
+bool_mjazz = no
+
+# Volume level, in percent.
+int_volume = 100
+
+# Volume control.
+key_volume_inc = '='
+key_volume_dec = '-'
+joy_volume_inc = ''
+joy_volume_dec = ''
+
+# Binding arbitrary actions is also supported. In the following example,
+# pressing button 2 of the first joystick loads a ROM:
+#
+#bind_j0-b2 = 'load test_rom.bin'
+#
+# Unbinding dangerous keys defined by default (quit and reset) and rebinding
+# them using combinations.
+#
+# Buttons 3, 4 and 6 of the first joystick must be pressed simultaneously to
+# quit:
+#
+#key_quit = ''
+#joy_quit = ''
+#bind_'j0-b3 j0-b6 j0-b4' = joy_quit
+#
+# Button 3 of the first joystick and keys "q" "w" and "e" must be pressed
+# simultaneously to reset the console:
+#
+#key_reset = ''
+#joy_reset = ''
+#bind_'j0-b3 q w e' = joy_reset
+
+# This is how many microseconds DGen should sleep every frame. Even little
+# amounts can decrease CPU overhead significantly, and the default of 20
+# doesn't hurt performance terribly. Of course, set it to 0 if you don't
+# mind DGen eating all your CPU (like me ;)
+int_nice = 0
+
+# Desired window width and height.
+int_width = -1
+int_height = -1
+
+# Color depth (bits per pixel). Allowed values are 0 (automatic), 8, 15, 16,
+# 24 and 32. Ignored in OpenGL mode.
+int_depth = 0
+
+# Video refresh rate. The default is 60 as in NTSC consoles.
+int_hz = 60
+
+# When true, a PAL console is emulated. This should be used in combination
+# with int_hz above for 50Hz emulation.
+bool_pal = false
+
+# Region to emulate: U for America (NTSC), E for Europe (PAL),
+# J for Japan (NTSC), X for Japan (PAL), or empty space for autodetection
+# (the default).
+# Overrides bool_pal and int_hz.
+region = ' '
+
+# Regions DGen is allowed to emulate when autodetection is enabled,
+# ordered by preference.
+str_region_order = JUEX
+
+# Run fullscreen?
+bool_fullscreen = no
+
+# Prevent screen tearing.
+bool_doublebuffer = yes
+
+# Additional thread to offload the displaying of frames in specific cases,
+# see dgenrc.5.
+bool_screen_thread = no
+
+# If you want to increase the size of the rendered screen, increase this value.
+# It currently must be a whole number. See scaling filters.
+int_scale = -1
+int_scale_x = -1
+int_scale_y = -1
+
+# Display the current number of frames per second.
+bool_fps = false
+
+# Display pressed buttons. Can be used to help configuring them.
+bool_buttons = false
+
+# Swap bytes in the video output.
+bool_swab = false
+
+# Scaler to use when display resolution is larger than original screen.
+# Choose between "stretch", "scale", "hqx", "hqx stretch", "scale2x",
+# "scale2x stretch" and "none".
+scaling_startup = stretch
+
+# Use a joystick?
+bool_joystick = yes
+
+# Number of milliseconds to wait after the last mouse motion event to release
+# buttons bound to such events.
+int_mouse_delay = 50
+
+# Use OpenGL mode?
+bool_opengl = yes
+
+# Let OpenGL stretch the screen.
+bool_opengl_stretch = yes
+
+# Retain original aspect ratio when resizing window.
+bool_aspect = true
+
+# Use GL_LINEAR for textures filtering instead of GL_NEAREST.
+bool_opengl_linear = true
+
+# Use 32 bit textures. They require more memory but are usually faster than
+# 16 bit textures.
+bool_opengl_32bit = true
+
+# Use a square OpenGL texture. Wastes memory.
+bool_opengl_square = false
+
+# Height of the text area at the bottom of the screen, in pixels.
+int_info_height = -1
+
+# Generate unfiltered screenshots.
+bool_raw_screenshots = false
+
+# The following variables aren't supported anymore. They have been replaced
+# with the joy_* bindings. They are still mentioned here to help convert
+# existing configuration files.
+#
+# Specifying joysticks identifiers, axes and buttons separately isn't required
+# anymore, because each joy_* binding provides all the necessary information
+# using the following format (see dgenrc.5):
+#
+# joy_padX_{control} = joystick{X}-button{Y}
+# joy_padX_{control} = joystick{X}-axis{Y}-(min|max)
+# joy_padX_{control} = joystick{X}-hat{Y}-{direction}
+#
+# This allows more than a single joystick/joypad to manage a game controller,
+# bind joystick/joypad axes to arbitrary actions, and a single joystick/joypad
+# event to several actions.
+#
+# Additionally, you can use the "calibrate" command to define controls easily.
+#
+# Joystick device selection.
+#int_joystick1_dev = 0 # not supported anymore
+#int_joystick2_dev = 1 # not supported anymore
+#
+# Joystick axes.
+#int_joystick1_axisX = 0 # not supported anymore
+#int_joystick1_axisY = 1 # not supported anymore
+#int_joystick2_axisX = 0 # not supported anymore
+#int_joystick2_axisY = 1 # not supported anymore
+#
+# Don't reverse axes by default
+#bool_joystick1_axisX = false # not supported anymore
+#bool_joystick1_axisY = false # not supported anymore
+#bool_joystick2_axisX = false # not supported anymore
+#bool_joystick2_axisY = false # not supported anymore
+#
+# Joypad 1
+#joypad1_b0 = A # not supported anymore
+#joypad1_b1 = C # not supported anymore
+#joypad1_b2 = A # not supported anymore
+#joypad1_b3 = B # not supported anymore
+#joypad1_b4 = Y # not supported anymore
+#joypad1_b5 = Z # not supported anymore
+#joypad1_b6 = X # not supported anymore
+#joypad1_b7 = X # not supported anymore
+#joypad1_b8 = START # not supported anymore
+#joypad1_b9 = MODE # not supported anymore
+#joypad1_b10 = # not supported anymore
+#joypad1_b11 = # not supported anymore
+#joypad1_b12 = # not supported anymore
+#joypad1_b13 = # not supported anymore
+#joypad1_b14 = # not supported anymore
+#joypad1_b15 = # not supported anymore
+#
+# Joypad 2
+#joypad2_b0 = A # not supported anymore
+#joypad2_b1 = C # not supported anymore
+#joypad2_b2 = A # not supported anymore
+#joypad2_b3 = B # not supported anymore
+#joypad2_b4 = Y # not supported anymore
+#joypad2_b5 = Z # not supported anymore
+#joypad2_b6 = X # not supported anymore
+#joypad2_b7 = X # not supported anymore
+#joypad2_b8 = START # not supported anymore
+#joypad2_b9 = MODE # not supported anymore
+#joypad2_b10 = # not supported anymore
+#joypad2_b11 = # not supported anymore
+#joypad2_b12 = # not supported anymore
+#joypad2_b13 = # not supported anymore
+#joypad2_b14 = # not supported anymore
+#joypad2_b15 = # not supported anymore
