@@ -59,7 +59,7 @@ int InitDGen()
 	//	Init SDL
  	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 
-	g_SDLWindow		= SDL_CreateWindow("DGen",				SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 320, 240, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
+	g_SDLWindow		= SDL_CreateWindow("DGen",				SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 320, 240, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN | SDL_WINDOW_INPUT_FOCUS);
 	g_SDLRenderer	= SDL_CreateRenderer(g_SDLWindow, -1,	SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC|SDL_RENDERER_TARGETTEXTURE);
 	g_BackBuffer	= SDL_CreateTexture(g_SDLRenderer,		SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 240);
 
@@ -184,14 +184,80 @@ void	ProcessInputs()
 {
 	SDL_Event event;
 
+	const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+
 	while(SDL_PollEvent(&event))
 	{
 		switch(event.type)
 		{
 		case SDL_KEYDOWN:
+			switch(event.key.keysym.sym)
+			{
+			case SDLK_LEFT:
+			case SDLK_j:
+				s_DGenInstance->pad[0] &=~ MD_LEFT_MASK;
+				break;
+
+			case SDLK_RIGHT:
+			case SDLK_l:
+				s_DGenInstance->pad[0] &=~ MD_RIGHT_MASK;
+				break;
+
+			case SDLK_DOWN:
+			case SDLK_k:
+				s_DGenInstance->pad[0] &=~ MD_DOWN_MASK;
+				break;
+
+			case SDLK_UP:
+			case SDLK_i:
+				s_DGenInstance->pad[0] &=~ MD_UP_MASK;
+				break;
+
+			case SDLK_a:
+				s_DGenInstance->pad[0] &=~ MD_A_MASK;
+				break;
+			case SDLK_s:
+				s_DGenInstance->pad[0] &=~ MD_B_MASK;
+				break;
+			case SDLK_d:
+				s_DGenInstance->pad[0] &=~ MD_C_MASK;
+				break;
+			}
 			break;
 
 		case SDL_KEYUP:
+			switch(event.key.keysym.sym)
+			{
+			case SDLK_LEFT:
+			case SDLK_j:
+ 				s_DGenInstance->pad[0] |= MD_LEFT_MASK;
+				break;
+
+			case SDLK_RIGHT:
+			case SDLK_l:
+				s_DGenInstance->pad[0] |= MD_RIGHT_MASK;
+				break;
+
+			case SDLK_DOWN:
+			case SDLK_k:
+				s_DGenInstance->pad[0] |= MD_DOWN_MASK;
+				break;
+
+			case SDLK_UP:
+			case SDLK_i:
+				s_DGenInstance->pad[0] |= MD_UP_MASK;
+				break;
+
+			case SDLK_a:
+				s_DGenInstance->pad[0] |= MD_A_MASK;
+				break;
+			case SDLK_s:
+				s_DGenInstance->pad[0] |= MD_B_MASK;
+				break;
+			case SDLK_d:
+				s_DGenInstance->pad[0] |= MD_C_MASK;
+				break;
+			}
 			break;
 		}
 	}

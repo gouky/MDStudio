@@ -66,5 +66,10 @@ namespace MDStudio
         {
             m_Parent.UpdateViewBuildLog(Visible);
         }
+
+        private void listErrors_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

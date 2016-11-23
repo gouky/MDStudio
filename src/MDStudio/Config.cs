@@ -41,6 +41,8 @@ namespace MDStudio
                         config = (Config)xs.Deserialize(sr);
 
                         Asm68kPath = config.Asm68kPath;
+
+                        sr.Close();
                     }
                     catch (Exception e)
                     {
@@ -55,11 +57,12 @@ namespace MDStudio
             XmlSerializer xs = new XmlSerializer(typeof(Config));
             string path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\mdstudio";
 
-            StreamWriter sw = new StreamWriter(path + @"\config.xml");
-
             try
             {
+                StreamWriter sw = new StreamWriter(path + @"\config.xml");
                 xs.Serialize(sw, this);
+
+                sw.Close();
             }
             catch (Exception e)
             {

@@ -30,6 +30,8 @@ namespace MDStudio
 
         private readonly Timer m_Timer = new Timer();
         private string m_PathToProject;
+        private string m_ProjectName;
+        private string m_SourceFileName;
 
         private DGenThread m_DGenThread;
         private DebugSource m_DebugSource;
@@ -43,9 +45,13 @@ namespace MDStudio
 
         private bool m_Modified;
 
+        private List<Marker> m_ErrorMarkers;
+
         public MainForm()
         {
             InitializeComponent();
+            
+            m_ErrorMarkers = new List<Marker>();
 
             //
             m_Config = new Config();
@@ -69,16 +75,10 @@ namespace MDStudio
             m_Timer.Interval = 16;
             m_Timer.Tick += TimerTick;
             m_Timer.Enabled = true;
-
-            m_PathToProject = @"D:\Nico\Megadrive\DragonNinja\";
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string source = System.IO.File.ReadAllText(m_PathToProject + @"\dragonninja.s");
-            codeEditor.Document.TextContent = source;
-            codeEditor.Document.BookmarkManager.Clear();
-            undoMenu.Enabled = false;
         }
 
         void TimerTick(object sender, EventArgs e)
@@ -141,19 +141,45 @@ namespace MDStudio
 
             Console.WriteLine("compile");
 
-            System.Diagnostics.Process proc = new System.Diagnostics.Process();
-            proc.StartInfo.FileName = m_Config.Asm68kPath;
-            proc.StartInfo.WorkingDirectory = m_PathToProject;
-            proc.StartInfo.Arguments = @"/o l+ /p "+m_PathToProject+@"\dragonninja.s,dragonninja.bin,dragonninja.symb,dragonninja.list";
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.RedirectStandardOutput = true;
-            proc.StartInfo.CreateNoWindow = true;
-            proc.Start();
+            StringBuilder q = new StringBuilder();
+
+            try
+            {
+                System.Diagnostics.Process proc = new System.Diagnostics.Process();
+                proc.StartInfo.FileName = m_Config.Asm68kPath;
+                proc.StartInfo.WorkingDirectory = m_PathToProject + @"\";
+                proc.StartInfo.Arguments =  @"/o l+ /p " + m_SourceFileName + "," + m_ProjectName + ".bin," + m_ProjectName + ".symb," + m_ProjectName + ".list";
+                proc.StartInfo.UseShellExecute = false;
+                proc.StartInfo.RedirectStandardOutput = true;
+                proc.StartInfo.RedirectStandardError = true;
+                proc.StartInfo.CreateNoWindow = true;
+                proc.Start();
+                while (!proc.HasExited)
+                {
+                    q.Append(proc.StandardOutput.ReadToEnd());
+                }
+
+                q.Append(proc.StandardOutput.ReadToEnd());
+
+                proc.WaitForExit();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
             //()\((\d+)\)\s: Error : (.+)
-            string[] output = proc.StandardOutput.ReadToEnd().Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            string foo = q.ToString();
+            string[] output = q.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
 
             int errorCount = 0;
+
+            foreach (Marker marker in m_ErrorMarkers)
+            {
+                codeEditor.Document.MarkerStrategy.RemoveMarker(marker);
+            }
+
+            m_ErrorMarkers.Clear();
 
             foreach (string line in output)
             {
@@ -170,9 +196,18 @@ namespace MDStudio
                     m_BuildLog.AddError(lineNumber, matchError.Groups[3].Value);
                     Console.WriteLine("Error in '" + matchError.Groups[1].Value + "' (" + matchError.Groups[2].Value + "): " + matchError.Groups[3].Value);
                     errorCount++;
+
+                    //  Mark the line
+                    int offset = codeEditor.Document.PositionToOffset(new TextLocation(0, lineNumber-1));
+                    Marker marker = new Marker(offset, codeEditor.Document.LineSegmentCollection[lineNumber-1].Length, MarkerType.SolidBlock, Color.DarkRed, Color.Black);
+                    codeEditor.Document.MarkerStrategy.AddMarker(marker);
+
+                    m_ErrorMarkers.Add(marker);
                 }
             }
             Console.WriteLine(errorCount + " Error(s)");
+
+            codeEditor.Refresh(); ;
 
             if (errorCount > 0)
                 statusLabel.Text = errorCount + " Error(s)";
@@ -207,10 +242,10 @@ namespace MDStudio
                 if (Build() == 0)
                 {
                     m_DebugSource = new DebugSource();
-                    m_DebugSource.Init(m_PathToProject + @"\dragonninja.s", m_PathToProject + @"\dragonninja.list", m_PathToProject);
+                    m_DebugSource.Init(m_PathToProject + @"\" + m_SourceFileName, m_PathToProject + @"\" + m_ProjectName + ".list", m_PathToProject+@"\");
 
                     //  Load Rom
-                    m_DGenThread.LoadRom(m_PathToProject + @"\DragonNinja.bin");
+                    m_DGenThread.LoadRom(m_PathToProject + @"\"+m_ProjectName+".bin");
 
                     //  Set breakpoint
                     DGenThread.GetDGen().ClearBreakpoints();
@@ -300,7 +335,7 @@ namespace MDStudio
 
         private void Save()
         {
-            System.IO.File.WriteAllText(m_PathToProject + @"\dragonninja.s", codeEditor.Document.TextContent);
+            System.IO.File.WriteAllText(m_PathToProject + @"\" + m_SourceFileName, codeEditor.Document.TextContent);
 
             m_Modified = false;
         }
@@ -364,7 +399,22 @@ namespace MDStudio
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            OpenFileDialog pathSelect = new OpenFileDialog();
 
+            pathSelect.Filter = "ASM|*.s;*.asm";
+
+            if (pathSelect.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                m_PathToProject = Path.GetDirectoryName(pathSelect.FileName); // @"D:\Devt\perso_nas\Megadrive\test\";
+                
+                string source = System.IO.File.ReadAllText(pathSelect.FileName);
+                codeEditor.Document.TextContent = source;
+                codeEditor.Document.BookmarkManager.Clear();
+                undoMenu.Enabled = false;
+
+                m_ProjectName = Path.GetFileNameWithoutExtension(pathSelect.FileName);
+                m_SourceFileName = Path.GetFileName(pathSelect.FileName);
+            }
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -375,6 +425,11 @@ namespace MDStudio
         private void documentChanged(object sender, EventArgs e)
         {
             m_Modified = true;
+        }
+
+        private void editToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

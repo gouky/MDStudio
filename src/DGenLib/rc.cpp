@@ -1016,8 +1016,6 @@ void rc_str_cleanup(void)
 /* Parse the rc file */
 void parse_rc(FILE *file, const char *name)
 {
-#if 1
-#else
 	struct rc_field *rc_field = NULL;
 	intptr_t potential;
 	int overflow = 0;
@@ -1143,7 +1141,6 @@ parse:
 	/* If len != 0, try to read once again */
 	if (len != 0)
 		goto read;
-#endif
 }
 
 /* Dump the rc file */

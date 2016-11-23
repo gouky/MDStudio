@@ -48,6 +48,7 @@
             this.listErrors.TabIndex = 0;
             this.listErrors.UseCompatibleStateImageBehavior = false;
             this.listErrors.View = System.Windows.Forms.View.Details;
+            this.listErrors.SelectedIndexChanged += new System.EventHandler(this.listErrors_SelectedIndexChanged);
             this.listErrors.DoubleClick += new System.EventHandler(this.listErrors_DoubleClick);
             // 
             // columnHeader1

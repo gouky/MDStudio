@@ -139,12 +139,13 @@
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
+            this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
             // 
             // undoMenu
             // 
             this.undoMenu.Name = "undoMenu";
             this.undoMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.undoMenu.Size = new System.Drawing.Size(144, 22);
+            this.undoMenu.Size = new System.Drawing.Size(152, 22);
             this.undoMenu.Text = "&Undo";
             this.undoMenu.Click += new System.EventHandler(this.undoMenu_Click);
             // 
@@ -152,7 +153,7 @@
             // 
             this.redoMenu.Name = "redoMenu";
             this.redoMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.redoMenu.Size = new System.Drawing.Size(144, 22);
+            this.redoMenu.Size = new System.Drawing.Size(152, 22);
             this.redoMenu.Text = "&Redo";
             this.redoMenu.Click += new System.EventHandler(this.redoToolStripMenuItem_Click);
             // 
@@ -273,7 +274,7 @@
             // vdpToolsRegistersMenu
             // 
             this.vdpToolsRegistersMenu.Name = "vdpToolsRegistersMenu";
-            this.vdpToolsRegistersMenu.Size = new System.Drawing.Size(152, 22);
+            this.vdpToolsRegistersMenu.Size = new System.Drawing.Size(146, 22);
             this.vdpToolsRegistersMenu.Text = "VDP Registers";
             this.vdpToolsRegistersMenu.Click += new System.EventHandler(this.vDPRegistersToolStripMenuItem_Click);
             // 
