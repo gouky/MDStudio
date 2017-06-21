@@ -32,6 +32,7 @@ namespace MDStudio
         private string m_PathToProject;
         private string m_ProjectName;
         private string m_SourceFileName;
+        private List<string> m_ProjectFiles;
 
         private DGenThread m_DGenThread;
         private DebugSource m_DebugSource;
@@ -87,6 +88,40 @@ namespace MDStudio
             {
                  statusLabel.Text = "PC 0x" + DGenThread.GetDGen().GetCurrentPC();
             }
+        }
+
+        List<string> ScanIncludes(string rootPath, string filename)
+        {
+            List<string> includes = new List<string>();
+            List<string> localIncludes = new List<string>();
+
+            using (System.IO.StreamReader file = System.IO.File.OpenText(filename))
+            {
+                string line;
+                while ((line = file.ReadLine()) != null)
+                {
+                    // all whitespace, followed by 'include', followed by all whitespace, followed by filename in quotes (relative to first assembled file)
+                    // e.g. "	include '..\framewk\dmaqueue.asm'"
+                    string pattern = "^\\sinclude(\\s+)*[\'\\\"](.+)*[\'\\\"]";
+                    Match match = Regex.Match(line, pattern);
+
+                    if (match.Success)
+                    {
+                        //Convert relative paths to absolute
+                        string include = System.IO.Path.GetFullPath(System.IO.Path.Combine(rootPath, match.Groups[2].Value));
+                        includes.Add(include);
+                        localIncludes.Add(include);
+                    }
+                }
+            }
+
+            //Recurse
+            foreach(string include in localIncludes)
+            {
+                includes.AddRange(ScanIncludes(rootPath, include));
+            }
+
+            return includes;
         }
 
         private void undoMenu_Click(object sender, EventArgs e)
@@ -415,6 +450,8 @@ namespace MDStudio
 
                 m_ProjectName = Path.GetFileNameWithoutExtension(pathSelect.FileName);
                 m_SourceFileName = Path.GetFileName(pathSelect.FileName);
+
+                m_ProjectFiles = ScanIncludes(System.IO.Path.GetDirectoryName(pathSelect.FileName), pathSelect.FileName);
             }
         }
 
