@@ -45,6 +45,9 @@
             // 
             // listErrors
             // 
+            this.listErrors.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listErrors.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader3,
@@ -75,6 +78,7 @@
             // 
             // btnExportRaw
             // 
+            this.btnExportRaw.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExportRaw.Location = new System.Drawing.Point(556, 246);
             this.btnExportRaw.Name = "btnExportRaw";
             this.btnExportRaw.Size = new System.Drawing.Size(75, 23);
@@ -91,6 +95,9 @@
             // 
             // tabControl1
             // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
@@ -123,6 +130,9 @@
             // 
             // txtRawLog
             // 
+            this.txtRawLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtRawLog.Location = new System.Drawing.Point(4, 4);
             this.txtRawLog.Multiline = true;
             this.txtRawLog.Name = "txtRawLog";
@@ -138,7 +148,7 @@
             this.ClientSize = new System.Drawing.Size(643, 281);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.btnExportRaw);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "BuildLog";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "BuildLog";
