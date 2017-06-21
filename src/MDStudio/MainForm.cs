@@ -124,6 +124,36 @@ namespace MDStudio
             return includes;
         }
 
+        private void PopulateFileView()
+        {
+            TreeNode lastNode = null;
+            string subPathAgg;
+
+            foreach (string path in m_ProjectFiles)
+            {
+                subPathAgg = string.Empty;
+
+                foreach (string subPath in path.Split(treeProjectFiles.PathSeparator[0]))
+                {
+                    subPathAgg += subPath + treeProjectFiles.PathSeparator[0];
+                    TreeNode[] nodes = treeProjectFiles.Nodes.Find(subPathAgg, true);
+                    if (nodes.Length == 0)
+                    {
+                        if (lastNode == null)
+                            lastNode = treeProjectFiles.Nodes.Add(subPathAgg, subPath);
+                        else
+                            lastNode = lastNode.Nodes.Add(subPathAgg, subPath);
+                    }
+                    else
+                    {
+                        lastNode = nodes[0];
+                    }
+                }
+
+                lastNode = null;
+            }
+        }
+
         private void undoMenu_Click(object sender, EventArgs e)
         {
             codeEditor.Undo();
@@ -452,6 +482,11 @@ namespace MDStudio
                 m_SourceFileName = Path.GetFileName(pathSelect.FileName);
 
                 m_ProjectFiles = ScanIncludes(System.IO.Path.GetDirectoryName(pathSelect.FileName), pathSelect.FileName);
+                m_ProjectFiles.Sort();
+
+                PopulateFileView();
+
+                treeProjectFiles.ExpandAll();
             }
         }
 

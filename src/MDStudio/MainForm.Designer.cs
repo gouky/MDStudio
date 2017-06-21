@@ -63,9 +63,15 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.treeProjectFiles = new System.Windows.Forms.TreeView();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -101,7 +107,7 @@
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -109,26 +115,26 @@
             // 
             this.saveMenu.Name = "saveMenu";
             this.saveMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveMenu.Size = new System.Drawing.Size(152, 22);
+            this.saveMenu.Size = new System.Drawing.Size(146, 22);
             this.saveMenu.Text = "&Save";
             this.saveMenu.Click += new System.EventHandler(this.saveMenu_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(143, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.exitToolStripMenuItem.Text = "&Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.newToolStripMenuItem.Text = "New";
             // 
             // editToolStripMenuItem
@@ -145,7 +151,7 @@
             // 
             this.undoMenu.Name = "undoMenu";
             this.undoMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.undoMenu.Size = new System.Drawing.Size(152, 22);
+            this.undoMenu.Size = new System.Drawing.Size(144, 22);
             this.undoMenu.Text = "&Undo";
             this.undoMenu.Click += new System.EventHandler(this.undoMenu_Click);
             // 
@@ -153,7 +159,7 @@
             // 
             this.redoMenu.Name = "redoMenu";
             this.redoMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.redoMenu.Size = new System.Drawing.Size(152, 22);
+            this.redoMenu.Size = new System.Drawing.Size(144, 22);
             this.redoMenu.Text = "&Redo";
             this.redoMenu.Click += new System.EventHandler(this.redoToolStripMenuItem_Click);
             // 
@@ -187,7 +193,7 @@
             // 
             this.compileMenu.Name = "compileMenu";
             this.compileMenu.ShortcutKeys = System.Windows.Forms.Keys.F7;
-            this.compileMenu.Size = new System.Drawing.Size(190, 22);
+            this.compileMenu.Size = new System.Drawing.Size(189, 22);
             this.compileMenu.Text = "&Compile";
             this.compileMenu.Click += new System.EventHandler(this.compileMenu_Click);
             // 
@@ -195,20 +201,20 @@
             // 
             this.runMenu.Name = "runMenu";
             this.runMenu.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.runMenu.Size = new System.Drawing.Size(190, 22);
+            this.runMenu.Size = new System.Drawing.Size(189, 22);
             this.runMenu.Text = "&Run";
             this.runMenu.Click += new System.EventHandler(this.runToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(187, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(186, 6);
             // 
             // toggleBreakpoint
             // 
             this.toggleBreakpoint.Name = "toggleBreakpoint";
             this.toggleBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.F9;
-            this.toggleBreakpoint.Size = new System.Drawing.Size(190, 22);
+            this.toggleBreakpoint.Size = new System.Drawing.Size(189, 22);
             this.toggleBreakpoint.Text = "Toggle Breakpoint";
             this.toggleBreakpoint.Click += new System.EventHandler(this.toggleBreakpoint_Click);
             // 
@@ -268,7 +274,7 @@
             this.toolsToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.vdpToolsRegistersMenu});
             this.toolsToolStripMenuItem1.Name = "toolsToolStripMenuItem1";
-            this.toolsToolStripMenuItem1.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem1.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem1.Text = "&Tools";
             // 
             // vdpToolsRegistersMenu
@@ -317,9 +323,9 @@
             this.codeEditor.AutoScroll = true;
             this.codeEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.codeEditor.IsIconBarVisible = true;
-            this.codeEditor.Location = new System.Drawing.Point(0, 49);
+            this.codeEditor.Location = new System.Drawing.Point(0, 0);
             this.codeEditor.Name = "codeEditor";
-            this.codeEditor.Size = new System.Drawing.Size(860, 442);
+            this.codeEditor.Size = new System.Drawing.Size(701, 420);
             this.codeEditor.TabIndex = 5;
             this.codeEditor.DocumentChanged += new System.EventHandler<DigitalRune.Windows.TextEditor.Document.DocumentEventArgs>(this.codeEditor_DocumentChanged);
             // 
@@ -345,13 +351,38 @@
             this.statusLabel.Text = "Welcome";
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // treeProjectFiles
+            // 
+            this.treeProjectFiles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeProjectFiles.Location = new System.Drawing.Point(0, 0);
+            this.treeProjectFiles.Name = "treeProjectFiles";
+            this.treeProjectFiles.Size = new System.Drawing.Size(155, 420);
+            this.treeProjectFiles.TabIndex = 7;
+            // 
+            // splitContainer
+            // 
+            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer.Location = new System.Drawing.Point(0, 49);
+            this.splitContainer.Name = "splitContainer";
+            // 
+            // splitContainer.Panel1
+            // 
+            this.splitContainer.Panel1.Controls.Add(this.treeProjectFiles);
+            // 
+            // splitContainer.Panel2
+            // 
+            this.splitContainer.Panel2.Controls.Add(this.codeEditor);
+            this.splitContainer.Size = new System.Drawing.Size(860, 420);
+            this.splitContainer.SplitterDistance = 155;
+            this.splitContainer.TabIndex = 8;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(860, 491);
+            this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.statusStrip);
-            this.Controls.Add(this.codeEditor);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -365,6 +396,10 @@
             this.toolStrip1.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
+            this.splitContainer.Panel1.ResumeLayout(false);
+            this.splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
+            this.splitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -405,6 +440,8 @@
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem vdpToolsRegistersMenu;
+        private System.Windows.Forms.TreeView treeProjectFiles;
+        private System.Windows.Forms.SplitContainer splitContainer;
     }
 }
 
