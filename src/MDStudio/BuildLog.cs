@@ -32,9 +32,10 @@ namespace MDStudio
             rawLog = string.Empty;
         }
 
-        public void AddError(int line, string message)
+        public void AddError(string file, int line, string message)
         {
-            listErrors.Items.Add(new ListViewItem(new[] { line.ToString(), "", message }));
+            string fileShort = System.IO.Path.GetFileName(file);
+            listErrors.Items.Add(new ListViewItem(new[] { line.ToString(), fileShort, message }));
         }
 
         public void AddRaw(string line)

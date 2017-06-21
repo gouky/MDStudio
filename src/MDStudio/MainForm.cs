@@ -194,7 +194,7 @@ namespace MDStudio
 
                     int.TryParse(matchError.Groups[2].Value, out lineNumber);
 
-                    m_BuildLog.AddError(lineNumber, matchError.Groups[3].Value);
+                    m_BuildLog.AddError(matchError.Groups[1].Value, lineNumber, matchError.Groups[3].Value);
                     Console.WriteLine("Error in '" + matchError.Groups[1].Value + "' (" + matchError.Groups[2].Value + "): " + matchError.Groups[3].Value);
                     errorCount++;
 
