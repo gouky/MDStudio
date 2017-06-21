@@ -28,6 +28,8 @@ namespace MDStudio
         public void Clear()
         {
             listErrors.Items.Clear();
+            txtRawLog.Clear();
+            rawLog = string.Empty;
         }
 
         public void AddError(int line, string message)
@@ -37,6 +39,7 @@ namespace MDStudio
 
         public void AddRaw(string line)
         {
+            txtRawLog.AppendText(line + Environment.NewLine);
             rawLog += line + Environment.NewLine;
         }
 
