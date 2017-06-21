@@ -13,6 +13,7 @@ namespace MDStudio
     public partial class BuildLog : Form
     {
         MainForm m_Parent;
+        string rawLog;
 
         public BuildLog(MainForm parent)
         {
@@ -32,6 +33,11 @@ namespace MDStudio
         public void AddError(int line, string message)
         {
             listErrors.Items.Add(new ListViewItem(new[] { line.ToString(), "", message }));
+        }
+
+        public void AddRaw(string line)
+        {
+            rawLog += line + Environment.NewLine;
         }
 
         private void BuildLog_Load(object sender, EventArgs e)
@@ -70,6 +76,19 @@ namespace MDStudio
         private void listErrors_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            saveLogDialog.ShowDialog();
+        }
+
+        private void saveLogDialog_FileOk(object sender, CancelEventArgs e)
+        {
+            using (System.IO.FileStream file = System.IO.File.OpenWrite(saveLogDialog.FileName))
+            {
+                file.Write(Encoding.ASCII.GetBytes(rawLog), 0, rawLog.Count());
+            }
         }
     }
 }

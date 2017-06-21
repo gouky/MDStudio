@@ -184,6 +184,7 @@ namespace MDStudio
             foreach (string line in output)
             {
                 Console.WriteLine(line);
+                m_BuildLog.AddRaw(line);
                 string patternError = @"([\w:\\.]*)\((\d+)\) : Error : (.+)";
                 Match matchError = Regex.Match(line, patternError);
 
