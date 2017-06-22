@@ -32,6 +32,7 @@ namespace MDStudio
         private string m_PathToProject;
         private string m_ProjectName;
         private string m_SourceFileName;
+        private string m_CurrentSourcePath;     //  should be removed...
         private List<string> m_ProjectFiles;
 
         private DGenThread m_DGenThread;
@@ -408,10 +409,13 @@ namespace MDStudio
 
         public void GoTo(string filename, int lineNumber)
         {
-            string source = System.IO.File.ReadAllText(filename);
-            codeEditor.Document.TextContent = source;
-            codeEditor.Document.BookmarkManager.Clear();
-            codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber;
+            if (m_CurrentSourcePath.ToLower() != filename.ToLower())
+            {
+                string source = System.IO.File.ReadAllText(filename);
+                codeEditor.Document.TextContent = source;
+                codeEditor.Document.BookmarkManager.Clear();
+            }
+            codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber-1;
             this.Activate();
         }
 
@@ -475,7 +479,8 @@ namespace MDStudio
             if (pathSelect.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 m_PathToProject = Path.GetDirectoryName(pathSelect.FileName); // @"D:\Devt\perso_nas\Megadrive\test\";
-                
+                m_CurrentSourcePath = pathSelect.FileName;
+
                 string source = System.IO.File.ReadAllText(pathSelect.FileName);
                 codeEditor.Document.TextContent = source;
                 codeEditor.Document.BookmarkManager.Clear();
