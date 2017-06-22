@@ -406,8 +406,11 @@ namespace MDStudio
             m_Modified = false;
         }
 
-        public void GoTo(int lineNumber)
+        public void GoTo(string filename, int lineNumber)
         {
+            string source = System.IO.File.ReadAllText(filename);
+            codeEditor.Document.TextContent = source;
+            codeEditor.Document.BookmarkManager.Clear();
             codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber;
             this.Activate();
         }
@@ -481,7 +484,7 @@ namespace MDStudio
                 m_ProjectName = Path.GetFileNameWithoutExtension(pathSelect.FileName);
                 m_SourceFileName = Path.GetFileName(pathSelect.FileName);
 
-                m_ProjectFiles = ScanIncludes(System.IO.Path.GetDirectoryName(pathSelect.FileName), pathSelect.FileName);
+                m_ProjectFiles = ScanIncludes(m_PathToProject, pathSelect.FileName);
                 m_ProjectFiles.Sort();
 
                 PopulateFileView();

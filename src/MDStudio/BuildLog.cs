@@ -12,8 +12,23 @@ namespace MDStudio
 {
     public partial class BuildLog : Form
     {
+        private struct ErrorEntry
+        {
+            public ErrorEntry(string _file, int _line, string _message)
+            {
+                file = _file;
+                line = _line;
+                message = _message;
+            }
+
+            public string file;
+            public int line;
+            public string message;
+        };
+
         MainForm m_Parent;
-        string rawLog;
+        List<ErrorEntry> m_Errors;
+        string m_RawLog;
 
         public BuildLog(MainForm parent)
         {
@@ -28,20 +43,22 @@ namespace MDStudio
         public void Clear()
         {
             listErrors.Items.Clear();
+            m_Errors = new List<ErrorEntry>();
             txtRawLog.Clear();
-            rawLog = string.Empty;
+            m_RawLog = string.Empty;
         }
 
         public void AddError(string file, int line, string message)
         {
             string fileShort = System.IO.Path.GetFileName(file);
             listErrors.Items.Add(new ListViewItem(new[] { line.ToString(), fileShort, message }));
+            m_Errors.Add(new ErrorEntry(file, line, message));
         }
 
         public void AddRaw(string line)
         {
             txtRawLog.AppendText(line + Environment.NewLine);
-            rawLog += line + Environment.NewLine;
+            m_RawLog += line + Environment.NewLine;
         }
 
         private void BuildLog_Load(object sender, EventArgs e)
@@ -52,14 +69,9 @@ namespace MDStudio
         {
             ListView.SelectedListViewItemCollection selection = listErrors.SelectedItems;
 
-            if (selection.Count > 0)
+            if (selection.Count > 0 && selection[0].Index < m_Errors.Count())
             {
-                int lineNumber;
-
-                if (int.TryParse(selection[0].SubItems[0].Text, out lineNumber))
-                {
-                    m_Parent.GoTo(lineNumber-1);
-                }
+                m_Parent.GoTo(m_Errors[selection[0].Index].file, m_Errors[selection[0].Index].line);
             }
         }
 
@@ -91,7 +103,7 @@ namespace MDStudio
         {
             using (System.IO.FileStream file = System.IO.File.OpenWrite(saveLogDialog.FileName))
             {
-                file.Write(Encoding.ASCII.GetBytes(rawLog), 0, rawLog.Count());
+                file.Write(Encoding.ASCII.GetBytes(m_RawLog), 0, m_RawLog.Count());
             }
         }
     }
