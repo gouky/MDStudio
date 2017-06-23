@@ -47,6 +47,8 @@
             this.runMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toggleBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.buildSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepIntoMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.stepOverMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -184,7 +186,9 @@
             this.compileMenu,
             this.runMenu,
             this.toolStripSeparator1,
-            this.toggleBreakpoint});
+            this.toggleBreakpoint,
+            this.toolStripSeparator4,
+            this.buildSettingsToolStripMenuItem});
             this.buildToolStripMenuItem.Name = "buildToolStripMenuItem";
             this.buildToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.buildToolStripMenuItem.Text = "&Build";
@@ -217,6 +221,11 @@
             this.toggleBreakpoint.Size = new System.Drawing.Size(189, 22);
             this.toggleBreakpoint.Text = "Toggle Breakpoint";
             this.toggleBreakpoint.Click += new System.EventHandler(this.toggleBreakpoint_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(186, 6);
             // 
             // debugToolStripMenuItem
             // 
@@ -442,6 +451,8 @@
         private System.Windows.Forms.ToolStripMenuItem vdpToolsRegistersMenu;
         private System.Windows.Forms.TreeView treeProjectFiles;
         private System.Windows.Forms.SplitContainer splitContainer;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem buildSettingsToolStripMenuItem;
     }
 }
 

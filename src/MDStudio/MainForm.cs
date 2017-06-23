@@ -34,6 +34,7 @@ namespace MDStudio
         private string m_SourceFileName;
         private string m_CurrentSourcePath;     //  should be removed...
         private List<string> m_ProjectFiles;
+        private string m_BuildArgs;
 
         private DGenThread m_DGenThread;
         private DebugSource m_DebugSource;
@@ -214,7 +215,7 @@ namespace MDStudio
                 System.Diagnostics.Process proc = new System.Diagnostics.Process();
                 proc.StartInfo.FileName = m_Config.Asm68kPath;
                 proc.StartInfo.WorkingDirectory = m_PathToProject + @"\";
-                proc.StartInfo.Arguments =  @"/o l+ /p " + m_SourceFileName + "," + m_ProjectName + ".bin," + m_ProjectName + ".symb," + m_ProjectName + ".list";
+                proc.StartInfo.Arguments =  @"/p " + m_Config.Asm68kArgs + " " + m_SourceFileName + "," + m_ProjectName + ".bin," + m_ProjectName + ".symb," + m_ProjectName + ".list";
                 proc.StartInfo.UseShellExecute = false;
                 proc.StartInfo.RedirectStandardOutput = true;
                 proc.StartInfo.RedirectStandardError = true;
@@ -265,11 +266,14 @@ namespace MDStudio
                     errorCount++;
 
                     //  Mark the line
-                    int offset = codeEditor.Document.PositionToOffset(new TextLocation(0, lineNumber-1));
-                    Marker marker = new Marker(offset, codeEditor.Document.LineSegmentCollection[lineNumber-1].Length, MarkerType.SolidBlock, Color.DarkRed, Color.Black);
-                    codeEditor.Document.MarkerStrategy.AddMarker(marker);
+                    if(matchError.Groups[1].Value == m_SourceFileName)
+                    {
+                        int offset = codeEditor.Document.PositionToOffset(new TextLocation(0, lineNumber - 1));
+                        Marker marker = new Marker(offset, codeEditor.Document.LineSegmentCollection[lineNumber - 1].Length, MarkerType.SolidBlock, Color.DarkRed, Color.Black);
+                        codeEditor.Document.MarkerStrategy.AddMarker(marker);
 
-                    m_ErrorMarkers.Add(marker);
+                        m_ErrorMarkers.Add(marker);
+                    }
                 }
             }
             Console.WriteLine(errorCount + " Error(s)");
@@ -409,6 +413,7 @@ namespace MDStudio
 
         public void GoTo(string filename, int lineNumber)
         {
+			m_SourceFileName = Path.GetFileName(filename);
             if (m_CurrentSourcePath.ToLower() != filename.ToLower())
             {
                 string source = System.IO.File.ReadAllText(filename);
@@ -446,13 +451,16 @@ namespace MDStudio
             configForm.StartPosition = FormStartPosition.CenterParent;
             
             configForm.asmPath.Text = m_Config.Asm68kPath;
+            configForm.asmArgs.Text = m_Config.Asm68kArgs;
 
             if (configForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 m_Config.Asm68kPath = configForm.asmPath.Text;
+                m_Config.Asm68kArgs = configForm.asmArgs.Text;
                 m_Config.Save();
 
                 Console.WriteLine(configForm.asmPath.Text);
+                Console.WriteLine(configForm.asmArgs.Text);
             }
         }
 

@@ -33,6 +33,8 @@
             this.okBtn = new System.Windows.Forms.Button();
             this.pathButton = new System.Windows.Forms.Button();
             this.cancelBtn = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.asmArgs = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -54,7 +56,7 @@
             // okBtn
             // 
             this.okBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okBtn.Location = new System.Drawing.Point(330, 33);
+            this.okBtn.Location = new System.Drawing.Point(330, 67);
             this.okBtn.Name = "okBtn";
             this.okBtn.Size = new System.Drawing.Size(75, 23);
             this.okBtn.TabIndex = 2;
@@ -74,18 +76,36 @@
             // cancelBtn
             // 
             this.cancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelBtn.Location = new System.Drawing.Point(249, 33);
+            this.cancelBtn.Location = new System.Drawing.Point(247, 67);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(75, 23);
             this.cancelBtn.TabIndex = 4;
             this.cancelBtn.Text = "&Cancel";
             this.cancelBtn.UseVisualStyleBackColor = true;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(31, 36);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(57, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Extra args:";
+            // 
+            // asmArgs
+            // 
+            this.asmArgs.Location = new System.Drawing.Point(94, 33);
+            this.asmArgs.Name = "asmArgs";
+            this.asmArgs.Size = new System.Drawing.Size(281, 20);
+            this.asmArgs.TabIndex = 6;
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(417, 66);
+            this.ClientSize = new System.Drawing.Size(417, 101);
+            this.Controls.Add(this.asmArgs);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.cancelBtn);
             this.Controls.Add(this.pathButton);
             this.Controls.Add(this.okBtn);
@@ -107,5 +127,7 @@
         private System.Windows.Forms.Button pathButton;
         private System.Windows.Forms.Button cancelBtn;
         public System.Windows.Forms.TextBox asmPath;
+        private System.Windows.Forms.Label label2;
+        public System.Windows.Forms.TextBox asmArgs;
     }
 }

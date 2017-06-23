@@ -14,6 +14,7 @@ namespace MDStudio
     {
         [XmlElement("ASM68KPath")]
         public string Asm68kPath { get; set; }
+        public string Asm68kArgs { get; set; }
 
         public Config()
         {
@@ -41,6 +42,7 @@ namespace MDStudio
                         config = (Config)xs.Deserialize(sr);
 
                         Asm68kPath = config.Asm68kPath;
+                        Asm68kArgs = config.Asm68kArgs;
 
                         sr.Close();
                     }
