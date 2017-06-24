@@ -18,7 +18,7 @@ namespace MDStudio
 
         //  ----------------------------------------------------------
         //  |                  ** FILE HEADER **                     |
-        //  |              13 bytes : last byte = 0x88               |
+        //  |                       8 bytes                          |
         //  |--------------------------------------------------------|
         //  |                                                        |
         //  |   --------------------------------------------------   |
@@ -63,13 +63,12 @@ namespace MDStudio
         {
             public uint unknown1;
             public uint unknown2;
-            public uint unknown3;
-            public byte flags;
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         private struct FilenameHeader
         {
+            //public AddressEntry firstAddress;
             public byte flags1;
             public byte flags2;
             public byte flags3;
@@ -151,57 +150,59 @@ namespace MDStudio
                     GCHandle pinnedData = GCHandle.Alloc(data, GCHandleType.Pinned);
                     IntPtr stream = pinnedData.AddrOfPinnedObject();
 
+                    FilenameHeader filenameHeader = new FilenameHeader();
+                    AddressEntry addressEntry = new AddressEntry();
+                    FilenameSection filenameSection = new FilenameSection();
+                    byte flags = 0x0;
                     int bytesRead = 0;
 
                     //Read file header
                     FileHeader fileHeader = new FileHeader();
                     bytesRead += Serialise(ref stream, out fileHeader);
 
-                    //Read filename+address chunks
-                    FilenameHeader filenameHeader = new FilenameHeader();
-                    AddressEntry addressEntry = new AddressEntry();
-
-                    byte flags = 0x0;
-
-                    //0x8A == end of filename table 
+                    //Read all addresses in filename table
+                    //0x8A == end of table 
                     while (bytesRead < data.Length && flags != 0x8A)
                     {
-                        flags = 0x0;
+                        //Read address entry
+                        bytesRead += Serialise(ref stream, out addressEntry);
+                            
+                        //Get chunk flags
+                        flags = addressEntry.flags;
 
-                        //Symbol symbol = new Symbol();
-                        FilenameSection filenameSection = new FilenameSection();
-                        filenameSection.addresses = new List<AddressEntry>();
-
-                        //Read filename chunk header
-                        bytesRead += Serialise(ref stream, out filenameHeader);
-                        EndianSwap(ref filenameHeader.length);
-                        //symbol.address = symbolHeader.address;
-
-                        //Read string
-                        bytesRead += Serialise(ref stream, filenameHeader.length, out filenameSection.filename);
-
-                        //Read all addresses
-                        //0x88 == end of filename/address section
-                        while(flags != 0x88 && flags != 0x8A)
+                        if (flags == 0x88)
                         {
-                            bytesRead += Serialise(ref stream, out addressEntry);
-                            //EndianSwap(ref addressEntry.address);
-                            filenameSection.addresses.Add(addressEntry);
-                            flags = addressEntry.flags;
+                            //This is the first address in a filename chunk, so also read the filename
+                            filenameSection = new FilenameSection();
+                            filenameSection.addresses = new List<AddressEntry>();
 
-                            if(flags == 0x82)
+                            //Read filename chunk header
+                            bytesRead += Serialise(ref stream, out filenameHeader);
+                            EndianSwap(ref filenameHeader.length);
+
+                            //Read string
+                            bytesRead += Serialise(ref stream, filenameHeader.length, out filenameSection.filename);
+
+                            if (filenameHeader.flags2 == 0x1)
                             {
-                                byte extraByte = 0;
-                                bytesRead += Serialise(ref stream, out extraByte);
+                                //This is the filename passed for assembly, not an address table entry
+                                break;
+                            }
+                            else
+                            {
+                                //Valid filename chunk, add and continue
+                                m_Filenames.Add(filenameSection);
                             }
                         }
-
-                        //Filename passed for assembly, not an address table entry
-                        if (filenameHeader.flags2 != 0x1)
+                        else if (flags == 0x82)
                         {
-                            //m_symbols.Add(symbol);
-                            m_Filenames.Add(filenameSection);
+                            //Read one extra byte, unknown yet
+                            byte extraByte = 0;
+                            bytesRead += Serialise(ref stream, out extraByte);
                         }
+                        
+                        //Add address to filename
+                        filenameSection.addresses.Add(addressEntry);
                     }
 
                     pinnedData.Free();
