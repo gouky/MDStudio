@@ -227,6 +227,11 @@
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(186, 6);
             // 
+            // buildSettingsToolStripMenuItem
+            // 
+            this.buildSettingsToolStripMenuItem.Name = "buildSettingsToolStripMenuItem";
+            this.buildSettingsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            // 
             // debugToolStripMenuItem
             // 
             this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -367,6 +372,7 @@
             this.treeProjectFiles.Name = "treeProjectFiles";
             this.treeProjectFiles.Size = new System.Drawing.Size(155, 420);
             this.treeProjectFiles.TabIndex = 7;
+            this.treeProjectFiles.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeProjectFiles_AfterSelect);
             // 
             // splitContainer
             // 

@@ -9,10 +9,104 @@ namespace MDStudio
 {
     class Symbols
     {
-        public struct Symbol
+        public uint GetAddress(string filename, int lineNumber)
+        {
+            //TODO: Slow
+            int sectionIdx = m_Filenames.FindIndex(element => element.filename.ToUpper() == filename.ToUpper());
+            if(sectionIdx >= 0)
+            {
+                int addressIdx = m_Filenames[sectionIdx].addresses.FindIndex(element => (lineNumber >= element.lineFrom && lineNumber <= element.lineTo));
+                if (addressIdx >= 0)
+                {
+                    return m_Filenames[sectionIdx].addresses[addressIdx].address;
+                }
+            }
+            
+            return 0;
+        }
+
+        public Tuple<string, int> GetFileLine(uint address)
+        {
+            if (m_Addr2FileLine.ContainsKey(address))
+            {
+                return m_Addr2FileLine[address];
+            }
+            else
+            {
+                return new Tuple<string, int>("", 0);
+            }
+        }
+
+        private struct AddressEntry
+        {
+            public uint address;
+            public byte flags;
+            public int lineFrom;
+            public int lineTo;
+        }
+
+        private struct SymbolEntry
         {
             public uint address;
             public string name;
+        }
+
+        private struct FilenameSection
+        {
+            public string filename;
+            public List<AddressEntry> addresses;
+        }
+
+        private List<SymbolEntry> m_Symbols;
+        private List<FilenameSection> m_Filenames;
+        private Dictionary<uint, Tuple<string, int>> m_Addr2FileLine;
+        private string m_AssembledFile;
+
+        //Reverse engineering notes:
+        // - Address chunks are 5 bytes: 4 bytes address + 1 byte flags
+        // - Filename chunks have 5 byte headers, last word = string length, string follows
+        // - 0x88 = address chunk + filename chunk packed
+        // - 0x80 = address chunk
+        // - 0x82 = address chunk + 1 byte line counter - number of lines this address spans
+        // - 0x8A = address chunk + end of filename/address table
+
+
+        //  ----------------------------------------------------------
+        //  |                  ** FILE HEADER **                     |
+        //  |                       8 bytes                          |
+        //  |--------------------------------------------------------|
+        //  |                                                        |
+        //  |   --------------------------------------------------   |
+        //  |   |      ** FILENAME/ADDRESS TABLE HEADER **       |   |
+        //  |   |   5 bytes : 3x byte flags, 2 byte string len   |   |
+        //  |   |------------------------------------------------|   |
+        //  |   |             ** FILENAME STRING  **             |   |
+        //  |   |------------------------------------------------|   |
+        //  |   |                                                |   |
+        //  |   |   ------------------------------------------   |   |
+        //  |   |   |             ** ADDRESS **              |   |   |
+        //  |   |   | 5 bytes : 4 byte address, 1 byte flags |   |   |
+        //  |   |   | 0x80 = end of address                  |   |   |
+        //  |   |   | 0x82 = read 1 extra byte (# lines)     |   |   |
+        //  |   |   | 0x88 = end of filename/address chunk   |   |   |
+        //  |   |   | 0x8A = end of filename/address table   |   |   |
+        //  |   |   ------------------------------------------   |   |
+        //  |   |                                                |   |
+        //  |   --------------------------------------------------   |
+        //  |                                                        |
+        //  |   --------------------------------------------------   |
+        //  |   |              ** SYMBOL TABLE **                |   |
+        //  |   |       ...                                      |   |
+        //  |   --------------------------------------------------   |
+        //  |                                                        |
+        //  ----------------------------------------------------------
+
+        public enum ChunkId : byte
+        {
+            Filename = 0x88,            // A filename with start address and line count
+            Address = 0x80,             // An address of next line
+            AddressWithCount = 0x82,    // An address with line count
+            SymbolTable = 0x8A          // The symbol table
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -23,14 +117,28 @@ namespace MDStudio
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        private struct SymbolHeader
+        private struct FilenameHeader
+        {
+            public byte firstLine;
+            public byte flags;
+            public byte unknown;
+            public short length;
+        }
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        public struct ChunkHeader
+        {
+            public uint payload;
+            public ChunkId chunkId;
+        }
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private struct SymbolChunk
         {
             public uint address;
             public byte flags;
             public byte stringLen;
         }
-
-        private List<Symbol> m_symbols;
 
         private int Serialise<T>(ref IntPtr bytes, out T value) where T : struct
         {
@@ -48,11 +156,40 @@ namespace MDStudio
             return length;
         }
 
+        private void EndianSwap(ref int value)
+        {
+            byte[] temp = BitConverter.GetBytes(value);
+            Array.Reverse(temp);
+            value = BitConverter.ToInt32(temp, 0);
+        }
+
+        private void EndianSwap(ref uint value)
+        {
+            byte[] temp = BitConverter.GetBytes(value);
+            Array.Reverse(temp);
+            value = BitConverter.ToUInt32(temp, 0);
+        }
+
+        private void EndianSwap(ref short value)
+        {
+            byte[] temp = BitConverter.GetBytes(value);
+            Array.Reverse(temp);
+            value = BitConverter.ToInt16(temp, 0);
+        }
+
+        private void EndianSwap(ref ushort value)
+        {
+            byte[] temp = BitConverter.GetBytes(value);
+            Array.Reverse(temp);
+            value = BitConverter.ToUInt16(temp, 0);
+        }
+
         public bool Read(string filename)
         {
             try
             {
-                m_symbols = new List<Symbol>();
+                m_Symbols = new List<SymbolEntry>();
+                m_Filenames = new List<FilenameSection>();
                 byte[] data = System.IO.File.ReadAllBytes(filename);
 
                 if (data.Length > 0)
@@ -60,30 +197,138 @@ namespace MDStudio
                     GCHandle pinnedData = GCHandle.Alloc(data, GCHandleType.Pinned);
                     IntPtr stream = pinnedData.AddrOfPinnedObject();
 
+                    FilenameHeader filenameHeader = new FilenameHeader();
+                    ChunkHeader chunkHeader = new ChunkHeader();
+                    FilenameSection filenameSection = new FilenameSection();
+                    AddressEntry addressEntry = new AddressEntry();
+                    SymbolChunk symbolChunk = new SymbolChunk();
+                    SymbolEntry symbolEntry = new SymbolEntry();
+                    string readString;
+
                     int bytesRead = 0;
+                    int currentLine = 0;
 
                     //Read file header
                     FileHeader fileHeader = new FileHeader();
                     bytesRead += Serialise(ref stream, out fileHeader);
 
-                    //Read all chunks
-                    SymbolHeader symbolHeader = new SymbolHeader();
-
+                    //Iterate over chunks
                     while (bytesRead < data.Length)
                     {
-                        Symbol symbol = new Symbol();
-
                         //Read chunk header
-                        bytesRead += Serialise(ref stream, out symbolHeader);
-                        symbol.address = symbolHeader.address;
+                        bytesRead += Serialise(ref stream, out chunkHeader);
 
-                        //Read string
-                        bytesRead += Serialise(ref stream, symbolHeader.stringLen, out symbol.name);
+                        //What is it?
+                        switch (chunkHeader.chunkId)
+                        {
+                            case ChunkId.Filename:
+                                {
+                                    //Read filename header
+                                    bytesRead += Serialise(ref stream, out filenameHeader);
+                                    EndianSwap(ref filenameHeader.length);
 
-                        m_symbols.Add(symbol);
+                                    //Read string
+                                    bytesRead += Serialise(ref stream, filenameHeader.length, out readString);
+
+                                    if (filenameHeader.flags == 0x1)
+                                    {
+                                        //This is the filename passed for assembly
+                                        m_AssembledFile = readString;
+                                    }
+                                    else
+                                    {
+                                        //This is the first address in a filename chunk
+                                        filenameSection = new FilenameSection();
+                                        filenameSection.addresses = new List<AddressEntry>();
+                                        filenameSection.filename = readString;
+
+                                        //Reset line counter
+                                        currentLine = filenameHeader.firstLine;
+
+                                        //Chunk payload contains address
+                                        addressEntry.address = chunkHeader.payload;
+                                        addressEntry.lineFrom = 0;
+                                        addressEntry.lineTo = currentLine;
+                                        filenameSection.addresses.Add(addressEntry);
+
+                                        //Add to filename list
+                                        m_Filenames.Add(filenameSection);
+                                    }
+
+                                    break;
+                                }
+
+                            case ChunkId.Address:
+                                {
+                                    //Chunk payload contains address
+                                    addressEntry.address = chunkHeader.payload;
+
+                                    //Set line range
+                                    addressEntry.lineFrom = currentLine;
+                                    currentLine++;
+                                    addressEntry.lineTo = currentLine;
+
+                                    //Add
+                                    filenameSection.addresses.Add(addressEntry);
+
+                                    break;
+                                }
+
+                            case ChunkId.AddressWithCount:
+                                {
+                                    //Read line count
+                                    byte lineCount = 0;
+                                    bytesRead += Serialise(ref stream, out lineCount);
+
+                                    //Chunk payload contains address
+                                    addressEntry.address = chunkHeader.payload;
+
+                                    //Set line range
+                                    addressEntry.lineFrom = currentLine;
+                                    currentLine += lineCount;
+                                    addressEntry.lineTo = currentLine;
+
+                                    //Add
+                                    filenameSection.addresses.Add(addressEntry);
+
+                                    break;
+                                }
+
+                            case ChunkId.SymbolTable:
+                                {
+                                    //Welcome to the symbol table
+                                    while (bytesRead < data.Length)
+                                    {
+                                        //Read chunk header
+                                        bytesRead += Serialise(ref stream, out symbolChunk);
+                                        symbolEntry.address = symbolChunk.address;
+
+                                        //Read string
+                                        bytesRead += Serialise(ref stream, symbolChunk.stringLen, out symbolEntry.name);
+
+                                        m_Symbols.Add(symbolEntry);
+                                    }
+
+                                    break;
+                                }
+                        }
                     }
 
                     pinnedData.Free();
+
+                    //Build address to file/line map
+                    m_Addr2FileLine = new Dictionary<uint, Tuple<string, int>>();
+
+                    foreach (FilenameSection section in m_Filenames)
+                    {
+                        foreach(AddressEntry address in section.addresses)
+                        {
+                            if(!m_Addr2FileLine.ContainsKey(address.address))
+                            {
+                                m_Addr2FileLine[address.address] = new Tuple<string, int>(section.filename, address.lineTo);
+                            }
+                        }
+                    }
 
                     return true;
                 }

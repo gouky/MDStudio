@@ -37,7 +37,7 @@ namespace MDStudio
         private string m_BuildArgs;
 
         private DGenThread m_DGenThread;
-        private DebugSource m_DebugSource;
+        private Symbols m_DebugSymbols;
 
         private MemoryView m_MemoryView;
         private BuildLog m_BuildLog;
@@ -49,6 +49,8 @@ namespace MDStudio
         private bool m_Modified;
 
         private List<Marker> m_ErrorMarkers;
+
+        private const int kAutoScrollThreshold = 20;
 
         public MainForm()
         {
@@ -137,14 +139,15 @@ namespace MDStudio
 
                 foreach (string subPath in path.Split(treeProjectFiles.PathSeparator[0]))
                 {
-                    subPathAgg += subPath + treeProjectFiles.PathSeparator[0];
-                    TreeNode[] nodes = treeProjectFiles.Nodes.Find(subPathAgg, true);
+                    subPathAgg += subPathAgg.Length > 0 ? treeProjectFiles.PathSeparator[0] + subPath : subPath;
+                    string absPath = System.IO.Path.GetFullPath(subPathAgg);
+                    TreeNode[] nodes = treeProjectFiles.Nodes.Find(absPath, true);
                     if (nodes.Length == 0)
                     {
                         if (lastNode == null)
-                            lastNode = treeProjectFiles.Nodes.Add(subPathAgg, subPath);
+                            lastNode = treeProjectFiles.Nodes.Add(absPath, subPath);
                         else
-                            lastNode = lastNode.Nodes.Add(subPathAgg, subPath);
+                            lastNode = lastNode.Nodes.Add(absPath, subPath);
                     }
                     else
                     {
@@ -215,7 +218,7 @@ namespace MDStudio
                 System.Diagnostics.Process proc = new System.Diagnostics.Process();
                 proc.StartInfo.FileName = m_Config.Asm68kPath;
                 proc.StartInfo.WorkingDirectory = m_PathToProject + @"\";
-                proc.StartInfo.Arguments =  @"/p " + m_Config.Asm68kArgs + " " + m_SourceFileName + "," + m_ProjectName + ".bin," + m_ProjectName + ".symb," + m_ProjectName + ".list";
+                proc.StartInfo.Arguments =  @"/p /c /zd " + m_Config.Asm68kArgs + " " + m_SourceFileName + "," + m_ProjectName + ".bin," + m_ProjectName + ".symb," + m_ProjectName + ".list";
                 proc.StartInfo.UseShellExecute = false;
                 proc.StartInfo.RedirectStandardOutput = true;
                 proc.StartInfo.RedirectStandardError = true;
@@ -312,17 +315,24 @@ namespace MDStudio
 
                 if (Build() == 0)
                 {
-                    m_DebugSource = new DebugSource();
-                    m_DebugSource.Init(m_PathToProject + @"\" + m_SourceFileName, m_PathToProject + @"\" + m_ProjectName + ".list", m_PathToProject+@"\");
+                    string initialSourceFile = m_PathToProject + @"\" + m_SourceFileName;
+                    string listingFile = m_PathToProject + @"\" + m_ProjectName + ".list";
+                    string symbolFile = m_PathToProject + @"\" + m_ProjectName + ".symb";
+                    string baseDirectory = m_PathToProject + @"\";
+                    string binaryFile = m_PathToProject + @"\" + m_ProjectName + ".bin";
+
+                    //Read symbols
+                    m_DebugSymbols = new Symbols();
+                    m_DebugSymbols.Read(symbolFile);
 
                     //  Load Rom
-                    m_DGenThread.LoadRom(m_PathToProject + @"\"+m_ProjectName+".bin");
+                    m_DGenThread.LoadRom(binaryFile);
 
                     //  Set breakpoint
                     DGenThread.GetDGen().ClearBreakpoints();
                     foreach (Bookmark mark in codeEditor.Document.BookmarkManager.Marks)
                     {
-                        DGenThread.GetDGen().AddBreakpoint(m_DebugSource.GetLineAddress(mark.LineNumber));
+                        DGenThread.GetDGen().AddBreakpoint((int)m_DebugSymbols.GetAddress(m_CurrentSourcePath, mark.LineNumber + 1));
                     }
 
                     //  Start
@@ -348,18 +358,31 @@ namespace MDStudio
             //  if runnnig
             DGenThread.GetDGen().StepInto();
 
+            //Lookup address
             int currentPC = DGenThread.GetDGen().GetCurrentPC();
-            int currentLine = m_DebugSource.GetSourceLine(currentPC) + 1;
+            Tuple<string, int> currentLine = m_DebugSymbols.GetFileLine((uint)currentPC);
 
-            int offset = codeEditor.Document.PositionToOffset(new TextLocation(0, currentLine));
+            string filename = currentLine.Item1;
+            int lineNumber = currentLine.Item2 - 1;
+
+            //Load file
+            if (m_CurrentSourcePath.ToLower() != filename)
+            {
+                string source = System.IO.File.ReadAllText(filename);
+                codeEditor.Document.TextContent = source;
+                codeEditor.Document.BookmarkManager.Clear();
+                m_CurrentSourcePath = filename;
+            }
+
+            int offset = codeEditor.Document.PositionToOffset(new TextLocation(0, lineNumber));
 
             codeEditor.Document.MarkerStrategy.Clear();
-            Marker marker = new Marker(offset, codeEditor.Document.LineSegmentCollection[currentLine].Length, MarkerType.SolidBlock, Color.Yellow, Color.Black);//selection.Offset, selection.Length, MarkerType.SolidBlock, Color.DarkRed, Color.White);
+            Marker marker = new Marker(offset, codeEditor.Document.LineSegmentCollection[lineNumber].Length, MarkerType.SolidBlock, Color.Yellow, Color.Black);//selection.Offset, selection.Length, MarkerType.SolidBlock, Color.DarkRed, Color.White);
             codeEditor.Document.MarkerStrategy.AddMarker(marker);
-            codeEditor.Refresh();
-
-            codeEditor.ActiveTextAreaControl.Caret.Line = m_DebugSource.GetSourceLine(currentPC) + 1;
+            codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber;
             codeEditor.ActiveTextAreaControl.Caret.Column = 0;
+            codeEditor.ActiveTextAreaControl.CenterViewOn(lineNumber, kAutoScrollThreshold);
+            codeEditor.ActiveTextAreaControl.Invalidate();
 
         }
 
@@ -406,19 +429,19 @@ namespace MDStudio
 
         private void Save()
         {
-            System.IO.File.WriteAllText(m_PathToProject + @"\" + m_SourceFileName, codeEditor.Document.TextContent);
+            System.IO.File.WriteAllText(m_CurrentSourcePath, codeEditor.Document.TextContent);
 
             m_Modified = false;
         }
 
         public void GoTo(string filename, int lineNumber)
         {
-			m_SourceFileName = Path.GetFileName(filename);
             if (m_CurrentSourcePath.ToLower() != filename.ToLower())
             {
                 string source = System.IO.File.ReadAllText(filename);
                 codeEditor.Document.TextContent = source;
                 codeEditor.Document.BookmarkManager.Clear();
+                m_CurrentSourcePath = filename;
             }
             codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber-1;
             this.Activate();
@@ -519,6 +542,11 @@ namespace MDStudio
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void treeProjectFiles_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            GoTo(treeProjectFiles.SelectedNode.Name, 0);
         }
     }
 }

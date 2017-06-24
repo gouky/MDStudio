@@ -76,7 +76,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DebugSource.cs" />
+    <Compile Include="Symbols.cs" />
     <Compile Include="VDPRegs.cs">
       <SubType>Form</SubType>
     </Compile>
