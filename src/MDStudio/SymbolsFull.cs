@@ -10,11 +10,13 @@ namespace MDStudio
     class SymbolsFull
     {
         //Reverse engineering notes:
-        // - Chunks have 5 byte footers, last byte = flags
-        // - 0x88 = end of file header / end of filename/address chunk
-        // - 0x80 = end of address chunk
-        // - 0x8A = end of filename/address table
-        // - 0x82 = 1 byte extra data follows subchunk, currently unknown
+        // - Address chunks are 5 bytes: 4 bytes address + 1 byte flags
+        // - Filename chunks have 5 byte headers, last word = string length, string follows
+        // - 0x88 = address chunk + filename chunk packed
+        // - 0x80 = address chunk
+        // - 0x82 = address chunk + 1 extra byte packed, currently unknown
+        // - 0x8A = address chunk + end of filename/address table
+
 
         //  ----------------------------------------------------------
         //  |                  ** FILE HEADER **                     |
@@ -68,7 +70,6 @@ namespace MDStudio
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         private struct FilenameHeader
         {
-            //public AddressEntry firstAddress;
             public byte flags1;
             public byte flags2;
             public byte flags3;
