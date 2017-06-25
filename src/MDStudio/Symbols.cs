@@ -62,51 +62,13 @@ namespace MDStudio
         private Dictionary<uint, Tuple<string, int>> m_Addr2FileLine;
         private string m_AssembledFile;
 
-        //Reverse engineering notes:
-        // - Address chunks are 5 bytes: 4 bytes address + 1 byte flags
-        // - Filename chunks have 5 byte headers, last word = string length, string follows
-        // - 0x88 = address chunk + filename chunk packed
-        // - 0x80 = address chunk
-        // - 0x82 = address chunk + 1 byte line counter - number of lines this address spans
-        // - 0x8A = address chunk + end of filename/address table
-
-
-        //  ----------------------------------------------------------
-        //  |                  ** FILE HEADER **                     |
-        //  |                       8 bytes                          |
-        //  |--------------------------------------------------------|
-        //  |                                                        |
-        //  |   --------------------------------------------------   |
-        //  |   |      ** FILENAME/ADDRESS TABLE HEADER **       |   |
-        //  |   |   5 bytes : 3x byte flags, 2 byte string len   |   |
-        //  |   |------------------------------------------------|   |
-        //  |   |             ** FILENAME STRING  **             |   |
-        //  |   |------------------------------------------------|   |
-        //  |   |                                                |   |
-        //  |   |   ------------------------------------------   |   |
-        //  |   |   |             ** ADDRESS **              |   |   |
-        //  |   |   | 5 bytes : 4 byte address, 1 byte flags |   |   |
-        //  |   |   | 0x80 = end of address                  |   |   |
-        //  |   |   | 0x82 = read 1 extra byte (# lines)     |   |   |
-        //  |   |   | 0x88 = end of filename/address chunk   |   |   |
-        //  |   |   | 0x8A = end of filename/address table   |   |   |
-        //  |   |   ------------------------------------------   |   |
-        //  |   |                                                |   |
-        //  |   --------------------------------------------------   |
-        //  |                                                        |
-        //  |   --------------------------------------------------   |
-        //  |   |              ** SYMBOL TABLE **                |   |
-        //  |   |       ...                                      |   |
-        //  |   --------------------------------------------------   |
-        //  |                                                        |
-        //  ----------------------------------------------------------
-
         public enum ChunkId : byte
         {
             Filename = 0x88,            // A filename with start address and line count
             Address = 0x80,             // An address of next line
             AddressWithCount = 0x82,    // An address with line count
-            SymbolTable = 0x8A          // The symbol table
+            EndOfSection = 0x8A,        // End of section
+            Symbol = 0x2                // Symbol table entry
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -237,18 +199,32 @@ namespace MDStudio
                                     }
                                     else
                                     {
-                                        //This is the first address in a filename chunk
-                                        filenameSection = new FilenameSection();
-                                        filenameSection.addresses = new List<AddressEntry>();
-                                        filenameSection.filename = readString;
+                                        //If filename already exists, continue adding data to it
+                                        int sectionIdx = m_Filenames.FindIndex(element => element.filename == readString);
+                                        if (sectionIdx >= 0)
+                                        {
+                                            //Continue
+                                            filenameSection = m_Filenames[sectionIdx];
 
-                                        //Reset line counter
-                                        currentLine = filenameHeader.firstLine;
+                                            //Fetch line counter
+                                            currentLine = filenameSection.addresses[filenameSection.addresses.Count - 1].lineTo;
+                                        }
+                                        else
+                                        {
+                                            //This is the first address in a filename chunk
+                                            filenameSection = new FilenameSection();
+                                            filenameSection.addresses = new List<AddressEntry>();
+                                            filenameSection.filename = readString;
+
+                                            //Reset line counter
+                                            currentLine = 0;
+                                        }
 
                                         //Chunk payload contains address
                                         addressEntry.address = chunkHeader.payload;
-                                        addressEntry.lineFrom = 0;
-                                        addressEntry.lineTo = currentLine;
+                                        addressEntry.lineFrom = currentLine;
+                                        addressEntry.lineTo = filenameHeader.firstLine;
+                                        currentLine = filenameHeader.firstLine;
                                         filenameSection.addresses.Add(addressEntry);
 
                                         //Add to filename list
@@ -294,23 +270,26 @@ namespace MDStudio
                                     break;
                                 }
 
-                            case ChunkId.SymbolTable:
+                            case ChunkId.Symbol:
                                 {
-                                    //Welcome to the symbol table
-                                    while (bytesRead < data.Length)
-                                    {
-                                        //Read chunk header
-                                        bytesRead += Serialise(ref stream, out symbolChunk);
-                                        symbolEntry.address = symbolChunk.address;
+                                    //Read symbol string length
+                                    byte stringLength = 0;
+                                    bytesRead += Serialise(ref stream, out stringLength);
 
-                                        //Read string
-                                        bytesRead += Serialise(ref stream, symbolChunk.stringLen, out symbolEntry.name);
+                                    //Read string
+                                    bytesRead += Serialise(ref stream, stringLength, out symbolEntry.name);
 
-                                        m_Symbols.Add(symbolEntry);
-                                    }
+                                    //Payload contains address
+                                    symbolEntry.address = chunkHeader.payload;
+
+                                    m_Symbols.Add(symbolEntry);
 
                                     break;
                                 }
+
+                            case ChunkId.EndOfSection:
+                                //Nothing of interest
+                                break;
                         }
                     }
 
