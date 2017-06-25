@@ -340,9 +340,13 @@ namespace MDStudio
 
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (DGenThread.GetDGen().IsDebugging())
+            if (m_State == State.kRunning)
             {
+                codeEditor.Document.MarkerStrategy.Clear();
+                codeEditor.ActiveTextAreaControl.Invalidate();
                 DGenThread.GetDGen().Resume();
+                
+                //TODO: Bring emu window to front
             }
             else
             {
