@@ -65,6 +65,15 @@ namespace MDStudio
 
         private const int kAutoScrollThreshold = 20;
 
+        public static readonly ReadOnlyCollection<Tuple<int, int>> kValidResolutions = new ReadOnlyCollection<Tuple<int, int>>(new[]
+        {
+            new Tuple<int,int>( 320, 240 ),
+            new Tuple<int,int>( 640, 480 ),
+            new Tuple<int,int>( 960, 720 )
+        });
+
+        public const int kDefaultResolutionEntry = 1;
+
         private static readonly ReadOnlyCollection<string> kStepIntoInstrs = new ReadOnlyCollection<string>(new[]
         {
             "RTS",
@@ -123,7 +132,6 @@ namespace MDStudio
             codeEditor.Document.DocumentChanged += documentChanged;
 
             m_DGenThread = new DGenThread();
-            m_DGenThread.Init();
 
             m_Timer.Interval = 16;
             m_Timer.Tick += TimerTick;
@@ -136,7 +144,7 @@ namespace MDStudio
 
         void TimerTick(object sender, EventArgs e)
         {
-            if (DGenThread.GetDGen().IsDebugging() && m_State == State.kRunning)
+            if (DGenThread.GetDGen() != null && DGenThread.GetDGen().IsDebugging() && m_State == State.kRunning)
             {
                 //Breakpoint hit, go to address
                 int currentPC = DGenThread.GetDGen().GetCurrentPC();
@@ -421,6 +429,10 @@ namespace MDStudio
                     string baseDirectory = m_PathToProject + @"\";
                     string binaryFile = m_PathToProject + @"\" + m_ProjectName + ".bin";
 
+                    //Init emu
+                    Tuple<int, int> resolution = kValidResolutions[m_Config.EmuResolution];
+                    m_DGenThread.Init(resolution.Item1, resolution.Item2);
+
                     //Read symbols
                     m_DebugSymbols = new Symbols();
                     m_DebugSymbols.Read(symbolFile);
@@ -539,6 +551,7 @@ namespace MDStudio
             m_DGenThread.Stop();
             DGenThread.GetDGen().Reset();
             DGenThread.GetDGen().Hide();
+            m_DGenThread.Destroy();
 
             codeEditor.Document.MarkerStrategy.Clear();
             codeEditor.Refresh();
@@ -647,11 +660,13 @@ namespace MDStudio
             
             configForm.asmPath.Text = m_Config.Asm68kPath;
             configForm.asmArgs.Text = m_Config.Asm68kArgs;
+            configForm.emuResolution.SelectedIndex = m_Config.EmuResolution;
 
             if (configForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 m_Config.Asm68kPath = configForm.asmPath.Text;
                 m_Config.Asm68kArgs = configForm.asmArgs.Text;
+                m_Config.EmuResolution = configForm.emuResolution.SelectedIndex;
                 m_Config.Save();
 
                 Console.WriteLine(configForm.asmPath.Text);

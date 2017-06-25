@@ -15,6 +15,7 @@ namespace MDStudio
         [XmlElement("ASM68KPath")]
         public string Asm68kPath { get; set; }
         public string Asm68kArgs { get; set; }
+        public int EmuResolution { get; set; }
 
         public Config()
         {
@@ -43,6 +44,7 @@ namespace MDStudio
 
                         Asm68kPath = config.Asm68kPath;
                         Asm68kArgs = config.Asm68kArgs;
+                        EmuResolution = config.EmuResolution;
 
                         sr.Close();
                     }

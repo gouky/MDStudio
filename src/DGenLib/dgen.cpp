@@ -27,6 +27,9 @@ int usec = 0;
 int newclk = 0, oldclk = 0, startclk = 0;
 int frames_todo = 0;
 
+int sdlWindowWidth;
+int sdlWindowHeight;
+
 static unsigned char*	mdpal = NULL;
 static struct sndinfo	sndi;
 static struct bmap		mdscr;
@@ -52,21 +55,24 @@ void pd_message(const char *msg, ...)
 	pd_message_process();*/
 }
 
-int InitDGen()
+int InitDGen(int windowWidth, int windowHeight)
 {
  	s_DGenInstance = new md(false, 'J');
 
 	//	Init SDL
  	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 
-	g_SDLWindow		= SDL_CreateWindow("DGen",				SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 320, 240, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN | SDL_WINDOW_INPUT_FOCUS);
+	g_SDLWindow		= SDL_CreateWindow("DGen",				SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN | SDL_WINDOW_INPUT_FOCUS);
 	g_SDLRenderer	= SDL_CreateRenderer(g_SDLWindow, -1,	SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC|SDL_RENDERER_TARGETTEXTURE);
-	g_BackBuffer	= SDL_CreateTexture(g_SDLRenderer,		SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 240);
+	g_BackBuffer	= SDL_CreateTexture(g_SDLRenderer,		SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, windowWidth, windowHeight);
+
+	sdlWindowWidth = windowWidth;
+	sdlWindowHeight = windowHeight;
 
 	//<	Init  screen
 	mdscr.bpp	= 32;
-	mdscr.w		= 320;
-	mdscr.h		= 240;
+	mdscr.w		= windowWidth;
+	mdscr.h		= windowHeight;
 	mdscr.pitch	= mdscr.w*4;
 	mdscr.data	= (unsigned char*)malloc(mdscr.pitch * mdscr.h);
 
@@ -124,14 +130,19 @@ void	EndFrame()
 	SDL_RenderSetClipRect(g_SDLRenderer, NULL);
 
 	//Back to screen
+	SDL_Rect	src;
 	SDL_Rect	dst;
 
+	src.x = src.y = 0;
+	src.w = 320;
+	src.h = 240;
+
 	dst.x = dst.y = 0;
-	dst.w = 320;
-	dst.h = 240;
+	dst.w = sdlWindowWidth;
+	dst.h = sdlWindowHeight;
 
 	SDL_SetRenderTarget(g_SDLRenderer, NULL);
-	SDL_RenderCopy(g_SDLRenderer, g_BackBuffer, NULL, &dst);
+	SDL_RenderCopy(g_SDLRenderer, g_BackBuffer, &src, &dst);
 	SDL_RenderPresent(g_SDLRenderer);
 }
 

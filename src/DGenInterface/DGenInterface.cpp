@@ -20,9 +20,9 @@ DGenInterface::DGen::~DGen()
 	::Shutdown();
 }
 
-int DGenInterface::DGen::Init()
+int DGenInterface::DGen::Init(int windowWidth, int windowHeight)
 {
-	return ::InitDGen();
+	return ::InitDGen(windowWidth, windowHeight);
 }
 
 int DGenInterface::DGen::Reset()

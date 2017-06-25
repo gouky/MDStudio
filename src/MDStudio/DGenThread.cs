@@ -15,12 +15,12 @@ namespace MDStudio
 
         private Thread myThread = null;
 
-        public void Init()
+        public void Init(int windowWidth, int windowHeight)
         {
             m_Instance = this;
 
             m_DGen = new DGen();
-            m_DGen.Init();
+            m_DGen.Init(windowWidth, windowHeight);
 
             myThread = new Thread(new ThreadStart(ThreadLoop));
             myThread.Start();
@@ -63,6 +63,7 @@ namespace MDStudio
         public void Destroy()
         {
             m_DGen.Dispose();
+            m_DGen = null;
         }
         
         public void AddBreakpoint(int addr)

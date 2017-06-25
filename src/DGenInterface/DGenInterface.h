@@ -13,7 +13,7 @@ namespace DGenInterface {
 		DGen();
 		~DGen();
 
-		int		Init();
+		int		Init(int windowWidth, int windowHeight);
 		int		Reset();
 		int		LoadRom(String^ path);
 		int		Update();

@@ -131,11 +131,11 @@ int process()
 // 	g_BackBuffer	= SDL_CreateTexture(g_SDLRenderer,		SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 320, 240);
 
 	//<	Init  screen
-	mdscr.bpp	= 32;
-	mdscr.w		= 320;
-	mdscr.h		= 240;
-	mdscr.pitch	= mdscr.w*4;
-	mdscr.data	= (unsigned char*)malloc(mdscr.pitch * mdscr.h);
+	//mdscr.bpp	= 32;
+	//mdscr.w		= 320;
+	//mdscr.h		= 240;
+	//mdscr.pitch	= mdscr.w*4;
+	//mdscr.data	= (unsigned char*)malloc(mdscr.pitch * mdscr.h);
 
 	mdpal		= NULL;
 
