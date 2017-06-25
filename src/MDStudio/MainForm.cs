@@ -28,6 +28,12 @@ namespace MDStudio
             kDebugging
         };
 
+        enum BreakMode
+        {
+            kBreakpoint,
+            kStepOver
+        };
+
         private readonly Timer m_Timer = new Timer();
         private string m_PathToProject;
         private string m_ProjectName;
@@ -49,6 +55,9 @@ namespace MDStudio
         private bool m_Modified;
 
         private List<Marker> m_ErrorMarkers;
+
+        private BreakMode m_BreakMode = BreakMode.kBreakpoint;
+        private int m_StepOverAddress;
 
         private const int kAutoScrollThreshold = 20;
 
@@ -99,6 +108,22 @@ namespace MDStudio
 
                 //Bring window to front
                 BringToFront();
+
+                //Determine break mode
+                if(m_BreakMode == BreakMode.kStepOver)
+                {
+                    //If hit desired step over address
+                    if(currentPC == m_StepOverAddress)
+                    {
+                        //Return to breakpoint mode
+                        m_StepOverAddress = 0;
+                        m_BreakMode = BreakMode.kBreakpoint;
+
+                        //Clear step over breakpoint
+                        //TODO: Add ClearBreakpoint() to DGen, clear all for now
+                        m_DGenThread.ClearBreakpoints();
+                    }
+                }
             }
         }
 
@@ -374,7 +399,44 @@ namespace MDStudio
 
         private void stepOverMenu_Click(object sender, EventArgs e)
         {
+            //Get current address
+            int currentPC = DGenThread.GetDGen().GetCurrentPC();
+            int nextPC = currentPC;
 
+            //Get current file/line
+            Tuple<string,int> currentLine = m_DebugSymbols.GetFileLine((uint)currentPC);
+            int nextLine = currentLine.Item2;
+
+            //Get total num lines
+            //TODO: Verify current filename in editor matched emulator?
+            int fileSizeLines = codeEditor.Document.TotalNumberOfLines;
+
+            //Ignore lines with same address as current
+            while (currentPC == nextPC)
+            {
+                //Get next line
+                nextLine++;
+
+                //If next line is in another file, step into instead
+                if (nextLine > fileSizeLines)
+                {
+                    stepIntoMenu_Click(sender, e);
+                    return;
+                }
+
+                //Get address of next line
+                nextPC = (int)m_DebugSymbols.GetAddress(currentLine.Item1, nextLine);
+            }
+
+            //Set breakpoint at next address
+            DGenThread.GetDGen().AddBreakpoint(nextPC);
+
+            //Set StepOver mode
+            m_BreakMode = BreakMode.kStepOver;
+            m_StepOverAddress = nextPC;
+
+            //Run to StepOver breakpoint
+            DGenThread.GetDGen().Resume();
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)

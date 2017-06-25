@@ -70,6 +70,11 @@ namespace MDStudio
             m_DGen.AddBreakpoint(addr);
         }
 
+        public void ClearBreakpoints()
+        {
+            m_DGen.ClearBreakpoints();
+        }
+
         static public DGen GetDGen()
         {
             return m_DGen;
