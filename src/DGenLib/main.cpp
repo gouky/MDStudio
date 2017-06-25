@@ -8,6 +8,7 @@
 extern "C" 
 {
 	#include "md.h"
+	#include "pd.h"
 }
 
 #include "sdl/pd-defs.h"
@@ -26,6 +27,8 @@ enum demo_status {
 	DEMO_RECORD,
 	DEMO_PLAY
 };
+
+extern void uSleep(int waitTime);
 
 static unsigned char*	mdpal = NULL;
 static struct sndinfo	sndi;
