@@ -56,6 +56,8 @@ namespace MDStudio
 
         private List<Marker> m_ErrorMarkers;
 
+        private State m_State = State.kStopped;
+
         private BreakMode m_BreakMode = BreakMode.kBreakpoint;
         private int m_StepOverAddress;
 
@@ -370,6 +372,7 @@ namespace MDStudio
 
                     //  Start
                     m_DGenThread.Start();
+                    m_State = State.kRunning;
                 }
             }
         }
@@ -379,6 +382,12 @@ namespace MDStudio
             int line = codeEditor.ActiveTextAreaControl.Caret.Line;
             codeEditor.Document.BookmarkManager.ToggleMarkAt(new TextLocation(0, line));
             codeEditor.Refresh();
+
+            //If running, set on running instance
+            if(m_State == State.kRunning)
+            {
+                DGenThread.GetDGen().AddBreakpoint((int)m_DebugSymbols.GetAddress(m_CurrentSourcePath, line + 1));
+            }
         }
 
         private void debugToolStripMenuItem_Click(object sender, EventArgs e)
@@ -449,6 +458,8 @@ namespace MDStudio
             codeEditor.Refresh();
             
             statusLabel.Text = "Stopped";
+
+            m_State = State.kStopped;
         }
 
         private void breakMenu_Click(object sender, EventArgs e)
