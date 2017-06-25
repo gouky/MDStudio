@@ -45,7 +45,7 @@ namespace MDStudio
 
         private void RegisterView_Load(object sender, EventArgs e)
         {
-            TopMost = true;
+            Owner = Application.OpenForms[0];
         }
     }
 }
