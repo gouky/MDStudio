@@ -596,6 +596,7 @@ namespace MDStudio
                 m_SourceFileName = Path.GetFileName(pathSelect.FileName);
 
                 m_ProjectFiles = ScanIncludes(m_PathToProject, pathSelect.FileName);
+                m_ProjectFiles.Add(m_CurrentSourcePath);
                 m_ProjectFiles.Sort();
 
                 PopulateFileView();
@@ -621,7 +622,10 @@ namespace MDStudio
 
         private void treeProjectFiles_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            GoTo(treeProjectFiles.SelectedNode.Name, 0);
+            if(System.IO.Path.GetExtension(treeProjectFiles.SelectedNode.Name).Length > 0)
+            {
+                GoTo(treeProjectFiles.SelectedNode.Name, 0);
+            }
         }
     }
 }
