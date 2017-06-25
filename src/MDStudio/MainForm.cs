@@ -90,7 +90,15 @@ namespace MDStudio
         {
             if (DGenThread.GetDGen().IsDebugging())
             {
-                 statusLabel.Text = "PC 0x" + DGenThread.GetDGen().GetCurrentPC();
+                //Breakpoint hit, go to address
+                int currentPC = DGenThread.GetDGen().GetCurrentPC();
+                GoTo((uint)currentPC);
+
+                //Set status
+                statusLabel.Text = "PC 0x" + DGenThread.GetDGen().GetCurrentPC();
+
+                //Bring window to front
+                BringToFront();
             }
         }
 
@@ -355,34 +363,12 @@ namespace MDStudio
 
         private void stepIntoMenu_Click(object sender, EventArgs e)
         {
-            //  if runnnig
+            //Step to next instruction (blocking)
             DGenThread.GetDGen().StepInto();
 
-            //Lookup address
+            //Go to address
             int currentPC = DGenThread.GetDGen().GetCurrentPC();
-            Tuple<string, int> currentLine = m_DebugSymbols.GetFileLine((uint)currentPC);
-
-            string filename = currentLine.Item1;
-            int lineNumber = currentLine.Item2 - 1;
-
-            //Load file
-            if (m_CurrentSourcePath.ToLower() != filename)
-            {
-                string source = System.IO.File.ReadAllText(filename);
-                codeEditor.Document.TextContent = source;
-                codeEditor.Document.BookmarkManager.Clear();
-                m_CurrentSourcePath = filename;
-            }
-
-            int offset = codeEditor.Document.PositionToOffset(new TextLocation(0, lineNumber));
-
-            codeEditor.Document.MarkerStrategy.Clear();
-            Marker marker = new Marker(offset, codeEditor.Document.LineSegmentCollection[lineNumber].Length, MarkerType.SolidBlock, Color.Yellow, Color.Black);//selection.Offset, selection.Length, MarkerType.SolidBlock, Color.DarkRed, Color.White);
-            codeEditor.Document.MarkerStrategy.AddMarker(marker);
-            codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber;
-            codeEditor.ActiveTextAreaControl.Caret.Column = 0;
-            codeEditor.ActiveTextAreaControl.CenterViewOn(lineNumber, kAutoScrollThreshold);
-            codeEditor.ActiveTextAreaControl.Invalidate();
+            GoTo((uint)currentPC);
 
         }
 
@@ -447,6 +433,33 @@ namespace MDStudio
             this.Activate();
         }
 
+        public void GoTo(uint address)
+        {
+            Tuple<string, int> currentLine = m_DebugSymbols.GetFileLine(address);
+
+            string filename = currentLine.Item1;
+            int lineNumber = currentLine.Item2 - 1;
+
+            //Load file
+            if (m_CurrentSourcePath.ToLower() != filename)
+            {
+                string source = System.IO.File.ReadAllText(filename);
+                codeEditor.Document.TextContent = source;
+                codeEditor.Document.BookmarkManager.Clear();
+                m_CurrentSourcePath = filename;
+            }
+
+            int offset = codeEditor.Document.PositionToOffset(new TextLocation(0, lineNumber));
+
+            codeEditor.Document.MarkerStrategy.Clear();
+            Marker marker = new Marker(offset, codeEditor.Document.LineSegmentCollection[lineNumber].Length, MarkerType.SolidBlock, Color.Yellow, Color.Black);//selection.Offset, selection.Length, MarkerType.SolidBlock, Color.DarkRed, Color.White);
+            codeEditor.Document.MarkerStrategy.AddMarker(marker);
+            codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber;
+            codeEditor.ActiveTextAreaControl.Caret.Column = 0;
+            codeEditor.ActiveTextAreaControl.CenterViewOn(lineNumber, kAutoScrollThreshold);
+            codeEditor.ActiveTextAreaControl.Invalidate();
+        }
+
         public void UpdateViewBuildLog(bool flag)
         {
             viewBuildLogMenu.Checked = flag;
@@ -505,7 +518,7 @@ namespace MDStudio
         {
             OpenFileDialog pathSelect = new OpenFileDialog();
 
-            pathSelect.Filter = "ASM|*.s;*.asm";
+            pathSelect.Filter = "ASM|*.s;*.asm;*.68k";
 
             if (pathSelect.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
