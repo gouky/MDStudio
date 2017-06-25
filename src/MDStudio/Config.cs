@@ -17,6 +17,16 @@ namespace MDStudio
         public string Asm68kArgs { get; set; }
         public int EmuResolution { get; set; }
 
+        // Index into SDL_Keycode.Keycode enum
+        public int KeycodeUp { get; set; }
+        public int KeycodeDown { get; set; }
+        public int KeycodeLeft { get; set; }
+        public int KeycodeRight { get; set; }
+        public int KeycodeA { get; set; }
+        public int KeycodeB { get; set; }
+        public int KeycodeC { get; set; }
+        public int KeycodeStart { get; set; }
+
         public Config()
         {
 
@@ -45,6 +55,15 @@ namespace MDStudio
                         Asm68kPath = config.Asm68kPath;
                         Asm68kArgs = config.Asm68kArgs;
                         EmuResolution = config.EmuResolution;
+
+                        KeycodeUp = config.KeycodeUp;
+                        KeycodeDown = config.KeycodeDown;
+                        KeycodeLeft = config.KeycodeLeft;
+                        KeycodeRight = config.KeycodeRight;
+                        KeycodeA = config.KeycodeA;
+                        KeycodeB = config.KeycodeB;
+                        KeycodeC = config.KeycodeC;
+                        KeycodeStart = config.KeycodeStart;
 
                         sr.Close();
                     }

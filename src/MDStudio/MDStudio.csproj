@@ -82,6 +82,7 @@
     <Compile Include="RegisterView.Designer.cs">
       <DependentUpon>RegisterView.cs</DependentUpon>
     </Compile>
+    <Compile Include="SDL_Keycode.cs" />
     <Compile Include="Symbols.cs" />
     <Compile Include="VDPRegs.cs">
       <SubType>Form</SubType>

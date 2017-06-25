@@ -98,6 +98,16 @@ int DGenInterface::DGen::GetRegisters()
 	return 0;
 }
 
+void DGenInterface::DGen::SetInputMapping(SDLInputs input, int mapping)
+{
+	::SetInputMapping((int)input, mapping);
+}
+
+int DGenInterface::DGen::GetInputMapping(SDLInputs input)
+{
+	return ::GetInputMapping((int)input);
+}
+
 void	DGenInterface::DGen::Show()
 {
 	ShowSDLWindow();

@@ -34,6 +34,28 @@ static unsigned char*	mdpal = NULL;
 static struct sndinfo	sndi;
 static struct bmap		mdscr;
 
+struct SDLInputMapping
+{
+	Uint32 sdlKey;
+	Uint32 dgenKey;
+};
+
+SDLInputMapping sdlInputMapping[eInput_COUNT] =
+{
+	{ SDLK_i, MD_UP_MASK },
+	{ SDLK_k, MD_DOWN_MASK },
+	{ SDLK_j, MD_LEFT_MASK },
+	{ SDLK_l, MD_RIGHT_MASK },
+	{ SDLK_s, MD_B_MASK },
+	{ SDLK_d, MD_C_MASK },
+	{ SDLK_a, MD_A_MASK },
+	{ SDLK_SPACE, MD_START_MASK },
+	{ SDLK_c, MD_Z_MASK },
+	{ SDLK_x, MD_Y_MASK },
+	{ SDLK_z, MD_X_MASK },
+	{ SDLK_m, MD_MODE_MASK }
+};
+
 // Do a demo frame, if active
 enum demo_status {
 	DEMO_OFF,
@@ -89,6 +111,16 @@ void	ShowSDLWindow()
 void	HideSDLWindow()
 {
 	SDL_HideWindow(g_SDLWindow);
+}
+
+void	SetInputMapping(int input, int mapping)
+{
+	sdlInputMapping[input].sdlKey = mapping;
+}
+
+int		GetInputMapping(int input)
+{
+	return sdlInputMapping[input].sdlKey;
 }
 
 int		LoadRom(const char* path)
@@ -197,78 +229,33 @@ void	ProcessInputs()
 
 	const Uint8 *keystate = SDL_GetKeyboardState(NULL);
 
-	while(SDL_PollEvent(&event))
+	while (SDL_PollEvent(&event))
 	{
 		switch(event.type)
 		{
-		case SDL_KEYDOWN:
-			switch(event.key.keysym.sym)
+			case SDL_KEYDOWN:
 			{
-			case SDLK_LEFT:
-			case SDLK_j:
-				s_DGenInstance->pad[0] &=~ MD_LEFT_MASK;
-				break;
-
-			case SDLK_RIGHT:
-			case SDLK_l:
-				s_DGenInstance->pad[0] &=~ MD_RIGHT_MASK;
-				break;
-
-			case SDLK_DOWN:
-			case SDLK_k:
-				s_DGenInstance->pad[0] &=~ MD_DOWN_MASK;
-				break;
-
-			case SDLK_UP:
-			case SDLK_i:
-				s_DGenInstance->pad[0] &=~ MD_UP_MASK;
-				break;
-
-			case SDLK_a:
-				s_DGenInstance->pad[0] &=~ MD_A_MASK;
-				break;
-			case SDLK_s:
-				s_DGenInstance->pad[0] &=~ MD_B_MASK;
-				break;
-			case SDLK_d:
-				s_DGenInstance->pad[0] &=~ MD_C_MASK;
-				break;
+				for (int i = 0; i < eInput_COUNT; i++)
+				{
+					if (event.key.keysym.sym == sdlInputMapping[i].sdlKey)
+					{
+						s_DGenInstance->pad[0] &= ~sdlInputMapping[i].dgenKey;
+					}
+				}
 			}
 			break;
 
-		case SDL_KEYUP:
-			switch(event.key.keysym.sym)
+			case SDL_KEYUP:
 			{
-			case SDLK_LEFT:
-			case SDLK_j:
- 				s_DGenInstance->pad[0] |= MD_LEFT_MASK;
-				break;
-
-			case SDLK_RIGHT:
-			case SDLK_l:
-				s_DGenInstance->pad[0] |= MD_RIGHT_MASK;
-				break;
-
-			case SDLK_DOWN:
-			case SDLK_k:
-				s_DGenInstance->pad[0] |= MD_DOWN_MASK;
-				break;
-
-			case SDLK_UP:
-			case SDLK_i:
-				s_DGenInstance->pad[0] |= MD_UP_MASK;
-				break;
-
-			case SDLK_a:
-				s_DGenInstance->pad[0] |= MD_A_MASK;
-				break;
-			case SDLK_s:
-				s_DGenInstance->pad[0] |= MD_B_MASK;
-				break;
-			case SDLK_d:
-				s_DGenInstance->pad[0] |= MD_C_MASK;
-				break;
+				for (int i = 0; i < eInput_COUNT; i++)
+				{
+					if (event.key.keysym.sym == sdlInputMapping[i].sdlKey)
+					{
+						s_DGenInstance->pad[0] |= sdlInputMapping[i].dgenKey;
+					}
+				}
 			}
+			
 			break;
 		}
 	}

@@ -72,6 +72,7 @@ namespace MDStudio
             new Tuple<int,int>( 960, 720 )
         });
 
+        //Default config
         public const int kDefaultResolutionEntry = 1;
 
         private static readonly ReadOnlyCollection<string> kStepIntoInstrs = new ReadOnlyCollection<string>(new[]
@@ -437,6 +438,16 @@ namespace MDStudio
                     Tuple<int, int> resolution = kValidResolutions[m_Config.EmuResolution];
                     m_DGenThread.Init(resolution.Item1, resolution.Item2);
 
+                    //Set input mappings
+                    DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputUp, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeUp));
+                    DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputDown, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeDown));
+                    DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputLeft, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeLeft));
+                    DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputRight, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeRight));
+                    DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputA, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeA));
+                    DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputB, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeB));
+                    DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputC, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeC));
+                    DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputStart, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeStart));
+
                     //Read symbols
                     m_DebugSymbols = new Symbols();
                     m_DebugSymbols.Read(symbolFile);
@@ -667,11 +678,30 @@ namespace MDStudio
             configForm.asmArgs.Text = m_Config.Asm68kArgs;
             configForm.emuResolution.SelectedIndex = m_Config.EmuResolution;
 
+            configForm.inputUp.SelectedIndex = m_Config.KeycodeUp;
+            configForm.inputDown.SelectedIndex = m_Config.KeycodeDown;
+            configForm.inputLeft.SelectedIndex = m_Config.KeycodeLeft;
+            configForm.inputRight.SelectedIndex = m_Config.KeycodeRight;
+            configForm.inputA.SelectedIndex = m_Config.KeycodeA;
+            configForm.inputB.SelectedIndex = m_Config.KeycodeB;
+            configForm.inputC.SelectedIndex = m_Config.KeycodeC;
+            configForm.inputStart.SelectedIndex = m_Config.KeycodeStart;
+
             if (configForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 m_Config.Asm68kPath = configForm.asmPath.Text;
                 m_Config.Asm68kArgs = configForm.asmArgs.Text;
                 m_Config.EmuResolution = configForm.emuResolution.SelectedIndex;
+
+                m_Config.KeycodeUp = configForm.inputUp.SelectedIndex;
+                m_Config.KeycodeDown = configForm.inputDown.SelectedIndex;
+                m_Config.KeycodeLeft = configForm.inputLeft.SelectedIndex;
+                m_Config.KeycodeRight = configForm.inputRight.SelectedIndex;
+                m_Config.KeycodeA = configForm.inputA.SelectedIndex;
+                m_Config.KeycodeB = configForm.inputB.SelectedIndex;
+                m_Config.KeycodeC = configForm.inputC.SelectedIndex;
+                m_Config.KeycodeStart = configForm.inputStart.SelectedIndex;
+
                 m_Config.Save();
 
                 Console.WriteLine(configForm.asmPath.Text);

@@ -26,6 +26,16 @@ namespace MDStudio
             }
         }
 
+        public class KeycodeEntry
+        {
+            public SDL_Keycode.Keycode Keycode { get; set; }
+
+            public override string ToString()
+            {
+                return Enum.GetName(typeof(SDL_Keycode.Keycode), Keycode);
+            }
+        }
+
         public void GetEmuResolution(out int width, out int height)
         {
             width = (emuResolution.SelectedItem as ResolutionEntry).Width;
@@ -39,6 +49,7 @@ namespace MDStudio
             AcceptButton = okBtn;
             CancelButton = cancelBtn;
 
+            //Populate resolution fields
             foreach(Tuple<int, int> resolution in MainForm.kValidResolutions)
             {
                 ResolutionEntry entry = new ResolutionEntry();
@@ -49,6 +60,22 @@ namespace MDStudio
             }
 
             emuResolution.SelectedIndex = MainForm.kDefaultResolutionEntry;
+
+            //Populate keycode fields
+            foreach (SDL_Keycode.Keycode keycode in Enum.GetValues(typeof(SDL_Keycode.Keycode)))
+            {
+                KeycodeEntry entry = new KeycodeEntry();
+                entry.Keycode = keycode;
+
+                inputUp.Items.Add(entry);
+                inputDown.Items.Add(entry);
+                inputLeft.Items.Add(entry);
+                inputRight.Items.Add(entry);
+                inputA.Items.Add(entry);
+                inputB.Items.Add(entry);
+                inputC.Items.Add(entry);
+                inputStart.Items.Add(entry);
+            }
         }
 
         private void ConfigForm_Load(object sender, EventArgs e)

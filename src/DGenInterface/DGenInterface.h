@@ -10,6 +10,25 @@ namespace DGenInterface {
 	{
 		// TODO: Add your methods for this class here.
 	public:
+
+		enum class SDLInputs
+		{
+			eInputUp,
+			eInputDown,
+			eInputLeft,
+			eInputRight,
+			eInputB,
+			eInputC,
+			eInputA,
+			eInputStart,
+			eInputZ,
+			eInputY,
+			eInputX,
+			eInputMode,
+
+			eInput_COUNT
+		};
+
 		DGen();
 		~DGen();
 
@@ -34,5 +53,8 @@ namespace DGenInterface {
 		int		GetSR();
 		int		GetCurrentPC();
 		int		GetRegisters();
+
+		void	SetInputMapping(SDLInputs input, int mapping);
+		int		GetInputMapping(SDLInputs input);
 	};
 }
