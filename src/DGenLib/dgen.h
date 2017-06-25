@@ -22,5 +22,9 @@ extern int		Break();
 extern int		IsDebugging();
 
 extern int		UpdateDGen();
+
+extern int		GetDReg(int index);
+extern int		GetAReg(int index);
+extern int		GetSR();
 extern int		GetCurrentPC();
 

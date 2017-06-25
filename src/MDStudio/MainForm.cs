@@ -46,6 +46,7 @@ namespace MDStudio
         private DGenThread m_DGenThread;
         private Symbols m_DebugSymbols;
 
+        private RegisterView m_RegisterView;
         private MemoryView m_MemoryView;
         private BuildLog m_BuildLog;
 
@@ -140,6 +141,25 @@ namespace MDStudio
                 //Breakpoint hit, go to address
                 int currentPC = DGenThread.GetDGen().GetCurrentPC();
                 GoTo((uint)currentPC);
+
+                //Get regs
+                uint[] dregs = new uint[8];
+                for(int i = 0; i < 8; i++)
+                {
+                    dregs[i] = (uint)DGenThread.GetDGen().GetDReg(i);
+                }
+
+                uint[] aregs = new uint[7];
+                for (int i = 0; i < 7; i++)
+                {
+                    aregs[i] = (uint)DGenThread.GetDGen().GetAReg(i);
+                }
+
+                uint sr = (uint)DGenThread.GetDGen().GetSR();
+
+                m_RegisterView.SetRegs( dregs[0], dregs[1], dregs[2], dregs[3], dregs[4], dregs[5], dregs[6], dregs[7],
+                                        aregs[0], aregs[1], aregs[2], aregs[3], aregs[4], aregs[5], aregs[6], 0,
+                                        sr, (uint)currentPC);
 
                 //Set status
                 statusLabel.Text = "PC 0x" + DGenThread.GetDGen().GetCurrentPC();
@@ -414,6 +434,10 @@ namespace MDStudio
                     {
                         DGenThread.GetDGen().AddBreakpoint((int)m_DebugSymbols.GetAddress(m_CurrentSourcePath, mark.LineNumber + 1));
                     }
+
+                    //  Show register window
+                    m_RegisterView = new RegisterView();
+                    m_RegisterView.Show();
 
                     //  Start
                     m_DGenThread.Start();

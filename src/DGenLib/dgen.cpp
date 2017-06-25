@@ -357,6 +357,21 @@ int IsDebugging()
 	return s_DGenInstance->debug_trap;
 }
 
+int GetDReg(int index)
+{
+	return s_DGenInstance->debug_m68k_get_reg((m68k_register_t)((int)M68K_REG_D0 + index));
+}
+
+int GetAReg(int index)
+{
+	return s_DGenInstance->debug_m68k_get_reg((m68k_register_t)((int)M68K_REG_A0 + index));
+}
+
+int GetSR()
+{
+	return s_DGenInstance->debug_m68k_get_reg(M68K_REG_SR);
+}
+
 int GetCurrentPC()
 {
 	if(!s_DGenInstance)

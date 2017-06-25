@@ -711,6 +711,7 @@ public:
 	int debug_should_z80_wp_fire(struct dgen_wp *w);
 	uint32_t m68k_get_pc();
 	uint16_t z80_get_pc();
+	uint32_t debug_m68k_get_reg(m68k_register_t reg);
 	bool debug_m68k_check_bps();
 	bool debug_m68k_check_wps();
 	bool debug_z80_check_bps();

@@ -29,6 +29,9 @@ namespace DGenInterface {
 		void	Hide();
 
 		///<	Accessors
+		int		GetDReg(int index);
+		int		GetAReg(int index);
+		int		GetSR();
 		int		GetCurrentPC();
 		int		GetRegisters();
 	};

@@ -63,6 +63,21 @@ bool DGenInterface::DGen::IsDebugging()
 	return ::IsDebugging() == 1 ? true : false;
 }
 
+int DGenInterface::DGen::GetDReg(int index)
+{
+	return ::GetDReg(index);
+}
+
+int DGenInterface::DGen::GetAReg(int index)
+{
+	return ::GetAReg(index);
+}
+
+int DGenInterface::DGen::GetSR()
+{
+	return ::GetSR();
+}
+
 int DGenInterface::DGen::GetCurrentPC()
 {
 	return ::GetCurrentPC();

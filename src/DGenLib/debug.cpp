@@ -513,6 +513,33 @@ uint32_t md::m68k_get_pc()
 }
 
 /**
+* Get M68K reg.
+*
+* @return reg.
+*/
+uint32_t md::debug_m68k_get_reg(m68k_register_t reg)
+{
+	if (reg >= M68K_REG_D0 && reg <= M68K_REG_D7)
+	{
+		return le2h32(m68k_state.d[reg]);
+	}
+	else if (reg >= M68K_REG_A0 && reg <= M68K_REG_A6)
+	{
+		return le2h32(m68k_state.d[M68K_REG_A0 + reg]);
+	}
+	else if (reg == M68K_REG_PC)
+	{
+		return le2h32(m68k_state.pc);
+	}
+	else if (reg == M68K_REG_SR)
+	{
+		return le2h32(m68k_state.sr);
+	}
+
+	return 0;
+}
+
+/**
  * Get Z80 PC.
  *
  * @return Current PC.
