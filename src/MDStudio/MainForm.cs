@@ -125,6 +125,10 @@ namespace MDStudio
             m_BuildLog = new BuildLog(this);
             m_BuildLog.Hide();
 
+            //
+            m_RegisterView = new RegisterView();
+            m_RegisterView.Hide();
+
             // Set the syntax-highlighting for C#
             codeEditor.Document.HighlightingStrategy = HighlightingManager.Manager.FindHighlighter("ASM68k");
 
@@ -448,7 +452,6 @@ namespace MDStudio
                     }
 
                     //  Show register window
-                    m_RegisterView = new RegisterView();
                     m_RegisterView.Show();
 
                     //  Start
@@ -552,6 +555,8 @@ namespace MDStudio
             DGenThread.GetDGen().Reset();
             DGenThread.GetDGen().Hide();
             m_DGenThread.Destroy();
+
+            m_RegisterView.Hide();
 
             codeEditor.Document.MarkerStrategy.Clear();
             codeEditor.Refresh();
