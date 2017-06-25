@@ -16,26 +16,40 @@ namespace MDStudio
                             uint a0, uint a1, uint a2, uint a3, uint a4, uint a5, uint a6, uint usp,
                             uint sr, uint pc)
         {
-            txt_d0.Text = "0x" + d0.ToString("X8");
-            txt_d1.Text = "0x" + d1.ToString("X8");
-            txt_d2.Text = "0x" + d2.ToString("X8");
-            txt_d3.Text = "0x" + d3.ToString("X8");
-            txt_d4.Text = "0x" + d4.ToString("X8");
-            txt_d5.Text = "0x" + d5.ToString("X8");
-            txt_d6.Text = "0x" + d6.ToString("X8");
-            txt_d7.Text = "0x" + d7.ToString("X8");
+            SetRegText(txt_d0, d0);
+            SetRegText(txt_d1, d1);
+            SetRegText(txt_d2, d2);
+            SetRegText(txt_d3, d3);
+            SetRegText(txt_d4, d4);
+            SetRegText(txt_d5, d5);
+            SetRegText(txt_d6, d6);
+            SetRegText(txt_d7, d7);
 
-            txt_a0.Text = "0x" + a0.ToString("X8");
-            txt_a1.Text = "0x" + a1.ToString("X8");
-            txt_a2.Text = "0x" + a2.ToString("X8");
-            txt_a3.Text = "0x" + a3.ToString("X8");
-            txt_a4.Text = "0x" + a4.ToString("X8");
-            txt_a5.Text = "0x" + a5.ToString("X8");
-            txt_a6.Text = "0x" + a6.ToString("X8");
+            SetRegText(txt_a0, a0);
+            SetRegText(txt_a1, a1);
+            SetRegText(txt_a2, a2);
+            SetRegText(txt_a3, a3);
+            SetRegText(txt_a4, a4);
+            SetRegText(txt_a5, a5);
+            SetRegText(txt_a6, a6);
 
-            txt_usp.Text = "0x" + usp.ToString("X8");
-            txt_pc.Text = "0x" + pc.ToString("X8");
-            txt_sr.Text = "0x" + sr.ToString("X4");
+            SetRegText(txt_usp, usp);
+            SetRegText(txt_pc, pc);
+            SetRegText(txt_sr, sr);
+        }
+
+        private void SetRegText(TextBox textBox, uint value)
+        {
+            string text = value.ToString("X8");
+            if(textBox.Text == text)
+            {
+                textBox.ForeColor = Color.Black;
+            }
+            else
+            {
+                textBox.Text = text;
+                textBox.ForeColor = Color.Red;
+            }
         }
 
         public RegisterView()
