@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -63,6 +64,41 @@ namespace MDStudio
 
         private const int kAutoScrollThreshold = 20;
 
+        private static readonly ReadOnlyCollection<string> kStepIntoInstrs = new ReadOnlyCollection<string>(new[]
+        {
+            "RTS",
+            "JMP",
+            "BRA",
+            "BCC",
+            "BCS",
+            "BEQ",
+            "BGE",
+            "BGT",
+            "BHI",
+            "BLE",
+            "BLS",
+            "BLT",
+            "BMI",
+            "BNE",
+            "BPL",
+            "BVC",
+            "BVS",
+            "DBCC",
+            "DBCS",
+            "DBEQ",
+            "DBGE",
+            "DBGT",
+            "DBHI",
+            "DBLE",
+            "DBLS",
+            "DBLT",
+            "DBMI",
+            "DBNE",
+            "DBPL",
+            "DBVC",
+            "DBVS",
+        });
+
         public MainForm()
         {
             InitializeComponent();
@@ -99,7 +135,7 @@ namespace MDStudio
 
         void TimerTick(object sender, EventArgs e)
         {
-            if (DGenThread.GetDGen().IsDebugging())
+            if (DGenThread.GetDGen().IsDebugging() && m_State == State.kRunning)
             {
                 //Breakpoint hit, go to address
                 int currentPC = DGenThread.GetDGen().GetCurrentPC();
@@ -126,6 +162,9 @@ namespace MDStudio
                         m_DGenThread.ClearBreakpoints();
                     }
                 }
+
+                //In breakpoint state
+                m_State = State.kDebugging;
             }
         }
 
@@ -340,15 +379,17 @@ namespace MDStudio
 
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (m_State == State.kRunning)
+            if (m_State == State.kDebugging)
             {
                 codeEditor.Document.MarkerStrategy.Clear();
                 codeEditor.ActiveTextAreaControl.Invalidate();
                 DGenThread.GetDGen().Resume();
-                
+
                 //TODO: Bring emu window to front
+
+                m_State = State.kRunning;
             }
-            else
+            else if(m_State == State.kStopped)
             {
                 Save();
 
@@ -388,7 +429,7 @@ namespace MDStudio
             codeEditor.Refresh();
 
             //If running, set on running instance
-            if(m_State == State.kRunning)
+            if(m_State == State.kRunning || m_State == State.kDebugging)
             {
                 DGenThread.GetDGen().AddBreakpoint((int)m_DebugSymbols.GetAddress(m_CurrentSourcePath, line + 1));
             }
@@ -420,8 +461,22 @@ namespace MDStudio
             Tuple<string,int> currentLine = m_DebugSymbols.GetFileLine((uint)currentPC);
             int nextLine = currentLine.Item2;
 
+            //Determine if current instruction should be stepped into
+            //TODO: Add instruction peek to DGen, determine by opcode
+            string currentLineText = codeEditor.Document.GetText(codeEditor.Document.GetLineSegment(currentLine.Item2 - 1));
+            Match match = Regex.Match(currentLineText, "\\s*?([a-zA-Z.]+)");
+            if(match.Success)
+            {
+                string opcode = match.Groups[1].ToString().ToUpper();
+                if (kStepIntoInstrs.Contains(opcode))
+                {
+                    stepIntoMenu_Click(sender, e);
+                    return;
+                }
+            }
+
             //Get total num lines
-            //TODO: Verify current filename in editor matched emulator?
+            //TODO: Verify current filename in editor matches emulator?
             int fileSizeLines = codeEditor.Document.TotalNumberOfLines;
 
             //Ignore lines with same address as current
@@ -450,6 +505,7 @@ namespace MDStudio
 
             //Run to StepOver breakpoint
             DGenThread.GetDGen().Resume();
+            m_State = State.kRunning;
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
