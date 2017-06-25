@@ -473,6 +473,8 @@ namespace MDStudio
             int currentPC = DGenThread.GetDGen().GetCurrentPC();
             GoTo((uint)currentPC);
 
+            //Re-evaluate on next timer tick
+            m_State = State.kRunning;
         }
 
         private void stepOverMenu_Click(object sender, EventArgs e)
