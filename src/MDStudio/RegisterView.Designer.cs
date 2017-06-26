@@ -46,6 +46,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.txt_usp = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
             this.txt_a6 = new System.Windows.Forms.TextBox();
             this.txt_a0 = new System.Windows.Forms.TextBox();
             this.txt_a5 = new System.Windows.Forms.TextBox();
@@ -65,8 +67,6 @@
             this.label17 = new System.Windows.Forms.Label();
             this.txt_sr = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.txt_usp = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -99,6 +99,7 @@
             // 
             // txt_d7
             // 
+            this.txt_d7.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_d7.Location = new System.Drawing.Point(37, 202);
             this.txt_d7.Name = "txt_d7";
             this.txt_d7.Size = new System.Drawing.Size(87, 20);
@@ -106,6 +107,7 @@
             // 
             // txt_d6
             // 
+            this.txt_d6.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_d6.Location = new System.Drawing.Point(37, 176);
             this.txt_d6.Name = "txt_d6";
             this.txt_d6.Size = new System.Drawing.Size(87, 20);
@@ -113,6 +115,7 @@
             // 
             // txt_d5
             // 
+            this.txt_d5.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_d5.Location = new System.Drawing.Point(37, 150);
             this.txt_d5.Name = "txt_d5";
             this.txt_d5.Size = new System.Drawing.Size(87, 20);
@@ -120,6 +123,7 @@
             // 
             // txt_d4
             // 
+            this.txt_d4.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_d4.Location = new System.Drawing.Point(37, 124);
             this.txt_d4.Name = "txt_d4";
             this.txt_d4.Size = new System.Drawing.Size(87, 20);
@@ -127,6 +131,7 @@
             // 
             // txt_d3
             // 
+            this.txt_d3.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_d3.Location = new System.Drawing.Point(37, 99);
             this.txt_d3.Name = "txt_d3";
             this.txt_d3.Size = new System.Drawing.Size(87, 20);
@@ -134,6 +139,7 @@
             // 
             // txt_d2
             // 
+            this.txt_d2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_d2.Location = new System.Drawing.Point(37, 73);
             this.txt_d2.Name = "txt_d2";
             this.txt_d2.Size = new System.Drawing.Size(87, 20);
@@ -141,6 +147,7 @@
             // 
             // txt_d1
             // 
+            this.txt_d1.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_d1.Location = new System.Drawing.Point(37, 45);
             this.txt_d1.Name = "txt_d1";
             this.txt_d1.Size = new System.Drawing.Size(87, 20);
@@ -148,6 +155,7 @@
             // 
             // txt_d0
             // 
+            this.txt_d0.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_d0.Location = new System.Drawing.Point(37, 19);
             this.txt_d0.Name = "txt_d0";
             this.txt_d0.Size = new System.Drawing.Size(87, 20);
@@ -250,8 +258,26 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Address";
             // 
+            // txt_usp
+            // 
+            this.txt_usp.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_usp.Location = new System.Drawing.Point(43, 202);
+            this.txt_usp.Name = "txt_usp";
+            this.txt_usp.Size = new System.Drawing.Size(87, 20);
+            this.txt_usp.TabIndex = 31;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(10, 205);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(29, 13);
+            this.label18.TabIndex = 30;
+            this.label18.Text = "USP";
+            // 
             // txt_a6
             // 
+            this.txt_a6.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_a6.Location = new System.Drawing.Point(43, 176);
             this.txt_a6.Name = "txt_a6";
             this.txt_a6.Size = new System.Drawing.Size(87, 20);
@@ -259,6 +285,7 @@
             // 
             // txt_a0
             // 
+            this.txt_a0.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_a0.Location = new System.Drawing.Point(43, 19);
             this.txt_a0.Name = "txt_a0";
             this.txt_a0.Size = new System.Drawing.Size(87, 20);
@@ -266,6 +293,7 @@
             // 
             // txt_a5
             // 
+            this.txt_a5.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_a5.Location = new System.Drawing.Point(43, 150);
             this.txt_a5.Name = "txt_a5";
             this.txt_a5.Size = new System.Drawing.Size(87, 20);
@@ -282,6 +310,7 @@
             // 
             // txt_a4
             // 
+            this.txt_a4.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_a4.Location = new System.Drawing.Point(43, 124);
             this.txt_a4.Name = "txt_a4";
             this.txt_a4.Size = new System.Drawing.Size(87, 20);
@@ -298,6 +327,7 @@
             // 
             // txt_a3
             // 
+            this.txt_a3.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_a3.Location = new System.Drawing.Point(43, 99);
             this.txt_a3.Name = "txt_a3";
             this.txt_a3.Size = new System.Drawing.Size(87, 20);
@@ -314,6 +344,7 @@
             // 
             // txt_a2
             // 
+            this.txt_a2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_a2.Location = new System.Drawing.Point(43, 73);
             this.txt_a2.Name = "txt_a2";
             this.txt_a2.Size = new System.Drawing.Size(87, 20);
@@ -330,6 +361,7 @@
             // 
             // txt_a1
             // 
+            this.txt_a1.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_a1.Location = new System.Drawing.Point(43, 45);
             this.txt_a1.Name = "txt_a1";
             this.txt_a1.Size = new System.Drawing.Size(87, 20);
@@ -377,6 +409,7 @@
             // 
             // txt_pc
             // 
+            this.txt_pc.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_pc.Location = new System.Drawing.Point(37, 48);
             this.txt_pc.Name = "txt_pc";
             this.txt_pc.Size = new System.Drawing.Size(87, 20);
@@ -393,6 +426,7 @@
             // 
             // txt_sr
             // 
+            this.txt_sr.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_sr.Location = new System.Drawing.Point(37, 22);
             this.txt_sr.Name = "txt_sr";
             this.txt_sr.Size = new System.Drawing.Size(87, 20);
@@ -406,22 +440,6 @@
             this.label16.Size = new System.Drawing.Size(22, 13);
             this.label16.TabIndex = 9;
             this.label16.Text = "SR";
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(10, 205);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(29, 13);
-            this.label18.TabIndex = 30;
-            this.label18.Text = "USP";
-            // 
-            // txt_usp
-            // 
-            this.txt_usp.Location = new System.Drawing.Point(43, 202);
-            this.txt_usp.Name = "txt_usp";
-            this.txt_usp.Size = new System.Drawing.Size(87, 20);
-            this.txt_usp.TabIndex = 31;
             // 
             // RegisterView
             // 
