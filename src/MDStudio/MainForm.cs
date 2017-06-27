@@ -36,6 +36,7 @@ namespace MDStudio
         };
 
         private readonly Timer m_Timer = new Timer();
+        private string m_ProjectFile;
         private string m_PathToProject;
         private string m_ProjectName;
         private string m_SourceFileName;
@@ -141,6 +142,12 @@ namespace MDStudio
             m_Timer.Interval = 16;
             m_Timer.Tick += TimerTick;
             m_Timer.Enabled = true;
+
+            if(m_Config.AutoOpenLastProject)
+            {
+                //Open last project
+                OpenProject(m_Config.LastProject);
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -686,6 +693,7 @@ namespace MDStudio
             configForm.asmPath.Text = m_Config.Asm68kPath;
             configForm.asmArgs.Text = m_Config.Asm68kArgs;
             configForm.emuResolution.SelectedIndex = m_Config.EmuResolution;
+            configForm.autoOpenLastProject.Checked = m_Config.AutoOpenLastProject;
 
             configForm.inputUp.SelectedIndex = m_Config.KeycodeUp;
             configForm.inputDown.SelectedIndex = m_Config.KeycodeDown;
@@ -701,6 +709,8 @@ namespace MDStudio
                 m_Config.Asm68kPath = configForm.asmPath.Text;
                 m_Config.Asm68kArgs = configForm.asmArgs.Text;
                 m_Config.EmuResolution = configForm.emuResolution.SelectedIndex;
+                m_Config.AutoOpenLastProject = configForm.autoOpenLastProject.Checked;
+                m_Config.LastProject = m_ProjectFile;
 
                 m_Config.KeycodeUp = configForm.inputUp.SelectedIndex;
                 m_Config.KeycodeDown = configForm.inputDown.SelectedIndex;
@@ -732,6 +742,32 @@ namespace MDStudio
             }
         }
 
+        private void OpenProject(string filename)
+        {
+            if(System.IO.File.Exists(filename))
+            {
+                m_ProjectFile = filename;
+                m_PathToProject = Path.GetDirectoryName(filename); // @"D:\Devt\perso_nas\Megadrive\test\";
+                m_CurrentSourcePath = filename;
+
+                string source = System.IO.File.ReadAllText(filename);
+                codeEditor.Document.TextContent = source;
+                codeEditor.Document.BookmarkManager.Clear();
+                undoMenu.Enabled = false;
+
+                m_ProjectName = Path.GetFileNameWithoutExtension(filename);
+                m_SourceFileName = Path.GetFileName(filename);
+
+                m_ProjectFiles = ScanIncludes(m_PathToProject, filename);
+                m_ProjectFiles.Add(m_CurrentSourcePath);
+                m_ProjectFiles.Sort();
+
+                PopulateFileView();
+
+                treeProjectFiles.ExpandAll();
+            }
+        }
+
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog pathSelect = new OpenFileDialog();
@@ -740,24 +776,7 @@ namespace MDStudio
 
             if (pathSelect.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                m_PathToProject = Path.GetDirectoryName(pathSelect.FileName); // @"D:\Devt\perso_nas\Megadrive\test\";
-                m_CurrentSourcePath = pathSelect.FileName;
-
-                string source = System.IO.File.ReadAllText(pathSelect.FileName);
-                codeEditor.Document.TextContent = source;
-                codeEditor.Document.BookmarkManager.Clear();
-                undoMenu.Enabled = false;
-
-                m_ProjectName = Path.GetFileNameWithoutExtension(pathSelect.FileName);
-                m_SourceFileName = Path.GetFileName(pathSelect.FileName);
-
-                m_ProjectFiles = ScanIncludes(m_PathToProject, pathSelect.FileName);
-                m_ProjectFiles.Add(m_CurrentSourcePath);
-                m_ProjectFiles.Sort();
-
-                PopulateFileView();
-
-                treeProjectFiles.ExpandAll();
+                OpenProject(pathSelect.FileName);
             }
         }
 
@@ -814,6 +833,12 @@ namespace MDStudio
 
             FileView dialog = new MDStudio.FileView(this, filenames);
             dialog.ShowDialog(this);
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            m_Config.LastProject = m_ProjectFile;
+            m_Config.Save();
         }
     }
 }

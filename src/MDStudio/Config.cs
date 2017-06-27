@@ -16,6 +16,8 @@ namespace MDStudio
         public string Asm68kPath { get; set; }
         public string Asm68kArgs { get; set; }
         public int EmuResolution { get; set; }
+        public bool AutoOpenLastProject = true;
+        public string LastProject { get; set; }
 
         // Index into SDL_Keycode.Keycode enum
         public int KeycodeUp { get; set; }
@@ -55,6 +57,8 @@ namespace MDStudio
                         Asm68kPath = config.Asm68kPath;
                         Asm68kArgs = config.Asm68kArgs;
                         EmuResolution = config.EmuResolution;
+                        AutoOpenLastProject = config.AutoOpenLastProject;
+                        LastProject = config.LastProject;
 
                         KeycodeUp = config.KeycodeUp;
                         KeycodeDown = config.KeycodeDown;

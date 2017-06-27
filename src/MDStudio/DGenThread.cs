@@ -56,14 +56,24 @@ namespace MDStudio
                     Thread.Sleep(1);
                 }
             }
-            m_DGen.Reset();
+            
             myThread = null;
+
+            if(m_DGen != null)
+            {
+                m_DGen.Reset();
+            }
+
+            m_DGen = null;
         }
 
         public void Destroy()
         {
-            m_DGen.Dispose();
-            m_DGen = null;
+            if(m_DGen != null)
+            {
+                m_DGen.Dispose();
+                m_DGen = null;
+            }
         }
         
         public void AddBreakpoint(int addr)
