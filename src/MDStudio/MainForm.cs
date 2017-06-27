@@ -789,5 +789,31 @@ namespace MDStudio
             SymbolView dialog = new SymbolView(this, m_DebugSymbols);
             dialog.ShowDialog(this);
         }
+
+        IEnumerable<TreeNode> Collect(TreeNodeCollection nodes)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                yield return node;
+
+                foreach (var child in Collect(node.Nodes))
+                    yield return child;
+            }
+        }
+
+        private void searchFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<string> filenames = new List<string>();
+            foreach(TreeNode node in Collect(treeProjectFiles.Nodes))
+            {
+                if (System.IO.Path.GetExtension(node.Name).Length > 0)
+                {
+                    filenames.Add(node.Name);
+                }
+            }
+
+            FileView dialog = new MDStudio.FileView(this, filenames);
+            dialog.ShowDialog(this);
+        }
     }
 }
