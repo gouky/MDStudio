@@ -7,6 +7,5 @@ D:\Devt\MDStudio\3rdparty\DigitalRune.Windows.TextEditor\DigitalRune.Windows.Tex
 C:\Users\Matt\Documents\Development\MDStudio\3rdparty\DigitalRune.Windows.TextEditor\DigitalRune.Windows.TextEditor\bin\Debug\DigitalRune.Windows.TextEditor.XML
 C:\Users\Matt\Documents\Development\MDStudio\3rdparty\DigitalRune.Windows.TextEditor\DigitalRune.Windows.TextEditor\bin\Debug\DigitalRune.Windows.TextEditor.dll
 C:\Users\Matt\Documents\Development\MDStudio\3rdparty\DigitalRune.Windows.TextEditor\DigitalRune.Windows.TextEditor\bin\Debug\DigitalRune.Windows.TextEditor.pdb
-C:\Users\Matt\Documents\Development\MDStudio\3rdparty\DigitalRune.Windows.TextEditor\DigitalRune.Windows.TextEditor\obj\Debug\DigitalRune.Windows.TextEditor.csprojResolveAssemblyReference.cache
 C:\Users\Matt\Documents\Development\MDStudio\3rdparty\DigitalRune.Windows.TextEditor\DigitalRune.Windows.TextEditor\obj\Debug\DigitalRune.Windows.TextEditor.dll
 C:\Users\Matt\Documents\Development\MDStudio\3rdparty\DigitalRune.Windows.TextEditor\DigitalRune.Windows.TextEditor\obj\Debug\DigitalRune.Windows.TextEditor.pdb

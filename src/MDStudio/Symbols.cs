@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace MDStudio
 {
-    class Symbols
+    public class Symbols
     {
         public uint GetAddress(string filename, int lineNumber)
         {
@@ -45,7 +45,7 @@ namespace MDStudio
             public int lineTo;
         }
 
-        private struct SymbolEntry
+        public struct SymbolEntry
         {
             public uint address;
             public string name;
@@ -57,7 +57,7 @@ namespace MDStudio
             public List<AddressEntry> addresses;
         }
 
-        private List<SymbolEntry> m_Symbols;
+        public List<SymbolEntry> m_Symbols;
         private List<FilenameSection> m_Filenames;
         private Dictionary<uint, Tuple<string, int>> m_Addr2FileLine;
         private string m_AssembledFile;

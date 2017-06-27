@@ -44,7 +44,7 @@ namespace MDStudio
         private string m_BuildArgs;
 
         private DGenThread m_DGenThread;
-        private Symbols m_DebugSymbols;
+        public Symbols m_DebugSymbols;
 
         private RegisterView m_RegisterView;
         private MemoryView m_MemoryView;
@@ -391,9 +391,18 @@ namespace MDStudio
             codeEditor.Refresh(); ;
 
             if (errorCount > 0)
+            {
                 statusLabel.Text = errorCount + " Error(s)";
+            }   
             else
+            {
                 statusLabel.Text = "Build ok!";
+
+                //Success, read symbols
+                string symbolFile = m_PathToProject + @"\" + m_ProjectName + ".symb";
+                m_DebugSymbols = new Symbols();
+                m_DebugSymbols.Read(symbolFile);
+            }
 
             return errorCount;
         }
@@ -773,6 +782,12 @@ namespace MDStudio
             {
                 GoTo(treeProjectFiles.SelectedNode.Name, 0);
             }
+        }
+
+        private void searchSymbolsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SymbolView dialog = new SymbolView(this, m_DebugSymbols);
+            dialog.ShowDialog(this);
         }
     }
 }

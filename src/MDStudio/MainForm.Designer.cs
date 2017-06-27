@@ -67,6 +67,8 @@
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.treeProjectFiles = new System.Windows.Forms.TreeView();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.searchFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.searchSymbolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -143,7 +145,9 @@
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.undoMenu,
-            this.redoMenu});
+            this.redoMenu,
+            this.searchFilesToolStripMenuItem,
+            this.searchSymbolsToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -153,7 +157,7 @@
             // 
             this.undoMenu.Name = "undoMenu";
             this.undoMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.undoMenu.Size = new System.Drawing.Size(144, 22);
+            this.undoMenu.Size = new System.Drawing.Size(157, 22);
             this.undoMenu.Text = "&Undo";
             this.undoMenu.Click += new System.EventHandler(this.undoMenu_Click);
             // 
@@ -161,7 +165,7 @@
             // 
             this.redoMenu.Name = "redoMenu";
             this.redoMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.redoMenu.Size = new System.Drawing.Size(144, 22);
+            this.redoMenu.Size = new System.Drawing.Size(157, 22);
             this.redoMenu.Text = "&Redo";
             this.redoMenu.Click += new System.EventHandler(this.redoToolStripMenuItem_Click);
             // 
@@ -176,7 +180,7 @@
             // viewBuildLogMenu
             // 
             this.viewBuildLogMenu.Name = "viewBuildLogMenu";
-            this.viewBuildLogMenu.Size = new System.Drawing.Size(124, 22);
+            this.viewBuildLogMenu.Size = new System.Drawing.Size(152, 22);
             this.viewBuildLogMenu.Text = "Build Log";
             this.viewBuildLogMenu.Click += new System.EventHandler(this.viewBuildLogMenu_Click);
             // 
@@ -391,6 +395,23 @@
             this.splitContainer.SplitterDistance = 155;
             this.splitContainer.TabIndex = 8;
             // 
+            // searchFilesToolStripMenuItem
+            // 
+            this.searchFilesToolStripMenuItem.Name = "searchFilesToolStripMenuItem";
+            this.searchFilesToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.O)));
+            this.searchFilesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.searchFilesToolStripMenuItem.Text = "Search Files";
+            // 
+            // searchSymbolsToolStripMenuItem
+            // 
+            this.searchSymbolsToolStripMenuItem.Name = "searchSymbolsToolStripMenuItem";
+            this.searchSymbolsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.S)));
+            this.searchSymbolsToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.searchSymbolsToolStripMenuItem.Text = "Search Symbols";
+            this.searchSymbolsToolStripMenuItem.Click += new System.EventHandler(this.searchSymbolsToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -459,6 +480,8 @@
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem buildSettingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem searchFilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem searchSymbolsToolStripMenuItem;
     }
 }
 
