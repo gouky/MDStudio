@@ -443,6 +443,9 @@ namespace MDStudio
                     string baseDirectory = m_PathToProject + @"\";
                     string binaryFile = m_PathToProject + @"\" + m_ProjectName + ".bin";
 
+                    //  Show tools windows first, so emu window gets foreground focus
+                    m_RegisterView.Show();
+
                     //Init emu
                     Tuple<int, int> resolution = kValidResolutions[m_Config.EmuResolution];
                     m_DGenThread.Init(resolution.Item1, resolution.Item2);
@@ -470,9 +473,6 @@ namespace MDStudio
                     {
                         DGenThread.GetDGen().AddBreakpoint((int)m_DebugSymbols.GetAddress(m_CurrentSourcePath, mark.LineNumber + 1));
                     }
-
-                    //  Show register window
-                    m_RegisterView.Show();
 
                     //  Start
                     m_DGenThread.Start();
