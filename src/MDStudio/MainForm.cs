@@ -579,8 +579,6 @@ namespace MDStudio
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
         {
             m_DGenThread.Stop();
-            DGenThread.GetDGen().Reset();
-            DGenThread.GetDGen().Hide();
             m_DGenThread.Destroy();
 
             m_RegisterView.Hide();

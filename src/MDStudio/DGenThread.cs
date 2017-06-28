@@ -21,9 +21,6 @@ namespace MDStudio
 
             m_DGen = new DGen();
             m_DGen.Init(windowWidth, windowHeight);
-
-            myThread = new Thread(new ThreadStart(ThreadLoop));
-            myThread.Start();
         }
 
         public void LoadRom(string path)
@@ -63,8 +60,6 @@ namespace MDStudio
             {
                 m_DGen.Reset();
             }
-
-            m_DGen = null;
         }
 
         public void Destroy()
