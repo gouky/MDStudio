@@ -56,6 +56,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.autoOpenLastProject = new System.Windows.Forms.CheckBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.megaUSBPath = new System.Windows.Forms.TextBox();
+            this.pathMegaUSBButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -78,12 +81,13 @@
             // okBtn
             // 
             this.okBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okBtn.Location = new System.Drawing.Point(343, 268);
+            this.okBtn.Location = new System.Drawing.Point(343, 289);
             this.okBtn.Name = "okBtn";
             this.okBtn.Size = new System.Drawing.Size(75, 23);
             this.okBtn.TabIndex = 2;
             this.okBtn.Text = "&Ok";
             this.okBtn.UseVisualStyleBackColor = true;
+            this.okBtn.Click += new System.EventHandler(this.okBtn_Click);
             // 
             // pathButton
             // 
@@ -98,12 +102,13 @@
             // cancelBtn
             // 
             this.cancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelBtn.Location = new System.Drawing.Point(250, 268);
+            this.cancelBtn.Location = new System.Drawing.Point(246, 289);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(75, 23);
             this.cancelBtn.TabIndex = 4;
             this.cancelBtn.Text = "&Cancel";
             this.cancelBtn.UseVisualStyleBackColor = true;
+            this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
             // 
             // label2
             // 
@@ -157,12 +162,13 @@
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.inputUp);
             this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Location = new System.Drawing.Point(10, 124);
+            this.groupBox1.Location = new System.Drawing.Point(10, 145);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(408, 138);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Input";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // inputStart
             // 
@@ -328,11 +334,40 @@
             this.autoOpenLastProject.TabIndex = 11;
             this.autoOpenLastProject.UseVisualStyleBackColor = true;
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(42, 122);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(87, 13);
+            this.label13.TabIndex = 12;
+            this.label13.Text = "Mega-USB Path:";
+            // 
+            // megaUSBPath
+            // 
+            this.megaUSBPath.Location = new System.Drawing.Point(137, 119);
+            this.megaUSBPath.Name = "megaUSBPath";
+            this.megaUSBPath.Size = new System.Drawing.Size(281, 20);
+            this.megaUSBPath.TabIndex = 13;
+            // 
+            // pathMegaUSBButton
+            // 
+            this.pathMegaUSBButton.Location = new System.Drawing.Point(424, 117);
+            this.pathMegaUSBButton.Name = "pathMegaUSBButton";
+            this.pathMegaUSBButton.Size = new System.Drawing.Size(24, 23);
+            this.pathMegaUSBButton.TabIndex = 14;
+            this.pathMegaUSBButton.Text = "...";
+            this.pathMegaUSBButton.UseVisualStyleBackColor = true;
+            this.pathMegaUSBButton.Click += new System.EventHandler(this.pathMegaUSBButton_Click);
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(456, 300);
+            this.ClientSize = new System.Drawing.Size(456, 322);
+            this.Controls.Add(this.pathMegaUSBButton);
+            this.Controls.Add(this.megaUSBPath);
+            this.Controls.Add(this.label13);
             this.Controls.Add(this.autoOpenLastProject);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.groupBox1);
@@ -386,5 +421,8 @@
         public System.Windows.Forms.ComboBox inputDown;
         private System.Windows.Forms.Label label12;
         public System.Windows.Forms.CheckBox autoOpenLastProject;
+        private System.Windows.Forms.Label label13;
+        public System.Windows.Forms.TextBox megaUSBPath;
+        private System.Windows.Forms.Button pathMegaUSBButton;
     }
 }

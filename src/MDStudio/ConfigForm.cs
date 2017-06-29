@@ -92,5 +92,30 @@ namespace MDStudio
                 asmPath.Text = pathSelect.FileName;
             }
         }
+
+        private void cancelBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void okBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pathMegaUSBButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog pathSelect = new OpenFileDialog();
+
+            if (pathSelect.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                megaUSBPath.Text = pathSelect.FileName;
+            }
+        }
     }
 }

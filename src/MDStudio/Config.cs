@@ -29,6 +29,9 @@ namespace MDStudio
         public int KeycodeC { get; set; }
         public int KeycodeStart { get; set; }
 
+        [XmlElement("Others")]
+        public string MegaUSBPath { get; set; }
+
         public Config()
         {
 
@@ -68,6 +71,8 @@ namespace MDStudio
                         KeycodeB = config.KeycodeB;
                         KeycodeC = config.KeycodeC;
                         KeycodeStart = config.KeycodeStart;
+
+                        MegaUSBPath = config.MegaUSBPath;
 
                         sr.Close();
                     }

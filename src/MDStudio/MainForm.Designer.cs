@@ -47,6 +47,7 @@
             this.buildToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.compileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.runMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.runMegaUSB = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toggleBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -207,6 +208,7 @@
             this.buildToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.compileMenu,
             this.runMenu,
+            this.runMegaUSB,
             this.toolStripSeparator1,
             this.toggleBreakpoint,
             this.toolStripSeparator4,
@@ -219,7 +221,7 @@
             // 
             this.compileMenu.Name = "compileMenu";
             this.compileMenu.ShortcutKeys = System.Windows.Forms.Keys.F7;
-            this.compileMenu.Size = new System.Drawing.Size(189, 22);
+            this.compileMenu.Size = new System.Drawing.Size(218, 22);
             this.compileMenu.Text = "&Compile";
             this.compileMenu.Click += new System.EventHandler(this.compileMenu_Click);
             // 
@@ -227,32 +229,40 @@
             // 
             this.runMenu.Name = "runMenu";
             this.runMenu.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.runMenu.Size = new System.Drawing.Size(189, 22);
+            this.runMenu.Size = new System.Drawing.Size(218, 22);
             this.runMenu.Text = "&Run";
             this.runMenu.Click += new System.EventHandler(this.runToolStripMenuItem_Click);
+            // 
+            // runMegaUSB
+            // 
+            this.runMegaUSB.Name = "runMegaUSB";
+            this.runMegaUSB.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
+            this.runMegaUSB.Size = new System.Drawing.Size(218, 22);
+            this.runMegaUSB.Text = "Launch Mega-&USB";
+            this.runMegaUSB.Click += new System.EventHandler(this.runMegaUSB_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(186, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(215, 6);
             // 
             // toggleBreakpoint
             // 
             this.toggleBreakpoint.Name = "toggleBreakpoint";
             this.toggleBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.F9;
-            this.toggleBreakpoint.Size = new System.Drawing.Size(189, 22);
+            this.toggleBreakpoint.Size = new System.Drawing.Size(218, 22);
             this.toggleBreakpoint.Text = "Toggle Breakpoint";
             this.toggleBreakpoint.Click += new System.EventHandler(this.toggleBreakpoint_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(186, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(215, 6);
             // 
             // buildSettingsToolStripMenuItem
             // 
             this.buildSettingsToolStripMenuItem.Name = "buildSettingsToolStripMenuItem";
-            this.buildSettingsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.buildSettingsToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
             // 
             // debugToolStripMenuItem
             // 
@@ -310,7 +320,7 @@
             this.toolsToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.vdpToolsRegistersMenu});
             this.toolsToolStripMenuItem1.Name = "toolsToolStripMenuItem1";
-            this.toolsToolStripMenuItem1.Size = new System.Drawing.Size(47, 20);
+            this.toolsToolStripMenuItem1.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem1.Text = "&Tools";
             // 
             // vdpToolsRegistersMenu
@@ -485,6 +495,7 @@
         private System.Windows.Forms.ToolStripMenuItem buildSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem searchFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem searchSymbolsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem runMegaUSB;
     }
 }
 

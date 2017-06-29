@@ -378,7 +378,9 @@ namespace MDStudio
 
                     int.TryParse(matchError.Groups[2].Value, out lineNumber);
 
-                    m_BuildLog.AddError(matchError.Groups[1].Value, lineNumber, matchError.Groups[3].Value);
+                    string filename = matchError.Groups[1].Value;
+
+                    m_BuildLog.AddError(filename, lineNumber, matchError.Groups[3].Value);
                     Console.WriteLine("Error in '" + matchError.Groups[1].Value + "' (" + matchError.Groups[2].Value + "): " + matchError.Groups[3].Value);
                     errorCount++;
 
@@ -702,6 +704,8 @@ namespace MDStudio
             configForm.inputC.SelectedIndex = m_Config.KeycodeC;
             configForm.inputStart.SelectedIndex = m_Config.KeycodeStart;
 
+            configForm.megaUSBPath.Text = m_Config.MegaUSBPath;
+
             if (configForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 m_Config.Asm68kPath = configForm.asmPath.Text;
@@ -718,6 +722,8 @@ namespace MDStudio
                 m_Config.KeycodeB = configForm.inputB.SelectedIndex;
                 m_Config.KeycodeC = configForm.inputC.SelectedIndex;
                 m_Config.KeycodeStart = configForm.inputStart.SelectedIndex;
+
+                m_Config.MegaUSBPath = configForm.megaUSBPath.Text;
 
                 m_Config.Save();
 
@@ -837,6 +843,31 @@ namespace MDStudio
         {
             m_Config.LastProject = m_ProjectFile;
             m_Config.Save();
+        }
+
+        private void runMegaUSB_Click(object sender, EventArgs e)
+        {
+            string binaryFile = m_PathToProject + @"\" + m_ProjectName + ".bin";
+
+            if(File.Exists(binaryFile) && m_Config.MegaUSBPath != null && File.Exists(m_Config.MegaUSBPath))
+            {
+                try
+                {
+                    System.Diagnostics.Process proc = new System.Diagnostics.Process();
+                    proc.StartInfo.FileName = m_Config.MegaUSBPath;
+                    proc.StartInfo.WorkingDirectory = m_PathToProject + @"\";
+                    proc.StartInfo.Arguments = binaryFile;
+                    proc.StartInfo.UseShellExecute = false;
+                    proc.StartInfo.RedirectStandardOutput = true;
+                    proc.StartInfo.RedirectStandardError = true;
+                    proc.StartInfo.CreateNoWindow = true;
+                    proc.Start();
+                    proc.WaitForExit();
+                }
+                catch
+                {
+                }
+            }
         }
     }
 }
