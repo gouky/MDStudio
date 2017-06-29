@@ -15,6 +15,7 @@ using DigitalRune.Windows.TextEditor.Highlighting;
 using DigitalRune.Windows.TextEditor.Markers;
 using System.Text.RegularExpressions;
 using System.IO;
+using MDStudio.Properties;
 
 namespace MDStudio
 {
@@ -610,6 +611,21 @@ namespace MDStudio
                     Save();
                 }
             }
+
+            Settings.Default.WindowState = this.WindowState;
+
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                Settings.Default.WindowLocation = this.Location;
+                Settings.Default.WindowSize = this.Size;
+            }
+            else
+            {
+                Settings.Default.WindowLocation = this.RestoreBounds.Location;
+                Settings.Default.WindowSize = this.RestoreBounds.Size;
+            }
+
+            Settings.Default.Save();
         }
 
         private void saveMenu_Click(object sender, EventArgs e)
@@ -843,6 +859,8 @@ namespace MDStudio
         {
             m_Config.LastProject = m_ProjectFile;
             m_Config.Save();
+
+            
         }
 
         private void runMegaUSB_Click(object sender, EventArgs e)
@@ -867,6 +885,26 @@ namespace MDStudio
                 catch
                 {
                 }
+            }
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            if(Settings.Default.WindowLocation != null)
+            {
+                this.Location = Settings.Default.WindowLocation;
+            }
+
+            if(Settings.Default.WindowSize != null)
+            {
+                this.Size = Settings.Default.WindowSize;
+            }
+
+            if(Settings.Default.WindowState != null)
+            {
+                this.WindowState = Settings.Default.WindowState;
+                if (this.WindowState == FormWindowState.Minimized)
+                    this.WindowState = FormWindowState.Normal;
             }
         }
     }
