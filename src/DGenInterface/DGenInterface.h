@@ -32,7 +32,7 @@ namespace DGenInterface {
 		DGen();
 		~DGen();
 
-		int		Init(int windowWidth, int windowHeight);
+		int		Init(int windowWidth, int windowHeight, IntPtr hwnd);
 		void	SetWindowPosition(int x, int y);
 		int		GetWindowXPosition();
 		int		GetWindowYPosition();

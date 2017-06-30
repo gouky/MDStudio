@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Windows.h>
+
 #define		strcasecmp	_stricmp
 #define		strncasecmp	_strnicmp
 #define		snprintf(buf,len, format,...) _snprintf_s(buf, len,len, format, __VA_ARGS__)
@@ -19,7 +21,7 @@
 #define eInputMode		11
 #define eInput_COUNT	12
 
-extern int		InitDGen(int windowWidth, int windowHeight);
+extern int		InitDGen(int windowWidth, int windowHeight, HWND parent);
 extern void		SetDGenWindowPosition(int x, int y);
 extern int		GetDGenWindowXPosition();
 extern int		GetDGenWindowYPosition();

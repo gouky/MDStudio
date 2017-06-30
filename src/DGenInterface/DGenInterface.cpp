@@ -20,9 +20,9 @@ DGenInterface::DGen::~DGen()
 	::Shutdown();
 }
 
-int DGenInterface::DGen::Init(int windowWidth, int windowHeight)
+int DGenInterface::DGen::Init(int windowWidth, int windowHeight, IntPtr hwnd)
 {
-	return ::InitDGen(windowWidth, windowHeight);
+	return ::InitDGen(windowWidth, windowHeight, static_cast<HWND>(hwnd.ToPointer()));
 }
 
 void DGenInterface::DGen::SetWindowPosition(int x, int y)

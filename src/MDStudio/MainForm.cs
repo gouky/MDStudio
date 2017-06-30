@@ -127,7 +127,7 @@ namespace MDStudio
             //
             m_BuildLog = new BuildLog(this);
             m_BuildLog.Hide();
-
+            
             //
             m_RegisterView = new RegisterView();
             m_RegisterView.Hide();
@@ -458,8 +458,8 @@ namespace MDStudio
 
                     //Init emu
                     Tuple<int, int> resolution = kValidResolutions[m_Config.EmuResolution];
-                    m_DGenThread.Init(resolution.Item1, resolution.Item2);
-
+                    m_DGenThread.Init(resolution.Item1, resolution.Item2, this.Handle);
+                    
                     //Set input mappings
                     DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputUp, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeUp));
                     DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputDown, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeDown));
@@ -912,12 +912,12 @@ namespace MDStudio
 
         private void MainForm_Activated(object sender, EventArgs e)
         {
-            if (m_BuildLog.Visible)
-            {
-                m_BuildLog.BringToFront();
-            }
 
-            if(DGenThread.GetDGen() != null && m_State != State.kStopped)
+        }
+
+        private void MainForm_Enter(object sender, EventArgs e)
+        {
+            if (DGenThread.GetDGen() != null && m_State != State.kStopped)
             {
                 DGenThread.GetDGen().BringToFront();
             }

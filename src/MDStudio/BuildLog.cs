@@ -34,6 +34,7 @@ namespace MDStudio
         public BuildLog(MainForm parent)
         {
             m_Parent = parent;
+            Owner = parent;
 
             InitializeComponent();
 

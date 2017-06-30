@@ -77,7 +77,7 @@ void pd_message(const char *msg, ...)
 	pd_message_process();*/
 }
 
-int InitDGen(int windowWidth, int windowHeight)
+int InitDGen(int windowWidth, int windowHeight, HWND parent)
 {
  	s_DGenInstance = new md(false, 'J');
 
@@ -99,6 +99,13 @@ int InitDGen(int windowWidth, int windowHeight)
 	mdscr.data	= (unsigned char*)malloc(mdscr.pitch * mdscr.h);
 
 	mdpal		= NULL;
+
+	//	Set parent window
+	SDL_SysWMinfo wmInfo;
+	
+	SDL_GetWindowWMInfo(g_SDLWindow, &wmInfo);
+
+	SetParent(wmInfo.info.win.window, parent);
 
 	return 1;
 }
