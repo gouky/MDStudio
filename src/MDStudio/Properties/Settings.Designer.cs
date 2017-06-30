@@ -58,5 +58,53 @@ namespace MDStudio.Properties {
                 this["WindowState"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("128, 128")]
+        public global::System.Drawing.Point DGenWindowLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["DGenWindowLocation"]));
+            }
+            set {
+                this["DGenWindowLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point RegisterWindowLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["RegisterWindowLocation"]));
+            }
+            set {
+                this["RegisterWindowLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point BuildLogWindowLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["BuildLogWindowLocation"]));
+            }
+            set {
+                this["BuildLogWindowLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("659, 315")]
+        public global::System.Drawing.Size BuildLogWindowSize {
+            get {
+                return ((global::System.Drawing.Size)(this["BuildLogWindowSize"]));
+            }
+            set {
+                this["BuildLogWindowSize"] = value;
+            }
+        }
     }
 }

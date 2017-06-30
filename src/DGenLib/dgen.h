@@ -20,6 +20,10 @@
 #define eInput_COUNT	12
 
 extern int		InitDGen(int windowWidth, int windowHeight);
+extern void		SetDGenWindowPosition(int x, int y);
+extern int		GetDGenWindowXPosition();
+extern int		GetDGenWindowYPosition();
+extern void		BringToFront();
 extern int		LoadRom(const char* path);
 extern int		Reset();
 extern int		Shutdown();

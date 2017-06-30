@@ -437,8 +437,8 @@ namespace MDStudio
                 codeEditor.ActiveTextAreaControl.Invalidate();
                 DGenThread.GetDGen().Resume();
 
-                //TODO: Bring emu window to front
 
+                //TODO: Bring emu window to front
                 m_State = State.kRunning;
             }
             else if(m_State == State.kStopped)
@@ -487,6 +487,8 @@ namespace MDStudio
                     //  Start
                     m_DGenThread.Start();
                     m_State = State.kRunning;
+
+                    statusLabel.Text = "Running...";
                 }
             }
         }
@@ -905,6 +907,19 @@ namespace MDStudio
                 this.WindowState = Settings.Default.WindowState;
                 if (this.WindowState == FormWindowState.Minimized)
                     this.WindowState = FormWindowState.Normal;
+            }
+        }
+
+        private void MainForm_Activated(object sender, EventArgs e)
+        {
+            if (m_BuildLog.Visible)
+            {
+                m_BuildLog.BringToFront();
+            }
+
+            if(DGenThread.GetDGen() != null && m_State != State.kStopped)
+            {
+                DGenThread.GetDGen().BringToFront();
             }
         }
     }

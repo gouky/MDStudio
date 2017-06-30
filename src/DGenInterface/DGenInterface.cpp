@@ -25,9 +25,29 @@ int DGenInterface::DGen::Init(int windowWidth, int windowHeight)
 	return ::InitDGen(windowWidth, windowHeight);
 }
 
+void DGenInterface::DGen::SetWindowPosition(int x, int y)
+{
+	::SetDGenWindowPosition(x, y);
+}
+
+int	DGenInterface::DGen::GetWindowXPosition()
+{
+	return ::GetDGenWindowXPosition();
+}
+
+int	DGenInterface::DGen::GetWindowYPosition()
+{
+	return ::GetDGenWindowYPosition();
+}
+
 int DGenInterface::DGen::Reset()
 {
 	return ::Reset();
+}
+
+void DGenInterface::DGen::BringToFront()
+{
+	::BringToFront();
 }
 
 int DGenInterface::DGen::LoadRom(String^ path)

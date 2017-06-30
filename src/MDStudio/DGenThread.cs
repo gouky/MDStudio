@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DGenInterface;
+using MDStudio.Properties;
 
 namespace MDStudio
 {
@@ -21,6 +22,11 @@ namespace MDStudio
 
             m_DGen = new DGen();
             m_DGen.Init(windowWidth, windowHeight);
+
+            if(Settings.Default.DGenWindowLocation != null)
+            {
+                m_DGen.SetWindowPosition(Settings.Default.DGenWindowLocation.X, Settings.Default.DGenWindowLocation.Y);
+            }
         }
 
         public void LoadRom(string path)
@@ -58,10 +64,18 @@ namespace MDStudio
 
             if(m_DGen != null)
             {
+                Settings.Default.DGenWindowLocation = new System.Drawing.Point(m_DGen.GetWindowXPosition(), m_DGen.GetWindowYPosition());
                 m_DGen.Reset();
             }
         }
 
+        public void BringToFront()
+        {
+            if(m_DGen != null)
+            {
+                m_DGen.BringToFront();
+            }
+        }
         public void Destroy()
         {
             if(m_DGen != null)

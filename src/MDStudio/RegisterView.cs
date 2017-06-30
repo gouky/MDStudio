@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MDStudio.Properties;
 
 namespace MDStudio
 {
@@ -60,6 +61,16 @@ namespace MDStudio
         private void RegisterView_Load(object sender, EventArgs e)
         {
             Owner = Application.OpenForms[0];
+
+            if(Settings.Default.RegisterWindowLocation != null)
+            {
+                this.Location = Settings.Default.RegisterWindowLocation;
+            }
+        }
+
+        private void RegisterView_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Settings.Default.RegisterWindowLocation = this.Location;
         }
     }
 }

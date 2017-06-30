@@ -103,6 +103,34 @@ int InitDGen(int windowWidth, int windowHeight)
 	return 1;
 }
 
+void	SetDGenWindowPosition(int x, int y)
+{
+	SDL_SetWindowPosition(g_SDLWindow, x, y);
+}
+
+int		GetDGenWindowXPosition()
+{
+	int x, y;
+
+	SDL_GetWindowPosition(g_SDLWindow, &x, &y);
+
+	return x;
+}
+
+int		GetDGenWindowYPosition()
+{
+	int x, y;
+
+	SDL_GetWindowPosition(g_SDLWindow, &x, &y);
+
+	return y;
+}
+
+void	BringToFront()
+{
+	SDL_RaiseWindow(g_SDLWindow);
+}
+
 void	ShowSDLWindow()
 {
 	SDL_ShowWindow(g_SDLWindow);

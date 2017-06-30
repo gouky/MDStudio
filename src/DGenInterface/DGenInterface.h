@@ -33,6 +33,10 @@ namespace DGenInterface {
 		~DGen();
 
 		int		Init(int windowWidth, int windowHeight);
+		void	SetWindowPosition(int x, int y);
+		int		GetWindowXPosition();
+		int		GetWindowYPosition();
+		void	BringToFront();
 		int		Reset();
 		int		LoadRom(String^ path);
 		int		Update();

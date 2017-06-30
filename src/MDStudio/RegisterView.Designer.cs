@@ -454,6 +454,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "68000 Registers";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RegisterView_FormClosing);
             this.Load += new System.EventHandler(this.RegisterView_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

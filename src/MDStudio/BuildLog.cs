@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MDStudio.Properties;
 
 namespace MDStudio
 {
@@ -63,6 +64,15 @@ namespace MDStudio
 
         private void BuildLog_Load(object sender, EventArgs e)
         {
+            if(Settings.Default.BuildLogWindowLocation != null)
+            {
+                this.Location = Settings.Default.BuildLogWindowLocation;
+            }
+
+            if (Settings.Default.BuildLogWindowSize != null)
+            {
+                this.Size = Settings.Default.BuildLogWindowSize;
+            }
         }
 
         private void listErrors_DoubleClick(object sender, EventArgs e)
@@ -105,6 +115,19 @@ namespace MDStudio
             {
                 file.Write(Encoding.ASCII.GetBytes(m_RawLog), 0, m_RawLog.Count());
             }
+        }
+
+        private void BuildLog_Move(object sender, EventArgs e)
+        {
+            if(this.Visible)
+            {
+                Settings.Default.BuildLogWindowLocation = this.Location;
+            }
+        }
+
+        private void BuildLog_Resize(object sender, EventArgs e)
+        {
+            Settings.Default.BuildLogWindowSize = this.Size;
         }
     }
 }
