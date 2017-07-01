@@ -15,19 +15,24 @@ namespace MDStudio
     public partial class VDPStatusWindow : Form
     {
         MainForm m_Parent;
-
+        public delegate void FuncUpdateInfo(int itemIndex);
+        
         private struct VDPRegisterInfo
         {
-            public VDPRegisterInfo(int index, string name)
+            public VDPRegisterInfo(int itemIndex, int index, string name, FuncUpdateInfo funcUpdate)
             {
+                this.itemIndex = itemIndex;
                 this.baseIndex = index;
                 this.name = name;
                 this.value = 0;
+                this.funcUpdate = funcUpdate;
             }
 
+            public int itemIndex;
             public int baseIndex;
             public int value;
             public string name;
+            public FuncUpdateInfo funcUpdate;
         };
 
         private VDPRegisterInfo[] m_VDPRegisters;
@@ -41,29 +46,29 @@ namespace MDStudio
             
             m_VDPRegisters = new VDPRegisterInfo[23]
             {
-                new VDPRegisterInfo(0x0, "Mode Register 1" ),
-                new VDPRegisterInfo(0x1, "Mode Register 2" ),
-                new VDPRegisterInfo(0x2, "Plane A Name Table Location" ),
-                new VDPRegisterInfo(0x3, "Window Name Table Location" ),
-                new VDPRegisterInfo(0x4, "Plane B Name Table Location" ),
-                new VDPRegisterInfo(0x5, "Sprite Table Location" ),
-                new VDPRegisterInfo(0x6, "Sprite Pattern Generator Base Address" ),
-                new VDPRegisterInfo(0x7, "Background Colour" ),
-                new VDPRegisterInfo(0xA, "Horizontal Interrupt Counter" ),
-                new VDPRegisterInfo(0xB, "Mode Register 3" ),
-                new VDPRegisterInfo(0xC, "Mode Register 4" ),
-                new VDPRegisterInfo(0xD, "Horizontal Scroll Data Location" ),
-                new VDPRegisterInfo(0xE, "Nametable Pattern Generator Base Address" ),
-                new VDPRegisterInfo(0xF, "Auto-Increment Value" ),
-                new VDPRegisterInfo(0x10, "Plane Size" ),
-                new VDPRegisterInfo(0x11, "Window Plane Horizontal Position" ),
-                new VDPRegisterInfo(0x12, "Window Plane Vertical Position" ),
-                new VDPRegisterInfo(0x13, "DMA Length lo" ),
-                new VDPRegisterInfo(0x14, "DMA Length hi" ),
-                new VDPRegisterInfo(0x15, "DMA Source" ),
-                new VDPRegisterInfo(0x16, "DMA Source" ),
-                new VDPRegisterInfo(0x17, "DMA Source" ),
-                new VDPRegisterInfo(0x18, "DMA Source" ),
+                new VDPRegisterInfo(0, 0x0, "Mode Register 1", null ),
+                new VDPRegisterInfo(1, 0x1, "Mode Register 2", null ),
+                new VDPRegisterInfo(2, 0x2, "Plane A Name Table Location", UpdatePlaneATableLocation ),
+                new VDPRegisterInfo(3, 0x3, "Window Name Table Location", UpdateWindowTableLocation ),
+                new VDPRegisterInfo(4, 0x4, "Plane B Name Table Location", UpdatePlaneBTableLocation ),
+                new VDPRegisterInfo(5, 0x5, "Sprite Table Location", UpdateSpriteTableLocation),
+                new VDPRegisterInfo(6, 0x6, "Sprite Pattern Generator Base Address", null ),
+                new VDPRegisterInfo(7, 0x7, "Background Colour", null ),
+                new VDPRegisterInfo(8, 0xA, "Horizontal Interrupt Counter", null ),
+                new VDPRegisterInfo(9, 0xB, "Mode Register 3", null ),
+                new VDPRegisterInfo(10, 0xC, "Mode Register 4", null ),
+                new VDPRegisterInfo(11, 0xD, "Horizontal Scroll Data Location", null ),
+                new VDPRegisterInfo(12, 0xE, "Nametable Pattern Generator Base Address", null ),
+                new VDPRegisterInfo(13, 0xF, "Auto-Increment Value", null ),
+                new VDPRegisterInfo(14, 0x10, "Plane Size", null ),
+                new VDPRegisterInfo(15, 0x11, "Window Plane Horizontal Position", null ),
+                new VDPRegisterInfo(16, 0x12, "Window Plane Vertical Position", null ),
+                new VDPRegisterInfo(17, 0x13, "DMA Length lo", null ),
+                new VDPRegisterInfo(18, 0x14, "DMA Length hi", null ),
+                new VDPRegisterInfo(19, 0x15, "DMA Source", null ),
+                new VDPRegisterInfo(20, 0x16, "DMA Source", null ),
+                new VDPRegisterInfo(21, 0x17, "DMA Source", null ),
+                new VDPRegisterInfo(22, 0x18, "DMA Source", null ),
             };
 
             foreach(VDPRegisterInfo register in m_VDPRegisters)
@@ -73,6 +78,7 @@ namespace MDStudio
                 item.Text = String.Format("0x{0:X}", register.baseIndex.ToString());
                 item.SubItems.Add(register.name);
                 item.SubItems.Add(String.Format("0x{0:X}",register.value.ToString()));
+                item.SubItems.Add("");
 
                 listVDPStatus.Items.Add(item);
             }
@@ -112,6 +118,10 @@ namespace MDStudio
                         this.listVDPStatus.Items[i].SubItems[2].Text = String.Format("0x{0:X}", value);
 
                         m_VDPRegisters[i].value = value;
+                        if(m_VDPRegisters[i].funcUpdate != null)
+                        {
+                            m_VDPRegisters[i].funcUpdate(i);
+                        }
                     }
                     else
                     {
@@ -122,6 +132,34 @@ namespace MDStudio
                     }
                 }
             }
+        }
+
+        public void UpdatePlaneATableLocation(int itemIndex)
+        {
+            int address = ((m_VDPRegisters[itemIndex].value >> 3) &0xF) << 13;
+
+           this.listVDPStatus.Items[itemIndex].SubItems[3].Text = String.Format("0x{0:X}", address);
+        }
+
+        public void UpdatePlaneBTableLocation(int itemIndex)
+        {
+            int address = (m_VDPRegisters[itemIndex].value & 0xF) << 13;
+
+            this.listVDPStatus.Items[itemIndex].SubItems[3].Text = String.Format("0x{0:X}", address);
+        }
+
+        public void UpdateSpriteTableLocation(int itemIndex)
+        {
+            int address = (((m_VDPRegisters[itemIndex].value) >> 4)&0x1) << 16;
+
+            this.listVDPStatus.Items[itemIndex].SubItems[3].Text = String.Format("0x{0:X}", address);
+        }
+
+        public void UpdateWindowTableLocation(int itemIndex)
+        {
+            int address = ((m_VDPRegisters[itemIndex].value >> 1) & 0x3F) << 11;
+
+            this.listVDPStatus.Items[itemIndex].SubItems[3].Text = String.Format("0x{0:X}", address);
         }
     }
 }

@@ -57,12 +57,12 @@
             // Index
             // 
             this.Index.Text = "Index";
-            this.Index.Width = 89;
+            this.Index.Width = 62;
             // 
             // Name
             // 
             this.Name.Text = "Name";
-            this.Name.Width = 120;
+            this.Name.Width = 170;
             // 
             // Value
             // 
