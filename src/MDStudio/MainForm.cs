@@ -523,6 +523,8 @@ namespace MDStudio
                     m_State = State.kRunning;
 
                     statusLabel.Text = "Running...";
+
+                    codeEditor.Document.ReadOnly = true;
                 }
             }
         }
@@ -628,6 +630,7 @@ namespace MDStudio
             statusLabel.Text = "Stopped";
 
             m_State = State.kStopped;
+            codeEditor.Document.ReadOnly = false;
         }
 
         private void breakMenu_Click(object sender, EventArgs e)
