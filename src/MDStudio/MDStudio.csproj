@@ -108,6 +108,12 @@
     <Compile Include="VDPRegs.Designer.cs">
       <DependentUpon>VDPRegs.cs</DependentUpon>
     </Compile>
+    <Compile Include="WatchView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WatchView.Designer.cs">
+      <DependentUpon>WatchView.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="BuildLog.resx">
       <DependentUpon>BuildLog.cs</DependentUpon>
     </EmbeddedResource>

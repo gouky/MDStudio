@@ -806,8 +806,9 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "CRamViewer";
             this.Text = "CRAM Viewer";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CRamViewer_FormClosing);
             this.Load += new System.EventHandler(this.CRamViewer_Load);
-            this.Shown += new System.EventHandler(this.CRamViewer_Shown);
+            this.VisibleChanged += new System.EventHandler(this.CRamViewer_VisibleChanged);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.CRamViewer_MouseMove);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();

@@ -50,3 +50,5 @@ extern int		GetCurrentPC();
 
 extern void		SetInputMapping(int input, int mapping);
 extern int		GetInputMapping(int input);
+
+extern int		GetPaletteEntry(int index);

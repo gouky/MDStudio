@@ -59,7 +59,16 @@ namespace MDStudio
             }
         }
 
-        private void CRamViewer_Shown(object sender, EventArgs e)
+        private void CRamViewer_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                Hide();
+            }
+        }
+
+        private void CRamViewer_VisibleChanged(object sender, EventArgs e)
         {
             m_Parent.UpdateViewCRAM(Visible);
         }

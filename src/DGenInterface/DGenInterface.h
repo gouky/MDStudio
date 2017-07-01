@@ -60,5 +60,7 @@ namespace DGenInterface {
 
 		void	SetInputMapping(SDLInputs input, int mapping);
 		int		GetInputMapping(SDLInputs input);
+
+		int		GetColor(int index);
 	};
 }

@@ -137,3 +137,8 @@ void	DGenInterface::DGen::Hide()
 {
 	HideSDLWindow();
 }
+
+int DGenInterface::DGen::GetColor(int i)
+{
+	return ::GetPaletteEntry(i);
+}

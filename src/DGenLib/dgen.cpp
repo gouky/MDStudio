@@ -412,3 +412,15 @@ int GetCurrentPC()
 
 	return s_DGenInstance->m68k_get_pc();
 }
+
+int GetPaletteEntry(int i)
+{
+	unsigned char* cram = s_DGenInstance->vdp.cram;
+
+	int r, g, b;
+	b = (cram[i * 2 + 0] & 0x0e) << 4;
+	g = (cram[i * 2 + 1] & 0xe0);
+	r = (cram[i * 2 + 1] & 0x0e) << 4;
+
+	return (r<<16) | (g << 8) | b;
+}
