@@ -89,6 +89,12 @@
       <DependentUpon>RegisterView.cs</DependentUpon>
     </Compile>
     <Compile Include="SDL_Keycode.cs" />
+    <Compile Include="SearchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SearchForm.Designer.cs">
+      <DependentUpon>SearchForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Symbols.cs" />
     <Compile Include="FileView.cs">
       <SubType>Form</SubType>
@@ -150,6 +156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FileView.resx">
       <DependentUpon>FileView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SearchForm.resx">
+      <DependentUpon>SearchForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SymbolView.resx">
       <DependentUpon>SymbolView.cs</DependentUpon>

@@ -149,9 +149,6 @@ namespace MDStudio
             // Set the syntax-highlighting for C#
             codeEditor.Document.HighlightingStrategy = HighlightingManager.Manager.FindHighlighter("ASM68k");
 
-            // Set events
-            codeEditor.Document.DocumentChanged += documentChanged;
-
             m_DGenThread = new DGenThread();
 
             m_Timer.Interval = 16;
@@ -818,6 +815,10 @@ namespace MDStudio
         {
             if(System.IO.File.Exists(filename))
             {
+                // Remove events
+                codeEditor.Document.DocumentChanged += documentChanged;
+                m_Modified = false;
+
                 m_ProjectFile = filename;
                 m_PathToProject = Path.GetDirectoryName(filename); // @"D:\Devt\perso_nas\Megadrive\test\";
                 m_CurrentSourcePath = filename;
@@ -837,6 +838,11 @@ namespace MDStudio
                 PopulateFileView();
 
                 treeProjectFiles.ExpandAll();
+
+                // Set events
+                codeEditor.Document.DocumentChanged += documentChanged;
+
+                this.Text = "MDStudio - " + m_CurrentSourcePath;
             }
         }
 
@@ -860,6 +866,7 @@ namespace MDStudio
         private void documentChanged(object sender, EventArgs e)
         {
             m_Modified = true;
+            this.Text = "MDStudio - " + m_CurrentSourcePath + "*";
         }
 
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
@@ -992,6 +999,16 @@ namespace MDStudio
                 m_VDPStatus.Show();
             else
                 m_VDPStatus.Hide();
+        }
+
+        private void searchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SearchForm search = new SearchForm();
+
+            if(search.ShowDialog() == DialogResult.OK)
+            {
+                Console.WriteLine("search: "  + search.searchString);
+            }
         }
     }
 }

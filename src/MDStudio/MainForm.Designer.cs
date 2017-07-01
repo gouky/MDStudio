@@ -45,6 +45,7 @@
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewBuildLogMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.viewCRAMmenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewVDPStatusMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.buildToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.compileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.runMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,7 +72,10 @@
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.treeProjectFiles = new System.Windows.Forms.TreeView();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.viewVDPStatusMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.searchNextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -149,8 +153,12 @@
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.undoMenu,
             this.redoMenu,
+            this.toolStripSeparator6,
             this.searchFilesToolStripMenuItem,
-            this.searchSymbolsToolStripMenuItem});
+            this.searchSymbolsToolStripMenuItem,
+            this.toolStripSeparator5,
+            this.searchToolStripMenuItem,
+            this.searchNextToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -214,6 +222,13 @@
             this.viewCRAMmenu.Size = new System.Drawing.Size(152, 22);
             this.viewCRAMmenu.Text = "CRAM Viewer";
             this.viewCRAMmenu.Click += new System.EventHandler(this.viewCRAMBtn_Click);
+            // 
+            // viewVDPStatusMenu
+            // 
+            this.viewVDPStatusMenu.Name = "viewVDPStatusMenu";
+            this.viewVDPStatusMenu.Size = new System.Drawing.Size(152, 22);
+            this.viewVDPStatusMenu.Text = "VDP Status";
+            this.viewVDPStatusMenu.Click += new System.EventHandler(this.viewVDPStatusMenu_Click);
             // 
             // buildToolStripMenuItem
             // 
@@ -435,12 +450,30 @@
             this.splitContainer.SplitterDistance = 155;
             this.splitContainer.TabIndex = 8;
             // 
-            // viewVDPStatusMenu
+            // searchToolStripMenuItem
             // 
-            this.viewVDPStatusMenu.Name = "viewVDPStatusMenu";
-            this.viewVDPStatusMenu.Size = new System.Drawing.Size(152, 22);
-            this.viewVDPStatusMenu.Text = "VDP Status";
-            this.viewVDPStatusMenu.Click += new System.EventHandler(this.viewVDPStatusMenu_Click);
+            this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
+            this.searchToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+            this.searchToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.searchToolStripMenuItem.Text = "Search";
+            this.searchToolStripMenuItem.Click += new System.EventHandler(this.searchToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(222, 6);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(222, 6);
+            // 
+            // searchNextToolStripMenuItem
+            // 
+            this.searchNextToolStripMenuItem.Name = "searchNextToolStripMenuItem";
+            this.searchNextToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
+            this.searchNextToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.searchNextToolStripMenuItem.Text = "Search Next";
             // 
             // MainForm
             // 
@@ -518,6 +551,10 @@
         private System.Windows.Forms.ToolStripMenuItem runMegaUSB;
         private System.Windows.Forms.ToolStripMenuItem viewCRAMmenu;
         private System.Windows.Forms.ToolStripMenuItem viewVDPStatusMenu;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem searchNextToolStripMenuItem;
     }
 }
 
