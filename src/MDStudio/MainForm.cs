@@ -51,6 +51,7 @@ namespace MDStudio
         private RegisterView m_RegisterView;
         private MemoryView m_MemoryView;
         private BuildLog m_BuildLog;
+        private CRamViewer m_CRAMViewer;
 
         private Config m_Config;
 
@@ -132,6 +133,12 @@ namespace MDStudio
             m_RegisterView = new RegisterView();
             m_RegisterView.Hide();
 
+            m_CRAMViewer = new CRamViewer(this);
+            if(Settings.Default.CRAMWindowVisible)
+                m_CRAMViewer.Show();
+            else
+                m_CRAMViewer.Hide();
+
             // Set the syntax-highlighting for C#
             codeEditor.Document.HighlightingStrategy = HighlightingManager.Manager.FindHighlighter("ASM68k");
 
@@ -155,6 +162,19 @@ namespace MDStudio
         {
         }
 
+        private void UpdateCRAM()
+        {
+            // Update palette
+            if (m_CRAMViewer.Visible)
+            {
+                for (int i = 0; i < 64; i++)
+                {
+                    uint rgb = (uint)DGenThread.GetDGen().GetColor(i);
+                    m_CRAMViewer.SetColor(i, rgb);
+                }
+            }
+        }
+
         void TimerTick(object sender, EventArgs e)
         {
             if (DGenThread.GetDGen() != null && DGenThread.GetDGen().IsDebugging() && m_State == State.kRunning)
@@ -165,7 +185,7 @@ namespace MDStudio
 
                 //Get regs
                 uint[] dregs = new uint[8];
-                for(int i = 0; i < 8; i++)
+                for (int i = 0; i < 8; i++)
                 {
                     dregs[i] = (uint)DGenThread.GetDGen().GetDReg(i);
                 }
@@ -178,7 +198,7 @@ namespace MDStudio
 
                 uint sr = (uint)DGenThread.GetDGen().GetSR();
 
-                m_RegisterView.SetRegs( dregs[0], dregs[1], dregs[2], dregs[3], dregs[4], dregs[5], dregs[6], dregs[7],
+                m_RegisterView.SetRegs(dregs[0], dregs[1], dregs[2], dregs[3], dregs[4], dregs[5], dregs[6], dregs[7],
                                         aregs[0], aregs[1], aregs[2], aregs[3], aregs[4], aregs[5], aregs[6], 0,
                                         sr, (uint)currentPC);
 
@@ -188,11 +208,13 @@ namespace MDStudio
                 //Bring window to front
                 BringToFront();
 
+                UpdateCRAM();
+
                 //Determine break mode
-                if(m_BreakMode == BreakMode.kStepOver)
+                if (m_BreakMode == BreakMode.kStepOver)
                 {
                     //If hit desired step over address
-                    if(currentPC == m_StepOverAddress)
+                    if (currentPC == m_StepOverAddress)
                     {
                         //Return to breakpoint mode
                         m_StepOverAddress = 0;
@@ -206,6 +228,10 @@ namespace MDStudio
 
                 //In breakpoint state
                 m_State = State.kDebugging;
+            }
+            else if (DGenThread.GetDGen() != null && m_State == State.kRunning)
+            {
+                UpdateCRAM();
             }
         }
 
@@ -627,6 +653,8 @@ namespace MDStudio
                 Settings.Default.WindowSize = this.RestoreBounds.Size;
             }
 
+            Settings.Default.CRAMWindowVisible = m_CRAMViewer.Visible;
+
             Settings.Default.Save();
         }
 
@@ -692,6 +720,11 @@ namespace MDStudio
             vdpToolsRegistersMenu.Checked = flag;
         }
 
+        public void UpdateViewCRAM(bool flag)
+        {
+            viewCRAMmenu.Checked = flag;
+        }
+        
         private void viewBuildLogMenu_Click(object sender, EventArgs e)
         {
             if (!viewBuildLogMenu.Checked)
@@ -920,6 +953,21 @@ namespace MDStudio
             if (DGenThread.GetDGen() != null && m_State != State.kStopped)
             {
                 DGenThread.GetDGen().BringToFront();
+            }
+        }
+
+        private void toolsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void viewCRAMBtn_Click(object sender, EventArgs e)
+        {
+            if (!viewCRAMmenu.Checked)
+                m_CRAMViewer.Show();
+            else
+            {
+                m_CRAMViewer.Hide();
             }
         }
     }

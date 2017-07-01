@@ -44,6 +44,7 @@
             this.searchSymbolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewBuildLogMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewCRAMmenu = new System.Windows.Forms.ToolStripMenuItem();
             this.buildToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.compileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.runMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -191,17 +192,26 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.viewBuildLogMenu});
+            this.viewBuildLogMenu,
+            this.viewCRAMmenu});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.toolsToolStripMenuItem.Text = "&View";
+            this.toolsToolStripMenuItem.Click += new System.EventHandler(this.toolsToolStripMenuItem_Click);
             // 
             // viewBuildLogMenu
             // 
             this.viewBuildLogMenu.Name = "viewBuildLogMenu";
-            this.viewBuildLogMenu.Size = new System.Drawing.Size(124, 22);
+            this.viewBuildLogMenu.Size = new System.Drawing.Size(152, 22);
             this.viewBuildLogMenu.Text = "Build Log";
             this.viewBuildLogMenu.Click += new System.EventHandler(this.viewBuildLogMenu_Click);
+            // 
+            // viewCRAMmenu
+            // 
+            this.viewCRAMmenu.Name = "viewCRAMmenu";
+            this.viewCRAMmenu.Size = new System.Drawing.Size(152, 22);
+            this.viewCRAMmenu.Text = "CRAM Viewer";
+            this.viewCRAMmenu.Click += new System.EventHandler(this.viewCRAMBtn_Click);
             // 
             // buildToolStripMenuItem
             // 
@@ -497,6 +507,7 @@
         private System.Windows.Forms.ToolStripMenuItem searchFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem searchSymbolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runMegaUSB;
+        private System.Windows.Forms.ToolStripMenuItem viewCRAMmenu;
     }
 }
 

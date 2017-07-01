@@ -106,5 +106,29 @@ namespace MDStudio.Properties {
                 this["BuildLogWindowSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point CRAMWindowPosition {
+            get {
+                return ((global::System.Drawing.Point)(this["CRAMWindowPosition"]));
+            }
+            set {
+                this["CRAMWindowPosition"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CRAMWindowVisible {
+            get {
+                return ((bool)(this["CRAMWindowVisible"]));
+            }
+            set {
+                this["CRAMWindowVisible"] = value;
+            }
+        }
     }
 }
