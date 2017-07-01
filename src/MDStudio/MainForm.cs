@@ -508,6 +508,9 @@ namespace MDStudio
                     //  Load Rom
                     m_DGenThread.LoadRom(binaryFile);
 
+                    // Reset the vdp status
+                    m_VDPStatus.Reset();
+
                     //  Set breakpoint
                     DGenThread.GetDGen().ClearBreakpoints();
                     foreach (Bookmark mark in codeEditor.Document.BookmarkManager.Marks)

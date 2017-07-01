@@ -122,15 +122,22 @@ namespace MDStudio
                         {
                             m_VDPRegisters[i].funcUpdate(i);
                         }
+
+                        this.listVDPStatus.Items[i].ForeColor = Color.Red;
                     }
                     else
                     {
-//                         if(this.listVDPStatus.Items[0].SubItems[1].ForeColor == Color.Red)
-//                         {
-//                             this.listVDPStatus.Items[0].SubItems[1].ForeColor = Color.Black;
-//                         }
+                        this.listVDPStatus.Items[i].ForeColor = Color.Black;
                     }
                 }
+            }
+        }
+
+        public void Reset()
+        {
+            for (int i = 0; i < m_VDPRegisters.Length; ++i)
+            {
+                m_VDPRegisters[i].value = DGenThread.GetDGen().GetVDPRegisterValue(m_VDPRegisters[i].baseIndex);
             }
         }
 
