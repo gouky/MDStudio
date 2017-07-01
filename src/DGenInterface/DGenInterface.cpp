@@ -142,3 +142,8 @@ int DGenInterface::DGen::GetColor(int i)
 {
 	return ::GetPaletteEntry(i);
 }
+
+unsigned char DGenInterface::DGen::GetVDPRegisterValue(int index)
+{
+	return ::GetVDPRegisterValue(index);
+}

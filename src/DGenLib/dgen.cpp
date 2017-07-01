@@ -424,3 +424,8 @@ int GetPaletteEntry(int i)
 
 	return (r<<16) | (g << 8) | b;
 }
+
+unsigned char GetVDPRegisterValue(int index)
+{
+	return s_DGenInstance->vdp.reg[index];
+}

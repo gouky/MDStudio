@@ -71,6 +71,7 @@
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.treeProjectFiles = new System.Windows.Forms.TreeView();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.viewVDPStatusMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -193,7 +194,8 @@
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.viewBuildLogMenu,
-            this.viewCRAMmenu});
+            this.viewCRAMmenu,
+            this.viewVDPStatusMenu});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.toolsToolStripMenuItem.Text = "&View";
@@ -433,6 +435,13 @@
             this.splitContainer.SplitterDistance = 155;
             this.splitContainer.TabIndex = 8;
             // 
+            // viewVDPStatusMenu
+            // 
+            this.viewVDPStatusMenu.Name = "viewVDPStatusMenu";
+            this.viewVDPStatusMenu.Size = new System.Drawing.Size(152, 22);
+            this.viewVDPStatusMenu.Text = "VDP Status";
+            this.viewVDPStatusMenu.Click += new System.EventHandler(this.viewVDPStatusMenu_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -508,6 +517,7 @@
         private System.Windows.Forms.ToolStripMenuItem searchSymbolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runMegaUSB;
         private System.Windows.Forms.ToolStripMenuItem viewCRAMmenu;
+        private System.Windows.Forms.ToolStripMenuItem viewVDPStatusMenu;
     }
 }
 

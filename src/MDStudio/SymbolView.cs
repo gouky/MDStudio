@@ -84,6 +84,9 @@ namespace MDStudio
 
         private void textSearch_TextChanged(object sender, EventArgs e)
         {
+            if (m_symbols == null)
+                return;
+
             string searchString = textSearch.Text.ToLower();
             string[] tokens = searchString.Split(' ');
             listSymbols.SelectedItem = null;

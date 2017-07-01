@@ -52,3 +52,5 @@ extern void		SetInputMapping(int input, int mapping);
 extern int		GetInputMapping(int input);
 
 extern int		GetPaletteEntry(int index);
+
+extern unsigned char GetVDPRegisterValue(int index);

@@ -130,5 +130,29 @@ namespace MDStudio.Properties {
                 this["CRAMWindowVisible"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool VDPStatusWindowVisible {
+            get {
+                return ((bool)(this["VDPStatusWindowVisible"]));
+            }
+            set {
+                this["VDPStatusWindowVisible"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point VDPStatusWindowPosition {
+            get {
+                return ((global::System.Drawing.Point)(this["VDPStatusWindowPosition"]));
+            }
+            set {
+                this["VDPStatusWindowPosition"] = value;
+            }
+        }
     }
 }

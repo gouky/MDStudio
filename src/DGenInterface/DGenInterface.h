@@ -62,5 +62,7 @@ namespace DGenInterface {
 		int		GetInputMapping(SDLInputs input);
 
 		int		GetColor(int index);
+
+		unsigned char	GetVDPRegisterValue(int index);
 	};
 }

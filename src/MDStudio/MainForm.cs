@@ -52,6 +52,7 @@ namespace MDStudio
         private MemoryView m_MemoryView;
         private BuildLog m_BuildLog;
         private CRamViewer m_CRAMViewer;
+        private VDPStatusWindow m_VDPStatus;
 
         private Config m_Config;
 
@@ -139,6 +140,12 @@ namespace MDStudio
             else
                 m_CRAMViewer.Hide();
 
+            m_VDPStatus = new VDPStatusWindow(this);
+            if (Settings.Default.VDPStatusWindowVisible)
+                m_VDPStatus.Show();
+            else
+                m_VDPStatus.Hide();
+
             // Set the syntax-highlighting for C#
             codeEditor.Document.HighlightingStrategy = HighlightingManager.Manager.FindHighlighter("ASM68k");
 
@@ -209,6 +216,7 @@ namespace MDStudio
                 BringToFront();
 
                 UpdateCRAM();
+                m_VDPStatus.UpdateView();
 
                 //Determine break mode
                 if (m_BreakMode == BreakMode.kStepOver)
@@ -654,6 +662,7 @@ namespace MDStudio
             }
 
             Settings.Default.CRAMWindowVisible = m_CRAMViewer.Visible;
+            Settings.Default.VDPStatusWindowVisible = m_VDPStatus.Visible;
 
             Settings.Default.Save();
         }
@@ -724,7 +733,12 @@ namespace MDStudio
         {
             viewCRAMmenu.Checked = flag;
         }
-        
+
+        public void UpdateViewVDPStatus(bool flag)
+        {
+            viewVDPStatusMenu.Checked = flag;
+        }        
+
         private void viewBuildLogMenu_Click(object sender, EventArgs e)
         {
             if (!viewBuildLogMenu.Checked)
@@ -966,9 +980,15 @@ namespace MDStudio
             if (!viewCRAMmenu.Checked)
                 m_CRAMViewer.Show();
             else
-            {
                 m_CRAMViewer.Hide();
-            }
+        }
+
+        private void viewVDPStatusMenu_Click(object sender, EventArgs e)
+        {
+            if (!viewVDPStatusMenu.Checked)
+                m_VDPStatus.Show();
+            else
+                m_VDPStatus.Hide();
         }
     }
 }
