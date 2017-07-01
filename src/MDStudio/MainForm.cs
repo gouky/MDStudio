@@ -62,6 +62,8 @@ namespace MDStudio
 
         private List<Marker> m_ErrorMarkers;
 
+        private List<Marker> m_SearchMarkers;
+        
         private State m_State = State.kStopped;
 
         private BreakMode m_BreakMode = BreakMode.kBreakpoint;
@@ -119,6 +121,7 @@ namespace MDStudio
             InitializeComponent();
             
             m_ErrorMarkers = new List<Marker>();
+            m_SearchMarkers= new List<Marker>();
 
             //
             m_Config = new Config();
@@ -1010,7 +1013,38 @@ namespace MDStudio
 
             if(search.ShowDialog() == DialogResult.OK)
             {
-                Console.WriteLine("search: "  + search.searchString);
+                bool firstFind = true;
+
+                foreach (Marker marker in m_SearchMarkers)
+                {
+                    codeEditor.Document.MarkerStrategy.RemoveMarker(marker);
+                }
+
+                m_SearchMarkers.Clear();
+
+                if (search.searchString.Text.Length > 0)
+                {
+                    Regex rx = new Regex(search.searchString.Text);
+                    foreach (Match match in rx.Matches(codeEditor.Document.TextContent))
+                    {
+                        TextLocation matchLocation = codeEditor.Document.OffsetToPosition(match.Index);
+
+                        //int offset = codeEditor.Document.PositionToOffset()
+                        Marker marker = new Marker(match.Index, match.Length, MarkerType.SolidBlock, Color.Orange, Color.Black);
+                        codeEditor.Document.MarkerStrategy.AddMarker(marker);
+
+                        m_SearchMarkers.Add(marker);
+
+                        Console.WriteLine("found at " + match.Index + " line " + matchLocation.Line);
+
+                        if(firstFind)
+                        {
+                            codeEditor.ActiveTextAreaControl.Caret.Position = matchLocation;
+                            firstFind = false;
+                        }
+                    }
+                    Console.WriteLine("search: " + search.searchString);
+                }
             }
         }
     }
