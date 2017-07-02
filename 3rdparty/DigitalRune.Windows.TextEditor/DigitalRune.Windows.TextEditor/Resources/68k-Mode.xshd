@@ -32,7 +32,7 @@
         <Key word = "equ" />
       </KeyWords>
 
-       <KeyWords name = "Instruction" bold="false" italic="false" color="Blue">
+       <KeyWords name = "Instructions" bold="false" italic="false" color="Blue">
          <Key word = "dc" />
          <Key word = "tst" />
          <Key word = "move" />
@@ -49,9 +49,18 @@
          <Key word = "beq" />
          <Key word = "lea" />
          <Key word = "andi" />
+         <Key word = "lsl" />
+         <Key word = "lsr" />
+         <Key word = "movem" />
+         <Key word = "and" />
+         <Key word = "moveq" />
+         <Key word = "mulu" />
+         <Key word = "cmp" />
+         <Key word = "btst" />
+         <Key word = "sub" />
       </KeyWords>
 
-      <KeyWords name = "Instruction" bold="false" italic="false" color="Red">
+      <KeyWords name = "Registers" bold="false" italic="false" color="Red">
         <Key word = "d0" />
         <Key word = "d1" />
         <Key word = "d2" />
