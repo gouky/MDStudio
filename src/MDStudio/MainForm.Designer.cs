@@ -40,8 +40,13 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.undoMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.redoMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.searchFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchSymbolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.searchNextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.searchPreviousToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewBuildLogMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.viewCRAMmenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,10 +77,6 @@
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.treeProjectFiles = new System.Windows.Forms.TreeView();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.searchNextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -158,7 +159,8 @@
             this.searchSymbolsToolStripMenuItem,
             this.toolStripSeparator5,
             this.searchToolStripMenuItem,
-            this.searchNextToolStripMenuItem});
+            this.searchNextToolStripMenuItem,
+            this.searchPreviousToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -180,6 +182,11 @@
             this.redoMenu.Text = "&Redo";
             this.redoMenu.Click += new System.EventHandler(this.redoToolStripMenuItem_Click);
             // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(222, 6);
+            // 
             // searchFilesToolStripMenuItem
             // 
             this.searchFilesToolStripMenuItem.Name = "searchFilesToolStripMenuItem";
@@ -198,6 +205,35 @@
             this.searchSymbolsToolStripMenuItem.Text = "Search Symbols";
             this.searchSymbolsToolStripMenuItem.Click += new System.EventHandler(this.searchSymbolsToolStripMenuItem_Click);
             // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(222, 6);
+            // 
+            // searchToolStripMenuItem
+            // 
+            this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
+            this.searchToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+            this.searchToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.searchToolStripMenuItem.Text = "Search";
+            this.searchToolStripMenuItem.Click += new System.EventHandler(this.searchToolStripMenuItem_Click);
+            // 
+            // searchNextToolStripMenuItem
+            // 
+            this.searchNextToolStripMenuItem.Name = "searchNextToolStripMenuItem";
+            this.searchNextToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
+            this.searchNextToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.searchNextToolStripMenuItem.Text = "Search Next";
+            this.searchNextToolStripMenuItem.Click += new System.EventHandler(this.searchNextToolStripMenuItem_Click);
+            // 
+            // searchPreviousToolStripMenuItem
+            // 
+            this.searchPreviousToolStripMenuItem.Name = "searchPreviousToolStripMenuItem";
+            this.searchPreviousToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F3)));
+            this.searchPreviousToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.searchPreviousToolStripMenuItem.Text = "Search Previous";
+            this.searchPreviousToolStripMenuItem.Click += new System.EventHandler(this.searchPreviousToolStripMenuItem_Click);
+            // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -212,21 +248,21 @@
             // viewBuildLogMenu
             // 
             this.viewBuildLogMenu.Name = "viewBuildLogMenu";
-            this.viewBuildLogMenu.Size = new System.Drawing.Size(152, 22);
+            this.viewBuildLogMenu.Size = new System.Drawing.Size(146, 22);
             this.viewBuildLogMenu.Text = "Build Log";
             this.viewBuildLogMenu.Click += new System.EventHandler(this.viewBuildLogMenu_Click);
             // 
             // viewCRAMmenu
             // 
             this.viewCRAMmenu.Name = "viewCRAMmenu";
-            this.viewCRAMmenu.Size = new System.Drawing.Size(152, 22);
+            this.viewCRAMmenu.Size = new System.Drawing.Size(146, 22);
             this.viewCRAMmenu.Text = "CRAM Viewer";
             this.viewCRAMmenu.Click += new System.EventHandler(this.viewCRAMBtn_Click);
             // 
             // viewVDPStatusMenu
             // 
             this.viewVDPStatusMenu.Name = "viewVDPStatusMenu";
-            this.viewVDPStatusMenu.Size = new System.Drawing.Size(152, 22);
+            this.viewVDPStatusMenu.Size = new System.Drawing.Size(146, 22);
             this.viewVDPStatusMenu.Text = "VDP Status";
             this.viewVDPStatusMenu.Click += new System.EventHandler(this.viewVDPStatusMenu_Click);
             // 
@@ -450,31 +486,6 @@
             this.splitContainer.SplitterDistance = 155;
             this.splitContainer.TabIndex = 8;
             // 
-            // searchToolStripMenuItem
-            // 
-            this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-            this.searchToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this.searchToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
-            this.searchToolStripMenuItem.Text = "Search";
-            this.searchToolStripMenuItem.Click += new System.EventHandler(this.searchToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(222, 6);
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(222, 6);
-            // 
-            // searchNextToolStripMenuItem
-            // 
-            this.searchNextToolStripMenuItem.Name = "searchNextToolStripMenuItem";
-            this.searchNextToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
-            this.searchNextToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
-            this.searchNextToolStripMenuItem.Text = "Search Next";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -492,6 +503,7 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Enter += new System.EventHandler(this.MainForm_Enter);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
@@ -555,6 +567,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem searchNextToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem searchPreviousToolStripMenuItem;
     }
 }
 

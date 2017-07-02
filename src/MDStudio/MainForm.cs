@@ -63,13 +63,13 @@ namespace MDStudio
         private List<Marker> m_ErrorMarkers;
 
         private List<Marker> m_SearchMarkers;
+        private List<TextLocation> m_SearchResults;
+        private int m_SearchIndex;
         
         private State m_State = State.kStopped;
 
         private BreakMode m_BreakMode = BreakMode.kBreakpoint;
         private int m_StepOverAddress;
-
-        private const int kAutoScrollThreshold = 20;
 
         public static readonly ReadOnlyCollection<Tuple<int, int>> kValidResolutions = new ReadOnlyCollection<Tuple<int, int>>(new[]
         {
@@ -122,6 +122,7 @@ namespace MDStudio
             
             m_ErrorMarkers = new List<Marker>();
             m_SearchMarkers= new List<Marker>();
+            m_SearchResults = new List<TextLocation>();
 
             //
             m_Config = new Config();
@@ -721,7 +722,7 @@ namespace MDStudio
             codeEditor.Document.MarkerStrategy.AddMarker(marker);
             codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber;
             codeEditor.ActiveTextAreaControl.Caret.Column = 0;
-            codeEditor.ActiveTextAreaControl.CenterViewOn(lineNumber, kAutoScrollThreshold);
+            codeEditor.ActiveTextAreaControl.CenterViewOn(lineNumber, -1);
             codeEditor.ActiveTextAreaControl.Invalidate();
         }
 
@@ -873,6 +874,8 @@ namespace MDStudio
         {
             m_Modified = true;
             this.Text = "MDStudio - " + m_CurrentSourcePath + "*";
+
+            ClearSearch();
         }
 
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1007,6 +1010,25 @@ namespace MDStudio
                 m_VDPStatus.Hide();
         }
 
+        private void ClearSearch()
+        {
+            bool requestUpdate = m_SearchMarkers.Count>0;
+
+            foreach (Marker marker in m_SearchMarkers)
+            {
+                codeEditor.Document.MarkerStrategy.RemoveMarker(marker);
+            }
+
+            m_SearchMarkers.Clear();
+            m_SearchResults.Clear();
+            m_SearchIndex = -1;
+
+            if(requestUpdate)
+            {
+                codeEditor.Refresh();
+            }
+        }
+
         private void searchToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SearchForm search = new SearchForm();
@@ -1015,37 +1037,61 @@ namespace MDStudio
             {
                 bool firstFind = true;
 
-                foreach (Marker marker in m_SearchMarkers)
-                {
-                    codeEditor.Document.MarkerStrategy.RemoveMarker(marker);
-                }
-
-                m_SearchMarkers.Clear();
+                ClearSearch();
 
                 if (search.searchString.Text.Length > 0)
                 {
-                    Regex rx = new Regex(search.searchString.Text);
+                    Regex rx = new Regex(search.checkMatchCase.Checked ? search.searchString.Text : "(?i)" + search.searchString.Text);
                     foreach (Match match in rx.Matches(codeEditor.Document.TextContent))
                     {
                         TextLocation matchLocation = codeEditor.Document.OffsetToPosition(match.Index);
 
-                        //int offset = codeEditor.Document.PositionToOffset()
                         Marker marker = new Marker(match.Index, match.Length, MarkerType.SolidBlock, Color.Orange, Color.Black);
                         codeEditor.Document.MarkerStrategy.AddMarker(marker);
 
                         m_SearchMarkers.Add(marker);
+                        m_SearchResults.Add(matchLocation);
 
-                        Console.WriteLine("found at " + match.Index + " line " + matchLocation.Line);
-
-                        if(firstFind)
+                        if (firstFind)
                         {
-                            codeEditor.ActiveTextAreaControl.Caret.Position = matchLocation;
-                            firstFind = false;
+                            m_SearchIndex++;
+                            if (matchLocation.Line >= codeEditor.ActiveTextAreaControl.Caret.Line)
+                            {
+                                codeEditor.ActiveTextAreaControl.Caret.Position = matchLocation;
+                                codeEditor.ActiveTextAreaControl.CenterViewOn(matchLocation.Line, -1);
+                                firstFind = false;
+                            }
                         }
                     }
                     Console.WriteLine("search: " + search.searchString);
                 }
             }
+        }
+
+        private void searchNextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(m_SearchResults.Count>0 && (m_SearchIndex+1)< m_SearchResults.Count)
+            {
+                m_SearchIndex++;
+
+                codeEditor.ActiveTextAreaControl.Caret.Position = m_SearchResults[m_SearchIndex];
+                codeEditor.ActiveTextAreaControl.CenterViewOn(m_SearchResults[m_SearchIndex].Line, -1);
+            }
+        }
+
+        private void searchPreviousToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (m_SearchResults.Count > 0 && (m_SearchIndex - 1) >= 0)
+            {
+                m_SearchIndex--;
+
+                codeEditor.ActiveTextAreaControl.Caret.Position = m_SearchResults[m_SearchIndex];
+                codeEditor.ActiveTextAreaControl.CenterViewOn(m_SearchResults[m_SearchIndex].Line, -1);
+            }
+        }
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
         }
     }
 }
