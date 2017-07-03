@@ -684,6 +684,7 @@ namespace MDStudio
             System.IO.File.WriteAllText(m_CurrentSourcePath, codeEditor.Document.TextContent);
 
             m_Modified = false;
+            UpdateTitle();
         }
 
         public void GoTo(string filename, int lineNumber)
@@ -870,10 +871,25 @@ namespace MDStudio
             Close();
         }
 
+        public void UpdateTitle()
+        {
+            if (m_CurrentSourcePath != null && m_CurrentSourcePath.Length > 0)
+            {
+                if (m_Modified)
+                    this.Text = "MDStudio - " + m_CurrentSourcePath + "*";
+                else
+                    this.Text = "MDStudio - " + m_CurrentSourcePath;
+            }
+            else
+            {
+                this.Text = "MDStudio";
+            }
+        }
         private void documentChanged(object sender, EventArgs e)
         {
             m_Modified = true;
-            this.Text = "MDStudio - " + m_CurrentSourcePath + "*";
+
+            UpdateTitle();
 
             ClearSearch();
         }
