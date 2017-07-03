@@ -68,6 +68,8 @@ namespace MDStudio
         
         private State m_State = State.kStopped;
 
+        private FileSystemWatcher m_SourceWatcher;
+
         private BreakMode m_BreakMode = BreakMode.kBreakpoint;
         private int m_StepOverAddress;
 
@@ -149,6 +151,8 @@ namespace MDStudio
                 m_VDPStatus.Show();
             else
                 m_VDPStatus.Hide();
+
+            m_SourceWatcher = null;
 
             // Set the syntax-highlighting for C#
             codeEditor.Document.HighlightingStrategy = HighlightingManager.Manager.FindHighlighter("ASM68k");
@@ -823,6 +827,12 @@ namespace MDStudio
         {
             if(System.IO.File.Exists(filename))
             {
+                if(m_SourceWatcher != null)
+                {
+                    m_SourceWatcher.Dispose();
+                    m_SourceWatcher = null;
+                }
+
                 // Remove events
                 codeEditor.Document.DocumentChanged -= documentChanged;
                 m_Modified = false;
@@ -851,7 +861,33 @@ namespace MDStudio
                 codeEditor.Document.DocumentChanged += documentChanged;
 
                 this.Text = "MDStudio - " + m_CurrentSourcePath;
+
+                //  Set watcher
+                m_SourceWatcher = new FileSystemWatcher();
+                m_SourceWatcher.Path = Path.GetDirectoryName(m_CurrentSourcePath);
+                m_SourceWatcher.NotifyFilter = NotifyFilters.LastWrite;
+                m_SourceWatcher.Filter = Path.GetFileName(m_CurrentSourcePath);
+                m_SourceWatcher.Changed += new FileSystemEventHandler(OnSourceChanged);
+                m_SourceWatcher.EnableRaisingEvents = true;
             }
+        }
+
+        private void OnSourceChanged(object source, FileSystemEventArgs e)
+        {
+            this.Invoke(new Action(() =>
+            {
+                m_SourceWatcher.EnableRaisingEvents = false;
+
+                DialogResult dialogResult = MessageBox.Show(this, m_CurrentSourcePath + " - This file has been modified by an another program. Do you want to reload it?", "Reload", MessageBoxButtons.YesNo);
+
+                if (dialogResult == DialogResult.Yes)
+                {
+                    codeEditor.Document.TextContent = System.IO.File.ReadAllText(m_CurrentSourcePath);
+
+                }
+
+                m_SourceWatcher.EnableRaisingEvents = true;
+            }));
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)

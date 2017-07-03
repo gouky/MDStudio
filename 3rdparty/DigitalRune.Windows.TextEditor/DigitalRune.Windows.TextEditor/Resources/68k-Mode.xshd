@@ -58,6 +58,7 @@
          <Key word = "cmp" />
          <Key word = "btst" />
          <Key word = "sub" />
+         <Key word = "rs" />
       </KeyWords>
 
       <KeyWords name = "Registers" bold="false" italic="false" color="Red">
