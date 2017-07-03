@@ -823,7 +823,7 @@ namespace MDStudio
             if(System.IO.File.Exists(filename))
             {
                 // Remove events
-                codeEditor.Document.DocumentChanged += documentChanged;
+                codeEditor.Document.DocumentChanged -= documentChanged;
                 m_Modified = false;
 
                 m_ProjectFile = filename;
