@@ -152,7 +152,8 @@ namespace MDStudio
             else
                 m_VDPStatus.Hide();
 
-            m_SourceWatcher = null;
+            m_SourceWatcher = new FileSystemWatcher();
+            m_SourceWatcher.EnableRaisingEvents = false;
 
             // Set the syntax-highlighting for C#
             codeEditor.Document.HighlightingStrategy = HighlightingManager.Manager.FindHighlighter("ASM68k");
@@ -685,7 +686,11 @@ namespace MDStudio
 
         private void Save()
         {
+            m_SourceWatcher.EnableRaisingEvents = false;
+
             System.IO.File.WriteAllText(m_CurrentSourcePath, codeEditor.Document.TextContent);
+
+            m_SourceWatcher.EnableRaisingEvents = true;
 
             m_Modified = false;
             UpdateTitle();
@@ -827,11 +832,7 @@ namespace MDStudio
         {
             if(System.IO.File.Exists(filename))
             {
-                if(m_SourceWatcher != null)
-                {
-                    m_SourceWatcher.Dispose();
-                    m_SourceWatcher = null;
-                }
+                m_SourceWatcher.EnableRaisingEvents = false;
 
                 // Remove events
                 codeEditor.Document.DocumentChanged -= documentChanged;
@@ -863,7 +864,6 @@ namespace MDStudio
                 this.Text = "MDStudio - " + m_CurrentSourcePath;
 
                 //  Set watcher
-                m_SourceWatcher = new FileSystemWatcher();
                 m_SourceWatcher.Path = Path.GetDirectoryName(m_CurrentSourcePath);
                 m_SourceWatcher.NotifyFilter = NotifyFilters.LastWrite;
                 m_SourceWatcher.Filter = Path.GetFileName(m_CurrentSourcePath);
@@ -878,7 +878,7 @@ namespace MDStudio
             {
                 m_SourceWatcher.EnableRaisingEvents = false;
 
-                DialogResult dialogResult = MessageBox.Show(this, m_CurrentSourcePath + " - This file has been modified by an another program. Do you want to reload it?", "Reload", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(this, m_CurrentSourcePath + Environment.NewLine + Environment.NewLine + "This file has been modified by an another program." + Environment.NewLine + Environment.NewLine + "Do you want to reload it?", "Reload", MessageBoxButtons.YesNo);
 
                 if (dialogResult == DialogResult.Yes)
                 {
