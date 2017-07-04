@@ -67,9 +67,15 @@
             this.label17 = new System.Windows.Forms.Label();
             this.txt_sr = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.decimalViewMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.hexaViewMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.binaryViewMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -90,7 +96,7 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(12, 27);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(140, 239);
             this.groupBox1.TabIndex = 0;
@@ -251,12 +257,13 @@
             this.groupBox2.Controls.Add(this.label11);
             this.groupBox2.Controls.Add(this.label10);
             this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Location = new System.Drawing.Point(158, 12);
+            this.groupBox2.Location = new System.Drawing.Point(158, 27);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(145, 239);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Address";
+            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // txt_usp
             // 
@@ -400,7 +407,7 @@
             this.groupBox3.Controls.Add(this.label17);
             this.groupBox3.Controls.Add(this.txt_sr);
             this.groupBox3.Controls.Add(this.label16);
-            this.groupBox3.Location = new System.Drawing.Point(12, 257);
+            this.groupBox3.Location = new System.Drawing.Point(12, 272);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(140, 79);
             this.groupBox3.TabIndex = 2;
@@ -441,15 +448,58 @@
             this.label16.TabIndex = 9;
             this.label16.Text = "SR";
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(314, 24);
+            this.menuStrip1.TabIndex = 3;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.decimalViewMenu,
+            this.hexaViewMenu,
+            this.binaryViewMenu});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // decimalViewMenu
+            // 
+            this.decimalViewMenu.Name = "decimalViewMenu";
+            this.decimalViewMenu.Size = new System.Drawing.Size(152, 22);
+            this.decimalViewMenu.Text = "Decimal";
+            this.decimalViewMenu.Click += new System.EventHandler(this.decimalViewMenu_Click);
+            // 
+            // hexaViewMenu
+            // 
+            this.hexaViewMenu.Name = "hexaViewMenu";
+            this.hexaViewMenu.Size = new System.Drawing.Size(152, 22);
+            this.hexaViewMenu.Text = "Hexa";
+            this.hexaViewMenu.Click += new System.EventHandler(this.hexaViewMenu_Click);
+            // 
+            // binaryViewMenu
+            // 
+            this.binaryViewMenu.Name = "binaryViewMenu";
+            this.binaryViewMenu.Size = new System.Drawing.Size(152, 22);
+            this.binaryViewMenu.Text = "Binary";
+            this.binaryViewMenu.Click += new System.EventHandler(this.binaryViewMenu_Click);
+            // 
             // RegisterView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(314, 349);
+            this.ClientSize = new System.Drawing.Size(314, 371);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "RegisterView";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
@@ -462,7 +512,10 @@
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -507,5 +560,10 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox txt_usp;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem decimalViewMenu;
+        private System.Windows.Forms.ToolStripMenuItem hexaViewMenu;
+        private System.Windows.Forms.ToolStripMenuItem binaryViewMenu;
     }
 }

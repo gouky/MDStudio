@@ -534,6 +534,9 @@ namespace MDStudio
                     statusLabel.Text = "Running...";
 
                     codeEditor.Document.ReadOnly = true;
+
+                    //  Hide the build window
+                    m_BuildLog.Hide();
                 }
             }
         }

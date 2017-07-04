@@ -13,6 +13,15 @@ namespace MDStudio
 {
     public partial class RegisterView : Form
     {
+        private enum kViewType
+        {
+            eDecimal,
+            eHexadecimal,
+            eBinary,
+        }
+
+        private kViewType m_ViewType;
+
         public void SetRegs(uint d0, uint d1, uint d2, uint d3, uint d4, uint d5, uint d6, uint d7,
                             uint a0, uint a1, uint a2, uint a3, uint a4, uint a5, uint a6, uint usp,
                             uint sr, uint pc)
@@ -41,8 +50,22 @@ namespace MDStudio
 
         private void SetRegText(TextBox textBox, uint value)
         {
-            string text = value.ToString("X8");
-            if(textBox.Text == text)
+            string text;
+            
+            switch(m_ViewType)
+            {
+                case kViewType.eBinary:
+                    text = Convert.ToString(value, 2);
+                    break;
+                case kViewType.eDecimal:
+                    text = value.ToString("D8");
+                    break;
+                default:
+                case kViewType.eHexadecimal:
+                    text = value.ToString("X8");
+                    break;
+            }
+            if (textBox.Text == text)
             {
                 textBox.ForeColor = Color.Black;
             }
@@ -62,7 +85,10 @@ namespace MDStudio
         {
             Owner = Application.OpenForms[0];
 
-            if(Settings.Default.RegisterWindowLocation != null)
+            m_ViewType = kViewType.eHexadecimal;
+            hexaViewMenu.Checked = true;
+
+            if (Settings.Default.RegisterWindowLocation != null)
             {
                 this.Location = Settings.Default.RegisterWindowLocation;
             }
@@ -71,6 +97,50 @@ namespace MDStudio
         private void RegisterView_FormClosing(object sender, FormClosingEventArgs e)
         {
             Settings.Default.RegisterWindowLocation = this.Location;
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+        
+        private void ChangeView(kViewType viewType)
+        {
+            m_ViewType = viewType;
+
+            switch(viewType)
+            {
+                case kViewType.eDecimal:
+                    hexaViewMenu.Checked = false;
+                    binaryViewMenu.Checked = false;
+                    decimalViewMenu.Checked = true;
+                    break;
+                case kViewType.eHexadecimal:
+                    hexaViewMenu.Checked = true;
+                    binaryViewMenu.Checked = false;
+                    decimalViewMenu.Checked = false;
+                    break;
+                case kViewType.eBinary:
+                    hexaViewMenu.Checked = false;
+                    binaryViewMenu.Checked = true;
+                    decimalViewMenu.Checked = false;
+                    break;
+            }
+        }
+
+        private void decimalViewMenu_Click(object sender, EventArgs e)
+        {
+            ChangeView(kViewType.eDecimal);
+        }
+
+        private void hexaViewMenu_Click(object sender, EventArgs e)
+        {
+            ChangeView(kViewType.eHexadecimal);
+        }
+
+        private void binaryViewMenu_Click(object sender, EventArgs e)
+        {
+            ChangeView(kViewType.eBinary);
         }
     }
 }
