@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VDPStatusWindow));
             this.listVDPStatus = new System.Windows.Forms.ListView();
             this.Index = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -81,6 +82,7 @@
             this.ClientSize = new System.Drawing.Size(768, 233);
             this.Controls.Add(this.listVDPStatus);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Text = "VDP Status";
             this.Load += new System.EventHandler(this.VDPStatusWindow_Load);
             this.VisibleChanged += new System.EventHandler(this.VDPStatusWindow_VisibleChanged);

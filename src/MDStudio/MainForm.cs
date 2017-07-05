@@ -488,10 +488,13 @@ namespace MDStudio
             {
                 codeEditor.Document.MarkerStrategy.Clear();
                 codeEditor.ActiveTextAreaControl.Invalidate();
+                codeEditor.Refresh();
+
                 DGenThread.GetDGen().Resume();
 
-
+                statusLabel.Text = "Running...";
                 //TODO: Bring emu window to front
+
                 m_State = State.kRunning;
             }
             else if(m_State == State.kStopped)
