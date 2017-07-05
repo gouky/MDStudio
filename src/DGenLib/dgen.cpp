@@ -395,6 +395,11 @@ unsigned int* GetProfilerResults(int* instructionCount)
 	return s_DGenInstance->md_profiler_get_instr_run_counts(instructionCount);
 }
 
+unsigned int GetInstructionCycleCount(unsigned int address)
+{
+	return s_DGenInstance->md_profiler_get_instr_num_cycles(address);
+}
+
 int GetDReg(int index)
 {
 	return s_DGenInstance->debug_m68k_get_reg((m68k_register_t)((int)M68K_REG_D0 + index));

@@ -41,6 +41,7 @@ extern int		Resume();
 extern int		Break();
 extern int		IsDebugging();
 extern unsigned int* GetProfilerResults(int* instructionCount);
+extern unsigned int GetInstructionCycleCount(unsigned int address);
 
 extern int		UpdateDGen();
 

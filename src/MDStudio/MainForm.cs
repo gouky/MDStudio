@@ -74,8 +74,17 @@ namespace MDStudio
         private BreakMode m_BreakMode = BreakMode.kBreakpoint;
         private int m_StepOverAddress;
 
-        //<Address, Hit Count>
-        private List<Tuple<uint,uint,string,int>> m_ProfileResults;
+        public struct ProfilerEntry
+        {
+            public uint address { get; set; }
+            public uint hitCount { get; set; }
+            public uint cyclesPerHit { get; set; }
+            public uint totalCycles { get; set; }
+            public string filename { get; set; }
+            public int line { get; set; }
+        };
+
+        private List<ProfilerEntry> m_ProfileResults;
 
         public static readonly ReadOnlyCollection<Tuple<int, int>> kValidResolutions = new ReadOnlyCollection<Tuple<int, int>>(new[]
         {
@@ -641,14 +650,22 @@ namespace MDStudio
                 {
                     int numInstructions = 0;
                     uint* profileResults = DGenThread.GetDGen().GetProfilerResults(&numInstructions);
-                    m_ProfileResults = new List<Tuple<uint, uint, string, int>>();
+                    m_ProfileResults = new List<ProfilerEntry>();
                     for (int i = 0; i < numInstructions; i++)
                     {
                         if (profileResults[i] > 0)
                         {
-                            uint address = (uint)i * sizeof(short);
-                            Tuple<string, int> line = m_DebugSymbols.GetFileLine(address);
-                            m_ProfileResults.Add(new Tuple<uint, uint, string, int>(address, profileResults[i], line.Item1, line.Item2));
+                            ProfilerEntry entry = new ProfilerEntry();
+
+                            entry.address = (uint)i * sizeof(short);
+                            entry.hitCount = profileResults[i];
+                            Tuple<string, int> line = m_DebugSymbols.GetFileLine(entry.address);
+                            entry.cyclesPerHit = DGenThread.GetDGen().GetInstructionCycleCount(entry.address);
+                            entry.totalCycles = entry.cyclesPerHit * entry.hitCount;
+                            entry.filename = line.Item1;
+                            entry.line = line.Item2;
+
+                            m_ProfileResults.Add(entry);
                         }
                     }
                 }
@@ -656,7 +673,7 @@ namespace MDStudio
                 if (m_ProfileResults.Count > 0)
                 {
                     //Sort by hit count
-                    m_ProfileResults.Sort((a, b) => (int)(b.Item2 - a.Item2));
+                    m_ProfileResults.Sort((a, b) => (int)(b.totalCycles - a.totalCycles));
 
                     //Show profiler results
                     if (m_ProfilerView == null)

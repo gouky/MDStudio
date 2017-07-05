@@ -334,6 +334,7 @@ public:
 	void md_profiler_end();
 	static int md_profiler_instr_hook_callback(void);
 	unsigned int *md_profiler_get_instr_run_counts(int* instr_count);
+	unsigned int md_profiler_get_instr_num_cycles(unsigned int address);
 	static unsigned int *md_profiler_instr_run_counts;
 	static int md_profiler_instr_count;
 #endif

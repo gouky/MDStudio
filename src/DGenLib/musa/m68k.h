@@ -377,6 +377,9 @@ void m68k_set_reg(m68k_register_t reg, unsigned int value);
 /* Check if an instruction is valid for the specified CPU type */
 unsigned int m68k_is_valid_instruction(unsigned int instruction, unsigned int cpu_type);
 
+/* get instruction cycle count */
+unsigned int m68k_get_instruction_cycle_count(unsigned int instruction);
+
 /* Disassemble 1 instruction using the epecified CPU type at pc.  Stores
  * disassembly in str_buff and returns the size of the instruction in bytes.
  */

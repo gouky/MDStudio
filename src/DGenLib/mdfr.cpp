@@ -56,6 +56,11 @@ unsigned int *md::md_profiler_get_instr_run_counts(int* instr_count)
 	*instr_count = md_profiler_instr_count;
 	return md_profiler_instr_run_counts;
 }
+
+unsigned int md::md_profiler_get_instr_num_cycles(unsigned int address)
+{
+	return m68k_get_instruction_cycle_count(m68k_read_immediate_16(address));
+}
 #endif
 
 #ifdef WITH_MUSA

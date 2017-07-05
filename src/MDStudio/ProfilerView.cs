@@ -20,6 +20,8 @@ namespace MDStudio
         {
             Address,
             HitCount,
+            CyclesPerInstr,
+            TotalCycles,
             Filename,
             Line
         };
@@ -30,11 +32,13 @@ namespace MDStudio
             InitializeComponent();
         }
 
-        public void SetResults(List<Tuple<uint,uint,string,int>> results)
+        public void SetResults(List<MainForm.ProfilerEntry> results)
         {
             dataGrid.DataSource = results;
             dataGrid.Columns[(int)Columns.Address].HeaderText = "Address";
             dataGrid.Columns[(int)Columns.HitCount].HeaderText = "Hit Count";
+            dataGrid.Columns[(int)Columns.CyclesPerInstr].HeaderText = "Cycles Per Hit";
+            dataGrid.Columns[(int)Columns.TotalCycles].HeaderText = "Total Cycles";
             dataGrid.Columns[(int)Columns.Filename].HeaderText = "Filename";
             dataGrid.Columns[(int)Columns.Line].HeaderText = "Line";
         }

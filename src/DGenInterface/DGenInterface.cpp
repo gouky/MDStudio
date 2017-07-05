@@ -88,6 +88,11 @@ unsigned int* DGenInterface::DGen::GetProfilerResults(int* instructionCount)
 	return ::GetProfilerResults(instructionCount);
 }
 
+unsigned int DGenInterface::DGen::GetInstructionCycleCount(unsigned int address)
+{
+	return ::GetInstructionCycleCount(address);
+}
+
 int DGenInterface::DGen::GetDReg(int index)
 {
 	return ::GetDReg(index);

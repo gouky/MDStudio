@@ -879,6 +879,10 @@ void m68k_end_timeslice(void)
 	SET_CYCLES(0);
 }
 
+unsigned int m68k_get_instruction_cycle_count(unsigned int instruction)
+{
+	return CYC_INSTRUCTION[instruction];
+}
 
 /* ASG: rewrote so that the int_level is a mask of the IPL0/IPL1/IPL2 bits */
 /* KS: Modified so that IPL* bits match with mask positions in the SR
