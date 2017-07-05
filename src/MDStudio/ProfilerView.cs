@@ -52,8 +52,8 @@ namespace MDStudio
         {
             if(dataGrid.SelectedCells.Count > 0)
             {
-                string filename = dataGrid.Rows[dataGrid.SelectedCells[0].RowIndex].Cells[(int)Columns.Filename].Value as string;
-                int line = Convert.ToInt32(dataGrid.Rows[dataGrid.SelectedCells[0].RowIndex].Cells[(int)Columns.Line].Value as string);
+                string filename = (string)dataGrid.Rows[dataGrid.SelectedCells[0].RowIndex].Cells[(int)Columns.Filename].Value;
+                int line = (int)dataGrid.Rows[dataGrid.SelectedCells[0].RowIndex].Cells[(int)Columns.Line].Value;
                 m_mainForm.GoTo(filename, line);
             }
         }
