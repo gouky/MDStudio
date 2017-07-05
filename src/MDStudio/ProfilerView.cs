@@ -41,6 +41,8 @@ namespace MDStudio
             dataGrid.Columns[(int)Columns.TotalCycles].HeaderText = "Total Cycles";
             dataGrid.Columns[(int)Columns.Filename].HeaderText = "Filename";
             dataGrid.Columns[(int)Columns.Line].HeaderText = "Line";
+
+            dataGrid.Columns[(int)Columns.Address].DefaultCellStyle.Format = "X08";
         }
 
         private void dataGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
