@@ -74,12 +74,13 @@ namespace MDStudio
         private BreakMode m_BreakMode = BreakMode.kBreakpoint;
         private int m_StepOverAddress;
 
-        public struct ProfilerEntry
+        public class ProfilerEntry
         {
             public uint address { get; set; }
             public uint hitCount { get; set; }
             public uint cyclesPerHit { get; set; }
             public uint totalCycles { get; set; }
+            public float percentCost { get; set; }
             public string filename { get; set; }
             public int line { get; set; }
         };
@@ -649,11 +650,15 @@ namespace MDStudio
         {
             if(m_State != State.kStopped)
             {
+                uint totalCycles = 0;
+
                 unsafe
                 {
                     int numInstructions = 0;
                     uint* profileResults = DGenThread.GetDGen().GetProfilerResults(&numInstructions);
+
                     m_ProfileResults = new List<ProfilerEntry>();
+
                     for (int i = 0; i < numInstructions; i++)
                     {
                         if (profileResults[i] > 0)
@@ -669,12 +674,20 @@ namespace MDStudio
                             entry.line = line.Item2;
 
                             m_ProfileResults.Add(entry);
+
+                            totalCycles += entry.totalCycles;
                         }
                     }
                 }
 
                 if (m_ProfileResults.Count > 0)
                 {
+                    //Calcuate percentage cost
+                    foreach (var entry in m_ProfileResults)
+                    {
+                        entry.percentCost = ((float)entry.totalCycles / (float)totalCycles);
+                    }
+
                     //Sort by hit count
                     m_ProfileResults.Sort((a, b) => (int)(b.totalCycles - a.totalCycles));
 

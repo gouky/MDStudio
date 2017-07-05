@@ -22,6 +22,7 @@ namespace MDStudio
             HitCount,
             CyclesPerInstr,
             TotalCycles,
+            PercentageCost,
             Filename,
             Line
         };
@@ -39,10 +40,12 @@ namespace MDStudio
             dataGrid.Columns[(int)Columns.HitCount].HeaderText = "Hit Count";
             dataGrid.Columns[(int)Columns.CyclesPerInstr].HeaderText = "Cycles Per Hit";
             dataGrid.Columns[(int)Columns.TotalCycles].HeaderText = "Total Cycles";
+            dataGrid.Columns[(int)Columns.PercentageCost].HeaderText = "Cost %";
             dataGrid.Columns[(int)Columns.Filename].HeaderText = "Filename";
             dataGrid.Columns[(int)Columns.Line].HeaderText = "Line";
 
             dataGrid.Columns[(int)Columns.Address].DefaultCellStyle.Format = "X08";
+            dataGrid.Columns[(int)Columns.PercentageCost].DefaultCellStyle.Format = "P4";
         }
 
         private void dataGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
