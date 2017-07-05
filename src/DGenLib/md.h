@@ -329,6 +329,14 @@ public:
 		}
 	}
 
+#ifdef WITH_PROFILER
+	void md_profiler_init(unsigned char* rom, int length);
+	void md_profiler_end();
+	static int md_profiler_instr_hook_callback(void);
+	unsigned int *md_profiler_get_instr_run_counts(int* instr_count);
+	static unsigned int *md_profiler_instr_run_counts;
+	static int md_profiler_instr_count;
+#endif
 #ifdef WITH_MUSA
 	static class md* md_musa;
 	unsigned int md_musa_ref;

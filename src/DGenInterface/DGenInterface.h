@@ -47,6 +47,7 @@ namespace DGenInterface {
 		int		Resume();
 		int		Break();
 		bool	IsDebugging();
+		unsigned int* GetProfilerResults(int* instructionCount);
 
 		void	Show();
 		void	Hide();

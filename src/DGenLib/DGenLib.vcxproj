@@ -46,7 +46,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WITH_MUSA;WITH_DZ80;WITH_DEBUGGER;_CRT_SECURE_NO_WARNINGS;NO_COMPLETION;_DZ80_EXCLUDE_SCRIPT;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WITH_MUSA;WITH_DZ80;WITH_DEBUGGER;WITH_PROFILER;_CRT_SECURE_NO_WARNINGS;NO_COMPLETION;_DZ80_EXCLUDE_SCRIPT;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SDL2_PATH)\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -68,7 +68,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WITH_MUSA;WITH_DZ80;WITH_DEBUGGER;_CRT_SECURE_NO_WARNINGS;NO_COMPLETION;_DZ80_EXCLUDE_SCRIPT;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WITH_MUSA;WITH_DZ80;WITH_DEBUGGER;WITH_PROFILER;_CRT_SECURE_NO_WARNINGS;NO_COMPLETION;_DZ80_EXCLUDE_SCRIPT;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SDL2_PATH)\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>

@@ -390,6 +390,11 @@ int IsDebugging()
 	return s_DGenInstance->debug_trap;
 }
 
+unsigned int* GetProfilerResults(int* instructionCount)
+{
+	return s_DGenInstance->md_profiler_get_instr_run_counts(instructionCount);
+}
+
 int GetDReg(int index)
 {
 	return s_DGenInstance->debug_m68k_get_reg((m68k_register_t)((int)M68K_REG_D0 + index));

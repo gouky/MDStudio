@@ -53,6 +53,7 @@ namespace MDStudio
         private BuildLog m_BuildLog;
         private CRamViewer m_CRAMViewer;
         private VDPStatusWindow m_VDPStatus;
+        private ProfilerView m_ProfilerView;
 
         private Config m_Config;
 
@@ -72,6 +73,9 @@ namespace MDStudio
 
         private BreakMode m_BreakMode = BreakMode.kBreakpoint;
         private int m_StepOverAddress;
+
+        //<Address, Hit Count>
+        private List<Tuple<uint,uint,string,int>> m_ProfileResults;
 
         public static readonly ReadOnlyCollection<Tuple<int, int>> kValidResolutions = new ReadOnlyCollection<Tuple<int, int>>(new[]
         {
@@ -631,18 +635,52 @@ namespace MDStudio
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_DGenThread.Stop();
-            m_DGenThread.Destroy();
+            if(m_State != State.kStopped)
+            {
+                unsafe
+                {
+                    int numInstructions = 0;
+                    uint* profileResults = DGenThread.GetDGen().GetProfilerResults(&numInstructions);
+                    m_ProfileResults = new List<Tuple<uint, uint, string, int>>();
+                    for (int i = 0; i < numInstructions; i++)
+                    {
+                        if (profileResults[i] > 0)
+                        {
+                            uint address = (uint)i * sizeof(short);
+                            Tuple<string, int> line = m_DebugSymbols.GetFileLine(address);
+                            m_ProfileResults.Add(new Tuple<uint, uint, string, int>(address, profileResults[i], line.Item1, line.Item2));
+                        }
+                    }
+                }
 
-            m_RegisterView.Hide();
+                if (m_ProfileResults.Count > 0)
+                {
+                    //Sort by hit count
+                    m_ProfileResults.Sort((a, b) => (int)(b.Item2 - a.Item2));
 
-            codeEditor.Document.MarkerStrategy.Clear();
-            codeEditor.Refresh();
-            
-            statusLabel.Text = "Stopped";
+                    //Show profiler results
+                    if (m_ProfilerView == null)
+                    {
+                        m_ProfilerView = new ProfilerView(this);
+                    }
 
-            m_State = State.kStopped;
-            codeEditor.Document.ReadOnly = false;
+                    m_ProfilerView.SetResults(m_ProfileResults);
+                    m_ProfilerView.Show();
+                }
+
+                m_DGenThread.Stop();
+                m_DGenThread.Destroy();
+
+                m_RegisterView.Hide();
+
+                codeEditor.Document.MarkerStrategy.Clear();
+                codeEditor.Refresh();
+
+                statusLabel.Text = "Stopped";
+
+                m_State = State.kStopped;
+                codeEditor.Document.ReadOnly = false;
+            }
         }
 
         private void breakMenu_Click(object sender, EventArgs e)

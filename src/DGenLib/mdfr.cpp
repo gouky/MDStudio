@@ -21,6 +21,43 @@
 
 // Set and unset contexts (Musashi, StarScream, MZ80)
 
+#ifdef WITH_PROFILER
+unsigned int *md::md_profiler_instr_run_counts = NULL;
+int md::md_profiler_instr_count = 0;
+
+void md::md_profiler_init(unsigned char* rom, int length)
+{
+	md_profiler_instr_count = length / sizeof(short);
+	md_profiler_instr_run_counts = (unsigned int*)malloc(md_profiler_instr_count * sizeof(int));
+	memset(md_profiler_instr_run_counts, 0, md_profiler_instr_count * sizeof(int));
+#ifdef WITH_MUSA
+	bool musa_set = md_set_musa(true);
+#endif
+	m68k_set_instr_hook_callback(md::md_profiler_instr_hook_callback);
+#ifdef WITH_MUSA
+	md_set_musa(musa_set);
+#endif
+}
+
+void md::md_profiler_end()
+{
+	if(md_profiler_instr_run_counts)
+		free(md_profiler_instr_run_counts);
+}
+
+int md::md_profiler_instr_hook_callback(void)
+{
+	md_profiler_instr_run_counts[m68k_get_reg(NULL, M68K_REG_PC) / sizeof(short)]++;
+	return 0;
+}
+
+unsigned int *md::md_profiler_get_instr_run_counts(int* instr_count)
+{
+	*instr_count = md_profiler_instr_count;
+	return md_profiler_instr_run_counts;
+}
+#endif
+
 #ifdef WITH_MUSA
 class md* md::md_musa(0);
 

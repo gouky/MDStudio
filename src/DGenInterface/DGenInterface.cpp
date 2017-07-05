@@ -83,6 +83,11 @@ bool DGenInterface::DGen::IsDebugging()
 	return ::IsDebugging() == 1 ? true : false;
 }
 
+unsigned int* DGenInterface::DGen::GetProfilerResults(int* instructionCount)
+{
+	return ::GetProfilerResults(instructionCount);
+}
+
 int DGenInterface::DGen::GetDReg(int index)
 {
 	return ::GetDReg(index);

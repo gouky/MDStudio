@@ -893,6 +893,9 @@ int md::plug_in(unsigned char *cart,int len)
 	md_set_star(0);
 #endif
   reset(); // Reset megadrive
+#ifdef WITH_PROFILER
+  md_profiler_init(rom, len);
+#endif
   return 0;
 }
 
