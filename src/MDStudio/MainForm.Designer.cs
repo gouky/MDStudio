@@ -45,6 +45,7 @@
             this.searchSymbolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.searchReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchNextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchPreviousToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,7 +79,8 @@
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.treeProjectFiles = new System.Windows.Forms.TreeView();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.searchReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -97,7 +99,8 @@
             this.buildToolStripMenuItem,
             this.debugToolStripMenuItem,
             this.toolsToolStripMenuItem1,
-            this.optionsToolStripMenuItem});
+            this.optionsToolStripMenuItem,
+            this.toolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(860, 24);
@@ -220,6 +223,14 @@
             this.searchToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.searchToolStripMenuItem.Text = "Search";
             this.searchToolStripMenuItem.Click += new System.EventHandler(this.searchToolStripMenuItem_Click);
+            // 
+            // searchReplaceToolStripMenuItem
+            // 
+            this.searchReplaceToolStripMenuItem.Name = "searchReplaceToolStripMenuItem";
+            this.searchReplaceToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
+            this.searchReplaceToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.searchReplaceToolStripMenuItem.Text = "Search && Replace";
+            this.searchReplaceToolStripMenuItem.Click += new System.EventHandler(this.searchReplaceToolStripMenuItem_Click);
             // 
             // searchNextToolStripMenuItem
             // 
@@ -501,13 +512,20 @@
             this.splitContainer.SplitterDistance = 155;
             this.splitContainer.TabIndex = 8;
             // 
-            // searchReplaceToolStripMenuItem
+            // toolStripMenuItem1
             // 
-            this.searchReplaceToolStripMenuItem.Name = "searchReplaceToolStripMenuItem";
-            this.searchReplaceToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
-            this.searchReplaceToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
-            this.searchReplaceToolStripMenuItem.Text = "Search && Replace";
-            this.searchReplaceToolStripMenuItem.Click += new System.EventHandler(this.searchReplaceToolStripMenuItem_Click);
+            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem});
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(24, 20);
+            this.toolStripMenuItem1.Text = "&?";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Text = "&About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -594,6 +612,8 @@
         private System.Windows.Forms.ToolStripMenuItem profilerEnabledMenuOptions;
         private System.Windows.Forms.ToolStripMenuItem profilerVDPStatusMenu;
         private System.Windows.Forms.ToolStripMenuItem searchReplaceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
     }
 }
 

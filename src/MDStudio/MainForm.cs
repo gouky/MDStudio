@@ -1266,5 +1266,12 @@ namespace MDStudio
                 }
             }
         }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutForm about = new AboutForm();
+
+            about.ShowDialog();
+        }
     }
 }
