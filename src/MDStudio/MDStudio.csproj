@@ -76,6 +76,12 @@
       <DependentUpon>CRamViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="DGenThread.cs" />
+    <Compile Include="GoToForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GoToForm.Designer.cs">
+      <DependentUpon>GoToForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,6 +158,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CRamViewer.resx">
       <DependentUpon>CRamViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GoToForm.resx">
+      <DependentUpon>GoToForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

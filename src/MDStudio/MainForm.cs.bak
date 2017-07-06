@@ -65,7 +65,6 @@ namespace MDStudio
 
         private List<Marker> m_SearchMarkers;
         private List<TextLocation> m_SearchResults;
-        private string m_ReplaceString;
         private int m_SearchIndex;
         
         private State m_State = State.kStopped;
@@ -75,19 +74,8 @@ namespace MDStudio
         private BreakMode m_BreakMode = BreakMode.kBreakpoint;
         private int m_StepOverAddress;
 
-        public class ProfilerEntry
-        {
-            public uint address { get; set; }
-            public uint hitCount { get; set; }
-            public uint cyclesPerHit { get; set; }
-            public uint totalCycles { get; set; }
-            public float percentCost { get; set; }
-            public string filename { get; set; }
-            public int line { get; set; }
-        };
-
-        private List<ProfilerEntry> m_ProfileResults;
-        private bool m_Profile;
+        //<Address, Hit Count>
+        private List<Tuple<uint,uint,string,int>> m_ProfileResults;
 
         public static readonly ReadOnlyCollection<Tuple<int, int>> kValidResolutions = new ReadOnlyCollection<Tuple<int, int>>(new[]
         {
@@ -151,11 +139,7 @@ namespace MDStudio
             //
             m_BuildLog = new BuildLog(this);
             m_BuildLog.Hide();
-
-            //Show profiler results
-            m_ProfilerView = new ProfilerView(this);
-            m_ProfilerView.Hide();
-
+            
             //
             m_RegisterView = new RegisterView();
             m_RegisterView.Hide();
@@ -189,28 +173,10 @@ namespace MDStudio
                 //Open last project
                 OpenProject(m_Config.LastProject);
             }
-
-            StopDebugging(); 
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-        }
-
-        private void StartDebugging()
-        {
-            stepIntoMenu.Enabled = true;
-            stepOverMenu.Enabled = true;
-            stopToolStripMenuItem.Enabled = true;
-            breakMenu.Enabled = true;
-        }
-
-        private void StopDebugging()
-        {
-            stepIntoMenu.Enabled = false;
-            stepOverMenu.Enabled = false;
-            stopToolStripMenuItem.Enabled = false;
-            breakMenu.Enabled = false;
         }
 
         private void UpdateCRAM()
@@ -518,8 +484,6 @@ namespace MDStudio
                 DGenThread.GetDGen().Resume();
 
                 statusLabel.Text = "Running...";
-                //TODO: Bring emu window to front
-
                 m_State = State.kRunning;
             }
             else if(m_State == State.kStopped)
@@ -578,11 +542,6 @@ namespace MDStudio
 
                     //  Hide the build window
                     m_BuildLog.Hide();
-
-                    //  profiling?
-                    m_Profile = profilerEnabledMenuOptions.Checked;
-
-                    StartDebugging();
                 }
             }
         }
@@ -679,52 +638,35 @@ namespace MDStudio
         {
             if(m_State != State.kStopped)
             {
-                if (m_Profile)
+                unsafe
                 {
-                    uint totalCycles = 0;
-
-                    unsafe
+                    int numInstructions = 0;
+                    uint* profileResults = DGenThread.GetDGen().GetProfilerResults(&numInstructions);
+                    m_ProfileResults = new List<Tuple<uint, uint, string, int>>();
+                    for (int i = 0; i < numInstructions; i++)
                     {
-                        int numInstructions = 0;
-                        uint* profileResults = DGenThread.GetDGen().GetProfilerResults(&numInstructions);
-
-                        m_ProfileResults = new List<ProfilerEntry>();
-
-                        for (int i = 0; i < numInstructions; i++)
+                        if (profileResults[i] > 0)
                         {
-                            if (profileResults[i] > 0)
-                            {
-                                ProfilerEntry entry = new ProfilerEntry();
-
-                                entry.address = (uint)i * sizeof(short);
-                                entry.hitCount = profileResults[i];
-                                Tuple<string, int> line = m_DebugSymbols.GetFileLine(entry.address);
-                                entry.cyclesPerHit = DGenThread.GetDGen().GetInstructionCycleCount(entry.address);
-                                entry.totalCycles = entry.cyclesPerHit * entry.hitCount;
-                                entry.filename = line.Item1;
-                                entry.line = line.Item2;
-
-                                m_ProfileResults.Add(entry);
-
-                                totalCycles += entry.totalCycles;
-                            }
+                            uint address = (uint)i * sizeof(short);
+                            Tuple<string, int> line = m_DebugSymbols.GetFileLine(address);
+                            m_ProfileResults.Add(new Tuple<uint, uint, string, int>(address, profileResults[i], line.Item1, line.Item2));
                         }
                     }
+                }
 
-                    if (m_ProfileResults.Count > 0)
+                if (m_ProfileResults.Count > 0)
+                {
+                    //Sort by hit count
+                    m_ProfileResults.Sort((a, b) => (int)(b.Item2 - a.Item2));
+
+                    //Show profiler results
+                    if (m_ProfilerView == null)
                     {
-                        //Calcuate percentage cost
-                        foreach (var entry in m_ProfileResults)
-                        {
-                            entry.percentCost = ((float)entry.totalCycles / (float)totalCycles);
-                        }
-
-                        //Sort by hit count
-                        m_ProfileResults.Sort((a, b) => (int)(b.totalCycles - a.totalCycles));
-
-                        m_ProfilerView.SetResults(m_ProfileResults);
-                        m_ProfilerView.Show();
+                        m_ProfilerView = new ProfilerView(this);
                     }
+
+                    m_ProfilerView.SetResults(m_ProfileResults);
+                    m_ProfilerView.Show();
                 }
 
                 m_DGenThread.Stop();
@@ -739,8 +681,6 @@ namespace MDStudio
 
                 m_State = State.kStopped;
                 codeEditor.Document.ReadOnly = false;
-
-                StopDebugging();
             }
         }
 
@@ -777,7 +717,6 @@ namespace MDStudio
 
             Settings.Default.CRAMWindowVisible = m_CRAMViewer.Visible;
             Settings.Default.VDPStatusWindowVisible = m_VDPStatus.Visible;
-            Settings.Default.ProfilerEnabled = profilerEnabledMenuOptions.Checked;
 
             Settings.Default.Save();
         }
@@ -820,7 +759,7 @@ namespace MDStudio
             int lineNumber = currentLine.Item2 - 1;
 
             //Load file
-            if (m_CurrentSourcePath.ToLower() != filename.ToLower())
+            if (m_CurrentSourcePath.ToLower() != filename)
             {
                 string source = System.IO.File.ReadAllText(filename);
                 codeEditor.Document.TextContent = source;
@@ -857,12 +796,7 @@ namespace MDStudio
         public void UpdateViewVDPStatus(bool flag)
         {
             viewVDPStatusMenu.Checked = flag;
-        }
-
-        public void UpdateViewProfiler(bool flag)
-        {
-            viewVDPStatusMenu.Checked = flag;
-        }
+        }        
 
         private void viewBuildLogMenu_Click(object sender, EventArgs e)
         {
@@ -1134,8 +1068,6 @@ namespace MDStudio
                 if (this.WindowState == FormWindowState.Minimized)
                     this.WindowState = FormWindowState.Normal;
             }
-
-            profilerEnabledMenuOptions.Checked = Settings.Default.ProfilerEnabled;
         }
 
         private void MainForm_Activated(object sender, EventArgs e)
@@ -1254,70 +1186,6 @@ namespace MDStudio
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-        }
-
-        private void profileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void profilerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if(viewVDPStatusMenu.Checked)
-                m_ProfilerView.Show();
-            else
-                m_ProfilerView.Hide();
-        }
-
-        private void searchReplaceToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SearchForm search = new SearchForm(true);
-
-            if (search.ShowDialog() == DialogResult.OK)
-            {
-                ClearSearch();
-
-                m_ReplaceString = search.replaceString.Text;
-
-                if (search.searchString.Text.Length > 0)
-                {
-                    Regex rx = new Regex(search.checkMatchCase.Checked ? search.searchString.Text : "(?i)" + search.searchString.Text);
-
-                    //  should do one by one ideally
-                    codeEditor.Document.TextContent = rx.Replace(codeEditor.Document.TextContent, m_ReplaceString);
-                }
-            }
-        }
-
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AboutForm about = new AboutForm();
-
-            about.ShowDialog();
-        }
-
-        public void OnKeyDown(int vkCode)
-        {
-        }
-
-        public void OnKeyUp(int vkCode)
-        {
-
-        }
-
-        private void goToToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            GoToForm gotoForm = new GoToForm();
-
-            if(gotoForm.ShowDialog() == DialogResult.OK)
-            {
-                int lineNumber;
-
-                if(int.TryParse(gotoForm.textLineNumber.Text, out lineNumber))
-                {
-                    codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber;
-                }
-            }
         }
     }
 }
