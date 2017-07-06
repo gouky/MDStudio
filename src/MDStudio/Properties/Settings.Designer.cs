@@ -154,5 +154,41 @@ namespace MDStudio.Properties {
                 this["VDPStatusWindowPosition"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ProfilerEnabled {
+            get {
+                return ((bool)(this["ProfilerEnabled"]));
+            }
+            set {
+                this["ProfilerEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point ProfilerWindowPosition {
+            get {
+                return ((global::System.Drawing.Point)(this["ProfilerWindowPosition"]));
+            }
+            set {
+                this["ProfilerWindowPosition"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("910, 411")]
+        public global::System.Drawing.Size ProfilerWindowSize {
+            get {
+                return ((global::System.Drawing.Size)(this["ProfilerWindowSize"]));
+            }
+            set {
+                this["ProfilerWindowSize"] = value;
+            }
+        }
     }
 }

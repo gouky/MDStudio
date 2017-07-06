@@ -86,6 +86,7 @@ namespace MDStudio
         };
 
         private List<ProfilerEntry> m_ProfileResults;
+        private bool m_Profile;
 
         public static readonly ReadOnlyCollection<Tuple<int, int>> kValidResolutions = new ReadOnlyCollection<Tuple<int, int>>(new[]
         {
@@ -149,7 +150,11 @@ namespace MDStudio
             //
             m_BuildLog = new BuildLog(this);
             m_BuildLog.Hide();
-            
+
+            //Show profiler results
+            m_ProfilerView = new ProfilerView(this);
+            m_ProfilerView.Hide();
+
             //
             m_RegisterView = new RegisterView();
             m_RegisterView.Hide();
@@ -554,6 +559,9 @@ namespace MDStudio
 
                     //  Hide the build window
                     m_BuildLog.Hide();
+
+                    //  profiling?
+                    m_Profile = profilerEnabledMenuOptions.Checked;
                 }
             }
         }
@@ -650,55 +658,52 @@ namespace MDStudio
         {
             if(m_State != State.kStopped)
             {
-                uint totalCycles = 0;
-
-                unsafe
+                if (m_Profile)
                 {
-                    int numInstructions = 0;
-                    uint* profileResults = DGenThread.GetDGen().GetProfilerResults(&numInstructions);
+                    uint totalCycles = 0;
 
-                    m_ProfileResults = new List<ProfilerEntry>();
-
-                    for (int i = 0; i < numInstructions; i++)
+                    unsafe
                     {
-                        if (profileResults[i] > 0)
+                        int numInstructions = 0;
+                        uint* profileResults = DGenThread.GetDGen().GetProfilerResults(&numInstructions);
+
+                        m_ProfileResults = new List<ProfilerEntry>();
+
+                        for (int i = 0; i < numInstructions; i++)
                         {
-                            ProfilerEntry entry = new ProfilerEntry();
+                            if (profileResults[i] > 0)
+                            {
+                                ProfilerEntry entry = new ProfilerEntry();
 
-                            entry.address = (uint)i * sizeof(short);
-                            entry.hitCount = profileResults[i];
-                            Tuple<string, int> line = m_DebugSymbols.GetFileLine(entry.address);
-                            entry.cyclesPerHit = DGenThread.GetDGen().GetInstructionCycleCount(entry.address);
-                            entry.totalCycles = entry.cyclesPerHit * entry.hitCount;
-                            entry.filename = line.Item1;
-                            entry.line = line.Item2;
+                                entry.address = (uint)i * sizeof(short);
+                                entry.hitCount = profileResults[i];
+                                Tuple<string, int> line = m_DebugSymbols.GetFileLine(entry.address);
+                                entry.cyclesPerHit = DGenThread.GetDGen().GetInstructionCycleCount(entry.address);
+                                entry.totalCycles = entry.cyclesPerHit * entry.hitCount;
+                                entry.filename = line.Item1;
+                                entry.line = line.Item2;
 
-                            m_ProfileResults.Add(entry);
+                                m_ProfileResults.Add(entry);
 
-                            totalCycles += entry.totalCycles;
+                                totalCycles += entry.totalCycles;
+                            }
                         }
                     }
-                }
 
-                if (m_ProfileResults.Count > 0)
-                {
-                    //Calcuate percentage cost
-                    foreach (var entry in m_ProfileResults)
+                    if (m_ProfileResults.Count > 0)
                     {
-                        entry.percentCost = ((float)entry.totalCycles / (float)totalCycles);
+                        //Calcuate percentage cost
+                        foreach (var entry in m_ProfileResults)
+                        {
+                            entry.percentCost = ((float)entry.totalCycles / (float)totalCycles);
+                        }
+
+                        //Sort by hit count
+                        m_ProfileResults.Sort((a, b) => (int)(b.totalCycles - a.totalCycles));
+
+                        m_ProfilerView.SetResults(m_ProfileResults);
+                        m_ProfilerView.Show();
                     }
-
-                    //Sort by hit count
-                    m_ProfileResults.Sort((a, b) => (int)(b.totalCycles - a.totalCycles));
-
-                    //Show profiler results
-                    if (m_ProfilerView == null)
-                    {
-                        m_ProfilerView = new ProfilerView(this);
-                    }
-
-                    m_ProfilerView.SetResults(m_ProfileResults);
-                    m_ProfilerView.Show();
                 }
 
                 m_DGenThread.Stop();
@@ -749,6 +754,7 @@ namespace MDStudio
 
             Settings.Default.CRAMWindowVisible = m_CRAMViewer.Visible;
             Settings.Default.VDPStatusWindowVisible = m_VDPStatus.Visible;
+            Settings.Default.ProfilerEnabled = profilerEnabledMenuOptions.Checked;
 
             Settings.Default.Save();
         }
@@ -828,7 +834,12 @@ namespace MDStudio
         public void UpdateViewVDPStatus(bool flag)
         {
             viewVDPStatusMenu.Checked = flag;
-        }        
+        }
+
+        public void UpdateViewProfiler(bool flag)
+        {
+            viewVDPStatusMenu.Checked = flag;
+        }
 
         private void viewBuildLogMenu_Click(object sender, EventArgs e)
         {
@@ -1100,6 +1111,8 @@ namespace MDStudio
                 if (this.WindowState == FormWindowState.Minimized)
                     this.WindowState = FormWindowState.Normal;
             }
+
+            profilerEnabledMenuOptions.Checked = Settings.Default.ProfilerEnabled;
         }
 
         private void MainForm_Activated(object sender, EventArgs e)
@@ -1218,6 +1231,19 @@ namespace MDStudio
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
+        }
+
+        private void profileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void profilerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(viewVDPStatusMenu.Checked)
+                m_ProfilerView.Show();
+            else
+                m_ProfilerView.Hide();
         }
     }
 }

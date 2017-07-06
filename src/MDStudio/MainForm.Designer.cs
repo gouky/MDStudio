@@ -51,6 +51,7 @@
             this.viewBuildLogMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.viewCRAMmenu = new System.Windows.Forms.ToolStripMenuItem();
             this.viewVDPStatusMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.profilerVDPStatusMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.buildToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.compileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.runMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,7 +59,6 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toggleBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.buildSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepIntoMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.stepOverMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,6 +69,7 @@
             this.vdpToolsRegistersMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.profilerEnabledMenuOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.codeEditor = new DigitalRune.Windows.TextEditor.TextEditorControl();
@@ -239,7 +240,8 @@
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.viewBuildLogMenu,
             this.viewCRAMmenu,
-            this.viewVDPStatusMenu});
+            this.viewVDPStatusMenu,
+            this.profilerVDPStatusMenu});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.toolsToolStripMenuItem.Text = "&View";
@@ -248,23 +250,30 @@
             // viewBuildLogMenu
             // 
             this.viewBuildLogMenu.Name = "viewBuildLogMenu";
-            this.viewBuildLogMenu.Size = new System.Drawing.Size(146, 22);
+            this.viewBuildLogMenu.Size = new System.Drawing.Size(152, 22);
             this.viewBuildLogMenu.Text = "Build Log";
             this.viewBuildLogMenu.Click += new System.EventHandler(this.viewBuildLogMenu_Click);
             // 
             // viewCRAMmenu
             // 
             this.viewCRAMmenu.Name = "viewCRAMmenu";
-            this.viewCRAMmenu.Size = new System.Drawing.Size(146, 22);
+            this.viewCRAMmenu.Size = new System.Drawing.Size(152, 22);
             this.viewCRAMmenu.Text = "CRAM Viewer";
             this.viewCRAMmenu.Click += new System.EventHandler(this.viewCRAMBtn_Click);
             // 
             // viewVDPStatusMenu
             // 
             this.viewVDPStatusMenu.Name = "viewVDPStatusMenu";
-            this.viewVDPStatusMenu.Size = new System.Drawing.Size(146, 22);
+            this.viewVDPStatusMenu.Size = new System.Drawing.Size(152, 22);
             this.viewVDPStatusMenu.Text = "VDP Status";
             this.viewVDPStatusMenu.Click += new System.EventHandler(this.viewVDPStatusMenu_Click);
+            // 
+            // profilerVDPStatusMenu
+            // 
+            this.profilerVDPStatusMenu.Name = "profilerVDPStatusMenu";
+            this.profilerVDPStatusMenu.Size = new System.Drawing.Size(152, 22);
+            this.profilerVDPStatusMenu.Text = "&Profiler";
+            this.profilerVDPStatusMenu.Click += new System.EventHandler(this.profilerToolStripMenuItem_Click);
             // 
             // buildToolStripMenuItem
             // 
@@ -274,8 +283,7 @@
             this.runMegaUSB,
             this.toolStripSeparator1,
             this.toggleBreakpoint,
-            this.toolStripSeparator4,
-            this.buildSettingsToolStripMenuItem});
+            this.toolStripSeparator4});
             this.buildToolStripMenuItem.Name = "buildToolStripMenuItem";
             this.buildToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.buildToolStripMenuItem.Text = "&Build";
@@ -321,11 +329,6 @@
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(215, 6);
-            // 
-            // buildSettingsToolStripMenuItem
-            // 
-            this.buildSettingsToolStripMenuItem.Name = "buildSettingsToolStripMenuItem";
-            this.buildSettingsToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
             // 
             // debugToolStripMenuItem
             // 
@@ -396,7 +399,8 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.configMenu});
+            this.configMenu,
+            this.profilerEnabledMenuOptions});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "&Options";
@@ -404,9 +408,18 @@
             // configMenu
             // 
             this.configMenu.Name = "configMenu";
-            this.configMenu.Size = new System.Drawing.Size(110, 22);
+            this.configMenu.Size = new System.Drawing.Size(198, 22);
             this.configMenu.Text = "&Config";
             this.configMenu.Click += new System.EventHandler(this.configMenu_Click);
+            // 
+            // profilerEnabledMenuOptions
+            // 
+            this.profilerEnabledMenuOptions.CheckOnClick = true;
+            this.profilerEnabledMenuOptions.Name = "profilerEnabledMenuOptions";
+            this.profilerEnabledMenuOptions.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.profilerEnabledMenuOptions.Size = new System.Drawing.Size(198, 22);
+            this.profilerEnabledMenuOptions.Text = "&Profiler Enabled";
+            this.profilerEnabledMenuOptions.Click += new System.EventHandler(this.profileToolStripMenuItem_Click);
             // 
             // toolStrip1
             // 
@@ -558,7 +571,6 @@
         private System.Windows.Forms.TreeView treeProjectFiles;
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripMenuItem buildSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem searchFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem searchSymbolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runMegaUSB;
@@ -569,6 +581,8 @@
         private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem searchNextToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem searchPreviousToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem profilerEnabledMenuOptions;
+        private System.Windows.Forms.ToolStripMenuItem profilerVDPStatusMenu;
     }
 }
 

@@ -181,6 +181,9 @@
     <EmbeddedResource Include="VDPStatusWindow.resx">
       <DependentUpon>VDPStatusWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="WatchView.resx">
+      <DependentUpon>WatchView.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -40,7 +40,7 @@
             this.dataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGrid.Location = new System.Drawing.Point(12, 12);
             this.dataGrid.Name = "dataGrid";
-            this.dataGrid.Size = new System.Drawing.Size(302, 441);
+            this.dataGrid.Size = new System.Drawing.Size(870, 353);
             this.dataGrid.TabIndex = 0;
             this.dataGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid_CellDoubleClick);
             // 
@@ -48,11 +48,16 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(326, 465);
+            this.ClientSize = new System.Drawing.Size(894, 377);
             this.Controls.Add(this.dataGrid);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "ProfilerView";
             this.Text = "ProfilerView";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProfilerView_FormClosing);
+            this.Load += new System.EventHandler(this.ProfilerView_Load);
+            this.VisibleChanged += new System.EventHandler(this.ProfilerView_VisibleChanged);
+            this.Move += new System.EventHandler(this.ProfilerView_Move);
+            this.Resize += new System.EventHandler(this.ProfilerView_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).EndInit();
             this.ResumeLayout(false);
 
