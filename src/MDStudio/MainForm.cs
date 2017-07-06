@@ -65,6 +65,7 @@ namespace MDStudio
 
         private List<Marker> m_SearchMarkers;
         private List<TextLocation> m_SearchResults;
+        private string m_ReplaceString;
         private int m_SearchIndex;
         
         private State m_State = State.kStopped;
@@ -1244,6 +1245,26 @@ namespace MDStudio
                 m_ProfilerView.Show();
             else
                 m_ProfilerView.Hide();
+        }
+
+        private void searchReplaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SearchForm search = new SearchForm(true);
+
+            if (search.ShowDialog() == DialogResult.OK)
+            {
+                ClearSearch();
+
+                m_ReplaceString = search.replaceString.Text;
+
+                if (search.searchString.Text.Length > 0)
+                {
+                    Regex rx = new Regex(search.checkMatchCase.Checked ? search.searchString.Text : "(?i)" + search.searchString.Text);
+
+                    //  should do one by one ideally
+                    codeEditor.Document.TextContent = rx.Replace(codeEditor.Document.TextContent, m_ReplaceString);
+                }
+            }
         }
     }
 }

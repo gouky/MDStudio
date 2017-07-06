@@ -12,12 +12,25 @@ namespace MDStudio
 {
     public partial class SearchForm : Form
     {
-        public SearchForm()
+        public SearchForm(bool replace = false)
         {
             InitializeComponent();
 
             this.CancelButton = btnCancel;
             this.AcceptButton = btnSearch;
+
+            if(replace)
+            {
+                btnSearch.Text = "Replace";
+                replaceString.Show();
+                label2.Show();
+            }
+            else
+            {
+                btnSearch.Text = "Search";
+                replaceString.Hide();
+                label2.Hide();
+            }
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
