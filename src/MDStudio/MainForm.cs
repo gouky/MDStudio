@@ -189,10 +189,28 @@ namespace MDStudio
                 //Open last project
                 OpenProject(m_Config.LastProject);
             }
+
+            StopDebugging(); 
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+        }
+
+        private void StartDebugging()
+        {
+            stepIntoMenu.Enabled = true;
+            stepOverMenu.Enabled = true;
+            stopToolStripMenuItem.Enabled = true;
+            breakMenu.Enabled = true;
+        }
+
+        private void StopDebugging()
+        {
+            stepIntoMenu.Enabled = false;
+            stepOverMenu.Enabled = false;
+            stopToolStripMenuItem.Enabled = false;
+            breakMenu.Enabled = false;
         }
 
         private void UpdateCRAM()
@@ -563,6 +581,8 @@ namespace MDStudio
 
                     //  profiling?
                     m_Profile = profilerEnabledMenuOptions.Checked;
+
+                    StartDebugging();
                 }
             }
         }
@@ -719,6 +739,8 @@ namespace MDStudio
 
                 m_State = State.kStopped;
                 codeEditor.Document.ReadOnly = false;
+
+                StopDebugging();
             }
         }
 
@@ -798,7 +820,7 @@ namespace MDStudio
             int lineNumber = currentLine.Item2 - 1;
 
             //Load file
-            if (m_CurrentSourcePath.ToLower() != filename)
+            if (m_CurrentSourcePath.ToLower() != filename.ToLower())
             {
                 string source = System.IO.File.ReadAllText(filename);
                 codeEditor.Document.TextContent = source;
