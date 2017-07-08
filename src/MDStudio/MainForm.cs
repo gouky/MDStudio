@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 using DGenInterface;
 using DigitalRune.Windows.TextEditor.Document;
 using DigitalRune.Windows.TextEditor.Bookmarks;
@@ -384,6 +385,17 @@ namespace MDStudio
 
         }
 
+        void p_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            //HANDLE STDERR
+            if (e.Data != null && !e.Data.Equals(""))
+            {
+                if (!e.Data.Contains("Something"))
+                {
+                }
+            }
+        }
+
         private int Build()
         {
             if (m_Config.Asm68kPath == null || m_Config.Asm68kPath.Length == 0)
@@ -404,11 +416,15 @@ namespace MDStudio
 
             Console.WriteLine("compile");
 
-            StringBuilder q = new StringBuilder();
+            StringBuilder processOutput = new StringBuilder();
 
             try
             {
-                System.Diagnostics.Process proc = new System.Diagnostics.Process();
+                // For some reason we don't get the standardoutput for asm68k when running in release
+                // using standarderror seems to work but standardoutput needs to be enabled as well for some reason however it's not working
+                // with the debugger dettached ¯\_(ツ)_/¯
+                Process proc = new Process();
+
                 proc.StartInfo.FileName = m_Config.Asm68kPath;
                 proc.StartInfo.WorkingDirectory = m_PathToProject + @"\";
                 proc.StartInfo.Arguments =  @"/p /c /zd " + m_Config.Asm68kArgs + " " + m_SourceFileName + "," + m_ProjectName + ".bin," + m_ProjectName + ".symb," + m_ProjectName + ".list";
@@ -417,23 +433,21 @@ namespace MDStudio
                 proc.StartInfo.RedirectStandardError = true;
                 proc.StartInfo.CreateNoWindow = true;
                 proc.Start();
+
                 while (!proc.HasExited)
                 {
-                    q.Append(proc.StandardOutput.ReadToEnd());
+                    processOutput.Append(proc.StandardError.ReadToEnd());
                 }
-
-                q.Append(proc.StandardOutput.ReadToEnd());
-
+                processOutput.Append(proc.StandardError.ReadToEnd());
                 proc.WaitForExit();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine("build exception: " + e.Message);
             }
 
             //()\((\d+)\)\s: Error : (.+)
-            string foo = q.ToString();
-            string[] output = q.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            string[] output = processOutput.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
 
             int errorCount = 0;
 
