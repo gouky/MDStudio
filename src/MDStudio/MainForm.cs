@@ -512,7 +512,6 @@ namespace MDStudio
         private void compileMenu_Click(object sender, EventArgs e)
         {
             Save();
-
             Build();
         }
 
@@ -801,12 +800,35 @@ namespace MDStudio
             Save();
         }
 
-        private void Save()
+        private void Save(bool saveAs = false)
         {
+            if(m_CurrentSourcePath==null || saveAs)
+            {
+                SaveFileDialog fileDialog = new SaveFileDialog();
+
+                fileDialog.Filter = "Source (*.asm;*.s;*.i)|*.ASM;*.S;*.I|All files (*.*)|*.*";
+                fileDialog.FilterIndex = 1;
+                fileDialog.RestoreDirectory = true;
+
+                if(fileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    m_CurrentSourcePath = fileDialog.FileName;
+                    m_ProjectFiles.Add(m_CurrentSourcePath);
+                    m_ProjectFiles.Sort();
+                    PopulateFileView();
+                    treeProjectFiles.ExpandAll();
+                }
+                else
+                {
+                    return;
+                }
+            }
             m_SourceWatcher.EnableRaisingEvents = false;
 
-            System.IO.File.WriteAllText(m_CurrentSourcePath, codeEditor.Document.TextContent);
+            codeEditor.SaveFile(m_CurrentSourcePath);
 
+            m_SourceWatcher.Path = Path.GetDirectoryName(m_CurrentSourcePath);
+            m_SourceWatcher.Filter = Path.GetFileName(m_CurrentSourcePath);
             m_SourceWatcher.EnableRaisingEvents = true;
 
             m_Modified = false;
@@ -817,9 +839,7 @@ namespace MDStudio
         {
             if (m_CurrentSourcePath.ToLower() != filename.ToLower())
             {
-                string source = System.IO.File.ReadAllText(filename);
-                codeEditor.Document.TextContent = source;
-                codeEditor.Document.BookmarkManager.Clear();
+                codeEditor.LoadFile(filename);
                 m_CurrentSourcePath = filename;
             }
             codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber-1;
@@ -836,9 +856,7 @@ namespace MDStudio
             //Load file
             if (m_CurrentSourcePath.ToLower() != filename.ToLower())
             {
-                string source = System.IO.File.ReadAllText(filename);
-                codeEditor.Document.TextContent = source;
-                codeEditor.Document.BookmarkManager.Clear();
+                codeEditor.LoadFile(filename);
                 m_CurrentSourcePath = filename;
             }
 
@@ -964,9 +982,8 @@ namespace MDStudio
                 m_PathToProject = Path.GetDirectoryName(filename); // @"D:\Devt\perso_nas\Megadrive\test\";
                 m_CurrentSourcePath = filename;
 
-                string source = System.IO.File.ReadAllText(filename);
-                codeEditor.Document.TextContent = source;
-                codeEditor.Document.BookmarkManager.Clear();
+                codeEditor.LoadFile(filename);
+
                 undoMenu.Enabled = false;
 
                 m_ProjectName = Path.GetFileNameWithoutExtension(filename);
@@ -1005,7 +1022,6 @@ namespace MDStudio
                 if (dialogResult == DialogResult.Yes)
                 {
                     codeEditor.Document.TextContent = System.IO.File.ReadAllText(m_CurrentSourcePath);
-
                 }
 
                 m_SourceWatcher.EnableRaisingEvents = true;
@@ -1040,7 +1056,10 @@ namespace MDStudio
             }
             else
             {
-                this.Text = "MDStudio";
+                if (m_Modified)
+                    this.Text = "MDStudio - *";
+                else
+                    this.Text = "MDStudio";
             }
         }
         private void documentChanged(object sender, EventArgs e)
@@ -1101,8 +1120,6 @@ namespace MDStudio
         {
             m_Config.LastProject = m_ProjectFile;
             m_Config.Save();
-
-            
         }
 
         private void runMegaUSB_Click(object sender, EventArgs e)
@@ -1332,6 +1349,38 @@ namespace MDStudio
                     codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber;
                 }
             }
+        }
+
+        private void ResetDocument()
+        {
+            codeEditor.Document.DocumentChanged -= documentChanged;
+
+            m_SourceFileName = null;
+            m_CurrentSourcePath = null;
+            m_Modified = false;
+            codeEditor.Document.TextContent = null;
+            m_SourceWatcher.EnableRaisingEvents = false;
+            codeEditor.Refresh();
+            codeEditor.Document.UndoStack.ClearAll();
+            codeEditor.Document.BookmarkManager.Clear();
+            UpdateTitle();
+            treeProjectFiles.Nodes.Clear();
+            m_ProjectFiles.Clear();
+
+            codeEditor.Document.DocumentChanged += documentChanged;
+        }
+
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(m_Modified)
+            {
+                if (MessageBox.Show("Save changes?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    Save();
+                }
+            }
+
+            ResetDocument();
         }
     }
 }
