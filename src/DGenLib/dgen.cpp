@@ -370,6 +370,43 @@ void	ClearBreakpoints()
 	s_DGenInstance->debug_clear_bp_m68k();
 }
 
+int	KeyPressed(int vkCode, int keyDown)
+{
+	SDL_Keycode	keycode = SDLK_UNKNOWN;
+	bool		pushEvent = false;
+
+	switch (vkCode)
+	{
+	case VK_LEFT:
+		keycode = SDLK_LEFT;
+		break;
+	case VK_RIGHT:
+		keycode = SDLK_RIGHT;
+		break;
+	case VK_UP:
+		keycode = SDLK_UP;
+		break;
+	case VK_DOWN:
+		keycode = SDLK_DOWN;
+		break;
+	case VK_SPACE:
+		keycode = SDLK_SPACE;
+		break;
+	}
+
+	if (keycode != SDLK_UNKNOWN)
+	{
+		SDL_Event event;
+
+		event.type = keyDown == 1 ? SDL_KEYDOWN : SDL_KEYUP;
+		event.key.keysym.sym = keycode;
+
+		return SDL_PushEvent(&event);
+	}
+
+	return 0;
+}
+
 int StepInto()
 {
 	return s_DGenInstance->debug_cmd_step(0, NULL);

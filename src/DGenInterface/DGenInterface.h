@@ -53,6 +53,8 @@ namespace DGenInterface {
 		void	Show();
 		void	Hide();
 
+		void	KeyPressed(int vkCode, int keyDown);
+
 		///<	Accessors
 		int		GetDReg(int index);
 		int		GetAReg(int index);

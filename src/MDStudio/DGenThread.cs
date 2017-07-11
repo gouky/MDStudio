@@ -99,7 +99,7 @@ namespace MDStudio
         {
             return m_DGen;
         }
-
+        
         private static void ThreadLoop()
         {
             while (Thread.CurrentThread.IsAlive)

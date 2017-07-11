@@ -36,6 +36,8 @@ extern void		HideSDLWindow();
 extern int		AddBreakpoint(int addr);
 extern void		ClearBreakpoints();
 
+extern int		KeyPressed(int vkCode, int keyDown);
+
 extern int		StepInto();
 extern int		Resume();
 extern int		Break();

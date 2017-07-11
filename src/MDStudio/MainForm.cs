@@ -1329,11 +1329,18 @@ namespace MDStudio
 
         public void OnKeyDown(int vkCode)
         {
+            if(m_State == State.kRunning)
+            {
+                DGenThread.GetDGen().KeyPressed(vkCode, 1);
+            }
         }
 
         public void OnKeyUp(int vkCode)
         {
-
+            if (m_State == State.kRunning)
+            {
+                DGenThread.GetDGen().KeyPressed(vkCode, 0);
+            }
         }
 
         private void goToToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1372,7 +1379,10 @@ namespace MDStudio
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(m_Modified)
+            if (m_State != State.kStopped)
+                return;
+
+            if (m_Modified)
             {
                 if (MessageBox.Show("Save changes?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {

@@ -24,7 +24,7 @@ namespace MDStudio
         [STAThread]
         static void Main()
         {
-//             _hookID = SetHook(_proc);
+            _hookID = SetHook(_proc);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -32,7 +32,7 @@ namespace MDStudio
             g_MainForm = new MainForm();
             Application.Run(g_MainForm);
 
-//             UnhookWindowsHookEx(_hookID);
+            UnhookWindowsHookEx(_hookID);
         }
 
 
@@ -48,17 +48,30 @@ namespace MDStudio
 
         private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
+        public static bool ApplicationIsActivated()
+        {
+            var activatedHandle = GetForegroundWindow();
+            if (activatedHandle == IntPtr.Zero)
+            {
+                return false;       // No window is currently activated
+            }
+
+            var procId = Process.GetCurrentProcess().Id;
+            int activeProcId;
+            GetWindowThreadProcessId(activatedHandle, out activeProcId);
+
+            return activeProcId == procId;
+        }
+
         private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
-//             FindWindow("", "");
-
-            if (nCode >= 0)
+            if (ApplicationIsActivated() && nCode >= 0)
             {
                 int vkCode = Marshal.ReadInt32(lParam);
 
                 if(wParam == (IntPtr)WM_KEYDOWN)
                 {
-                    Console.WriteLine((Keys)vkCode);
+//                     Console.WriteLine((Keys)vkCode);
                     g_MainForm.OnKeyDown(vkCode);
                 }
 
@@ -86,7 +99,14 @@ namespace MDStudio
 
         [DllImport("user32.dll")]
         public static extern int FindWindow(string lpClassName, String lpWindowName);
+
         [DllImport("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, int wMsg, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern int GetWindowThreadProcessId(IntPtr handle, out int processId);
     }
 }

@@ -148,6 +148,11 @@ void	DGenInterface::DGen::Hide()
 	HideSDLWindow();
 }
 
+void	DGenInterface::DGen::KeyPressed(int vkCode, int keyDown)
+{
+	::KeyPressed(vkCode, keyDown);
+}
+
 int DGenInterface::DGen::GetColor(int i)
 {
 	return ::GetPaletteEntry(i);
