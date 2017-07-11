@@ -420,7 +420,8 @@ namespace MDStudio
 
             Console.WriteLine("compile");
 
-            StringBuilder processOutput = new StringBuilder();
+            StringBuilder processStandardOutput = new StringBuilder();
+            StringBuilder processErrorOutput = new StringBuilder();
 
             try
             {
@@ -440,9 +441,12 @@ namespace MDStudio
 
                 while (!proc.HasExited)
                 {
-                    processOutput.Append(proc.StandardError.ReadToEnd());
+                    processErrorOutput.Append(proc.StandardError.ReadToEnd());
+                    processStandardOutput.Append(proc.StandardError.ReadToEnd());
                 }
-                processOutput.Append(proc.StandardError.ReadToEnd());
+                processErrorOutput.Append(proc.StandardError.ReadToEnd());
+                processStandardOutput.Append(proc.StandardError.ReadToEnd());
+
                 proc.WaitForExit();
             }
             catch (Exception e)
@@ -451,7 +455,12 @@ namespace MDStudio
             }
 
             //()\((\d+)\)\s: Error : (.+)
-            string[] output = processOutput.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            string[] output;
+            
+            if(processErrorOutput.Length > 0 )
+                output = processErrorOutput.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            else
+                output = processStandardOutput.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
 
             int errorCount = 0;
 
