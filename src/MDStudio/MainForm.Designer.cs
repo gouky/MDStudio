@@ -35,6 +35,7 @@
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.undoMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,7 +83,7 @@
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.treeProjectFiles = new System.Windows.Forms.TreeView();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.goToAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -126,7 +127,7 @@
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -134,7 +135,7 @@
             // 
             this.saveMenu.Name = "saveMenu";
             this.saveMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveMenu.Size = new System.Drawing.Size(152, 22);
+            this.saveMenu.Size = new System.Drawing.Size(149, 22);
             this.saveMenu.Text = "&Save";
             this.saveMenu.Click += new System.EventHandler(this.saveMenu_Click);
             // 
@@ -142,14 +143,19 @@
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(146, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.exitToolStripMenuItem.Text = "&Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -167,7 +173,8 @@
             this.searchNextToolStripMenuItem,
             this.searchPreviousToolStripMenuItem,
             this.toolStripSeparator7,
-            this.goToToolStripMenuItem});
+            this.goToToolStripMenuItem,
+            this.goToAddressToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -259,7 +266,7 @@
             this.goToToolStripMenuItem.Name = "goToToolStripMenuItem";
             this.goToToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
             this.goToToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
-            this.goToToolStripMenuItem.Text = "Go To";
+            this.goToToolStripMenuItem.Text = "Go To Line";
             this.goToToolStripMenuItem.Click += new System.EventHandler(this.goToToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
@@ -277,28 +284,28 @@
             // viewBuildLogMenu
             // 
             this.viewBuildLogMenu.Name = "viewBuildLogMenu";
-            this.viewBuildLogMenu.Size = new System.Drawing.Size(146, 22);
+            this.viewBuildLogMenu.Size = new System.Drawing.Size(152, 22);
             this.viewBuildLogMenu.Text = "Build Log";
             this.viewBuildLogMenu.Click += new System.EventHandler(this.viewBuildLogMenu_Click);
             // 
             // viewCRAMmenu
             // 
             this.viewCRAMmenu.Name = "viewCRAMmenu";
-            this.viewCRAMmenu.Size = new System.Drawing.Size(146, 22);
+            this.viewCRAMmenu.Size = new System.Drawing.Size(152, 22);
             this.viewCRAMmenu.Text = "CRAM Viewer";
             this.viewCRAMmenu.Click += new System.EventHandler(this.viewCRAMBtn_Click);
             // 
             // viewVDPStatusMenu
             // 
             this.viewVDPStatusMenu.Name = "viewVDPStatusMenu";
-            this.viewVDPStatusMenu.Size = new System.Drawing.Size(146, 22);
+            this.viewVDPStatusMenu.Size = new System.Drawing.Size(152, 22);
             this.viewVDPStatusMenu.Text = "VDP Status";
             this.viewVDPStatusMenu.Click += new System.EventHandler(this.viewVDPStatusMenu_Click);
             // 
             // profilerVDPStatusMenu
             // 
             this.profilerVDPStatusMenu.Name = "profilerVDPStatusMenu";
-            this.profilerVDPStatusMenu.Size = new System.Drawing.Size(146, 22);
+            this.profilerVDPStatusMenu.Size = new System.Drawing.Size(152, 22);
             this.profilerVDPStatusMenu.Text = "&Profiler";
             this.profilerVDPStatusMenu.Click += new System.EventHandler(this.profilerToolStripMenuItem_Click);
             // 
@@ -413,7 +420,7 @@
             this.toolsToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.vdpToolsRegistersMenu});
             this.toolsToolStripMenuItem1.Name = "toolsToolStripMenuItem1";
-            this.toolsToolStripMenuItem1.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem1.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem1.Text = "&Tools";
             // 
             // vdpToolsRegistersMenu
@@ -541,10 +548,14 @@
             this.splitContainer.SplitterDistance = 155;
             this.splitContainer.TabIndex = 8;
             // 
-            // toolStripSeparator3
+            // goToAddressToolStripMenuItem
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+            this.goToAddressToolStripMenuItem.Name = "goToAddressToolStripMenuItem";
+            this.goToAddressToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.G)));
+            this.goToAddressToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.goToAddressToolStripMenuItem.Text = "Go To Address";
+            this.goToAddressToolStripMenuItem.Click += new System.EventHandler(this.goToAddressToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -635,6 +646,7 @@
         private System.Windows.Forms.ToolStripMenuItem goToToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem goToAddressToolStripMenuItem;
     }
 }
 

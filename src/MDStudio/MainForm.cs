@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -1345,7 +1346,7 @@ namespace MDStudio
 
         private void goToToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GoToForm gotoForm = new GoToForm();
+            GoToForm gotoForm = new GoToForm(GoToForm.Type.Line);
 
             if(gotoForm.ShowDialog() == DialogResult.OK)
             {
@@ -1354,6 +1355,21 @@ namespace MDStudio
                 if(int.TryParse(gotoForm.textLineNumber.Text, out lineNumber))
                 {
                     codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber;
+                }
+            }
+        }
+
+        private void goToAddressToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GoToForm gotoForm = new GoToForm(GoToForm.Type.Address);
+
+            if (gotoForm.ShowDialog() == DialogResult.OK)
+            {
+                uint address;
+
+                if (uint.TryParse(gotoForm.textLineNumber.Text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out address))
+                {
+                    GoTo(address);
                 }
             }
         }
