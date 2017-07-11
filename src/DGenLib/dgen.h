@@ -35,6 +35,8 @@ extern void		HideSDLWindow();
 
 extern int		AddBreakpoint(int addr);
 extern void		ClearBreakpoints();
+extern int		AddWatchPoint(int fromAddr, int toAddr);
+extern void		ClearWatchpoints();
 
 extern int		KeyPressed(int vkCode, int keyDown);
 

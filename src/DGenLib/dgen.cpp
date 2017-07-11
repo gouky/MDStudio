@@ -370,6 +370,17 @@ void	ClearBreakpoints()
 	s_DGenInstance->debug_clear_bp_m68k();
 }
 
+int AddWatchPoint(int fromAddr, int toAddr)
+{
+	s_DGenInstance->debug_set_wp_m68k(fromAddr, toAddr);
+	return 1;
+}
+
+void ClearWatchpoints()
+{
+	// TODO
+}
+
 int	KeyPressed(int vkCode, int keyDown)
 {
 	SDL_Keycode	keycode = SDLK_UNKNOWN;

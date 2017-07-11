@@ -379,7 +379,7 @@ static void debug_print_hex_buf(
 	uint32_t		i, done = 0;
 	unsigned char		byte;
 	char			ascii[17], *ap, *hp;
-	char			hdr[60] = "            ";
+	char			hdr[1024] = "            ";
 	char			hex[] = "0123456789abcdef";
 
 	// header

@@ -77,6 +77,8 @@ namespace MDStudio
         private BreakMode m_BreakMode = BreakMode.kBreakpoint;
         private int m_StepOverAddress;
 
+        private List<uint> m_Watchpoints;
+
         public class ProfilerEntry
         {
             public uint address { get; set; }
@@ -143,6 +145,7 @@ namespace MDStudio
             m_ErrorMarkers = new List<Marker>();
             m_SearchMarkers= new List<Marker>();
             m_SearchResults = new List<TextLocation>();
+            m_Watchpoints = new List<uint>();
 
             //
             m_Config = new Config();
@@ -575,11 +578,17 @@ namespace MDStudio
                     // Reset the vdp status
                     m_VDPStatus.Reset();
 
-                    //  Set breakpoint
+                    //  Set breakpoints
                     DGenThread.GetDGen().ClearBreakpoints();
                     foreach (Bookmark mark in codeEditor.Document.BookmarkManager.Marks)
                     {
                         DGenThread.GetDGen().AddBreakpoint((int)m_DebugSymbols.GetAddress(m_CurrentSourcePath, mark.LineNumber + 1));
+                    }
+
+                    // Set watchpoints
+                    foreach(uint address in m_Watchpoints)
+                    {
+                        DGenThread.GetDGen().AddWatchPoint((int)address, (int)address + 4);
                     }
 
                     //  Start
@@ -1407,6 +1416,26 @@ namespace MDStudio
             }
 
             ResetDocument();
+        }
+
+        private void addWatchpointToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GoToForm gotoForm = new GoToForm(GoToForm.Type.Address);
+
+            if (gotoForm.ShowDialog() == DialogResult.OK)
+            {
+                uint address;
+
+                if (uint.TryParse(gotoForm.textLineNumber.Text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out address))
+                {
+                    m_Watchpoints.Add(address);
+
+                    if(m_State != State.kStopped)
+                    {
+                        DGenThread.GetDGen().AddWatchPoint((int)address, (int)address + 4);
+                    }
+                }
+            }
         }
     }
 }

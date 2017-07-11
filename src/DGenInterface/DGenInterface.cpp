@@ -73,6 +73,16 @@ void	DGenInterface::DGen::ClearBreakpoints()
 	::ClearBreakpoints();
 }
 
+int DGenInterface::DGen::AddWatchPoint(int fromAddr, int toAddr)
+{
+	return ::AddWatchPoint(fromAddr, toAddr);
+}
+
+void DGenInterface::DGen::ClearWatchpoints()
+{
+	::ClearWatchpoints();
+}
+
 int DGenInterface::DGen::StepInto()
 {
 	return ::StepInto();
