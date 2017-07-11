@@ -47,7 +47,12 @@ void md::md_profiler_end()
 
 int md::md_profiler_instr_hook_callback(void)
 {
-	md_profiler_instr_run_counts[m68k_get_reg(NULL, M68K_REG_PC) / sizeof(short)]++;
+	unsigned int address = m68k_get_reg(NULL, M68K_REG_PC);
+	unsigned int instruction = address / sizeof(short);
+	if (instruction < md_profiler_instr_count)
+	{
+		md_profiler_instr_run_counts[instruction]++;
+	}
 	return 0;
 }
 
