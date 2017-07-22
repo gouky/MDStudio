@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define UMDK_SUPPORT
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -18,6 +20,10 @@ using DigitalRune.Windows.TextEditor.Markers;
 using System.Text.RegularExpressions;
 using System.IO;
 using MDStudio.Properties;
+
+#if UMDK_SUPPORT
+    using UMDK;
+#endif
 
 namespace MDStudio
 {
@@ -78,6 +84,10 @@ namespace MDStudio
         private int m_StepOverAddress;
 
         private List<uint> m_Watchpoints;
+
+#if UMDK_SUPPORT
+        private static UMDKInterface m_UMDK = null;
+#endif
 
         public class ProfilerEntry
         {
@@ -195,7 +205,11 @@ namespace MDStudio
                 OpenProject(m_Config.LastProject);
             }
 
-            StopDebugging(); 
+            StopDebugging();
+
+#if UMDK_SUPPORT
+            m_UMDK = new UMDKInterface();
+#endif
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -445,7 +459,7 @@ namespace MDStudio
                     processStandardOutput.Append(proc.StandardError.ReadToEnd());
                 }
                 processErrorOutput.Append(proc.StandardError.ReadToEnd());
-                processStandardOutput.Append(proc.StandardError.ReadToEnd());
+                processStandardOutput.Append(proc.StandardOutput.ReadToEnd());
 
                 proc.WaitForExit();
             }
@@ -1445,6 +1459,17 @@ namespace MDStudio
                     }
                 }
             }
+        }
+
+        private void fooToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+#if UMDK_SUPPORT
+            string binaryFile = m_PathToProject + @"\" + m_ProjectName + ".bin";
+
+            m_UMDK.Open();
+            m_UMDK.WriteFile(binaryFile);
+            m_UMDK.Close();
+#endif
         }
     }
 }
