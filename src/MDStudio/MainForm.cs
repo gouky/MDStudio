@@ -1,4 +1,4 @@
-﻿//#define UMDK_SUPPORT
+﻿#define UMDK_SUPPORT
 
 using System;
 using System.Collections.Generic;
@@ -247,7 +247,12 @@ namespace MDStudio
 
         void TimerTick(object sender, EventArgs e)
         {
-            if (DGenThread.GetDGen() != null && DGenThread.GetDGen().IsDebugging() && m_State == State.kRunning)
+            if (
+                (DGenThread.GetDGen() != null && DGenThread.GetDGen().IsDebugging())
+#if UMDK_SUPPORT
+//                 || ()
+#endif
+                && m_State == State.kRunning)
             {
                 //Breakpoint hit, go to address
                 int currentPC = DGenThread.GetDGen().GetCurrentPC();
@@ -577,45 +582,58 @@ namespace MDStudio
                     //  Show tools windows first, so emu window gets foreground focus
                     m_RegisterView.Show();
 
-                    //Init emu
-                    Tuple<int, int> resolution = kValidResolutions[m_Config.EmuResolution];
-                    m_DGenThread.Init(resolution.Item1, resolution.Item2, this.Handle);
-                    
-                    //Set input mappings
-                    DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputUp, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeUp));
-                    DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputDown, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeDown));
-                    DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputLeft, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeLeft));
-                    DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputRight, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeRight));
-                    DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputA, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeA));
-                    DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputB, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeB));
-                    DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputC, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeC));
-                    DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputStart, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeStart));
-
                     //Read symbols
                     m_DebugSymbols = new Symbols();
                     m_DebugSymbols.Read(symbolFile);
 
-                    //  Load Rom
-                    m_DGenThread.LoadRom(binaryFile);
-
                     // Reset the vdp status
                     m_VDPStatus.Reset();
 
-                    //  Set breakpoints
-                    DGenThread.GetDGen().ClearBreakpoints();
-                    foreach (Bookmark mark in codeEditor.Document.BookmarkManager.Marks)
+#if UMDK_SUPPORT
+                    if (UMDKEnabledMenuOption.Checked)
                     {
-                        DGenThread.GetDGen().AddBreakpoint((int)m_DebugSymbols.GetAddress(m_CurrentSourcePath, mark.LineNumber + 1));
+
+                    }
+                    else
+#endif  //  UMDK_SUPPORT
+                    {
+                        //Init emu
+                        Tuple<int, int> resolution = kValidResolutions[m_Config.EmuResolution];
+                        m_DGenThread.Init(resolution.Item1, resolution.Item2, this.Handle);
+
+                        //Set input mappings
+                        DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputUp, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeUp));
+                        DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputDown, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeDown));
+                        DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputLeft, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeLeft));
+                        DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputRight, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeRight));
+                        DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputA, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeA));
+                        DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputB, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeB));
+                        DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputC, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeC));
+                        DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputStart, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeStart));
+
+                        //  Load Rom
+                        m_DGenThread.LoadRom(binaryFile);
+
+                        //  Set breakpoints
+                        DGenThread.GetDGen().ClearBreakpoints();
+                        foreach (Bookmark mark in codeEditor.Document.BookmarkManager.Marks)
+                        {
+                            DGenThread.GetDGen().AddBreakpoint((int)m_DebugSymbols.GetAddress(m_CurrentSourcePath, mark.LineNumber + 1));
+                        }
+
+                        // Set watchpoints
+                        foreach (uint address in m_Watchpoints)
+                        {
+                            DGenThread.GetDGen().AddWatchPoint((int)address, (int)address + 4);
+                        }
+
+                        //  Start
+                        m_DGenThread.Start();
+
+                        //  profiling?
+                        m_Profile = profilerEnabledMenuOptions.Checked;
                     }
 
-                    // Set watchpoints
-                    foreach(uint address in m_Watchpoints)
-                    {
-                        DGenThread.GetDGen().AddWatchPoint((int)address, (int)address + 4);
-                    }
-
-                    //  Start
-                    m_DGenThread.Start();
                     m_State = State.kRunning;
 
                     statusLabel.Text = "Running...";
@@ -624,9 +642,6 @@ namespace MDStudio
 
                     //  Hide the build window
                     m_BuildLog.Hide();
-
-                    //  profiling?
-                    m_Profile = profilerEnabledMenuOptions.Checked;
 
                     StartDebugging();
                 }
