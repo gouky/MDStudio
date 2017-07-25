@@ -1,4 +1,4 @@
-﻿#define UMDK_SUPPORT
+﻿//#define UMDK_SUPPORT
 
 using System;
 using System.Collections.Generic;
@@ -1456,26 +1456,6 @@ namespace MDStudio
             ResetDocument();
         }
 
-        private void addWatchpointToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            GoToForm gotoForm = new GoToForm(GoToForm.Type.Address);
-
-            if (gotoForm.ShowDialog() == DialogResult.OK)
-            {
-                uint address;
-
-                if (uint.TryParse(gotoForm.textLineNumber.Text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out address))
-                {
-                    m_Watchpoints.Add(address);
-
-                    if(m_State != State.kStopped)
-                    {
-                        DGenThread.GetDGen().AddWatchPoint((int)address, (int)address + 4);
-                    }
-                }
-            }
-        }
-
         private void fooToolStripMenuItem_Click(object sender, EventArgs e)
         {
 #if UMDK_SUPPORT
@@ -1485,6 +1465,26 @@ namespace MDStudio
             m_UMDK.WriteFile(binaryFile);
             m_UMDK.Close();
 #endif
+        }
+
+        private void addWatchpointToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GoToForm gotoForm = new GoToForm(GoToForm.Type.Address);
+            
+            if (gotoForm.ShowDialog() == DialogResult.OK)
+            {
+                uint address;
+            
+                if (uint.TryParse(gotoForm.textLineNumber.Text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out address))
+                {
+                    m_Watchpoints.Add(address);
+            
+                    if(m_State != State.kStopped)
+                    {
+                        DGenThread.GetDGen().AddWatchPoint((int)address, (int)address + 4);
+                    }
+                }
+            }
         }
     }
 }

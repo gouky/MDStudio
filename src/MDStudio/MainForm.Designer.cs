@@ -75,6 +75,7 @@
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.profilerEnabledMenuOptions = new System.Windows.Forms.ToolStripMenuItem();
+            this.UMDKEnabledMenuOption = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -85,7 +86,7 @@
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.treeProjectFiles = new System.Windows.Forms.TreeView();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.UMDKEnabledMenuOption = new System.Windows.Forms.ToolStripMenuItem();
+            this.addWatchpointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -390,7 +391,8 @@
             this.stepOverMenu,
             this.toolStripSeparator2,
             this.stopToolStripMenuItem,
-            this.breakMenu});
+            this.breakMenu,
+            this.addWatchpointToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.debugToolStripMenuItem.Text = "&Debug";
@@ -439,7 +441,7 @@
             this.toolsToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.vdpToolsRegistersMenu});
             this.toolsToolStripMenuItem1.Name = "toolsToolStripMenuItem1";
-            this.toolsToolStripMenuItem1.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem1.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem1.Text = "&Tools";
             // 
             // vdpToolsRegistersMenu
@@ -474,6 +476,14 @@
             this.profilerEnabledMenuOptions.Size = new System.Drawing.Size(198, 22);
             this.profilerEnabledMenuOptions.Text = "&Profiler Enabled";
             this.profilerEnabledMenuOptions.Click += new System.EventHandler(this.profileToolStripMenuItem_Click);
+            // 
+            // UMDKEnabledMenuOption
+            // 
+            this.UMDKEnabledMenuOption.CheckOnClick = true;
+            this.UMDKEnabledMenuOption.Name = "UMDKEnabledMenuOption";
+            this.UMDKEnabledMenuOption.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
+            this.UMDKEnabledMenuOption.Size = new System.Drawing.Size(198, 22);
+            this.UMDKEnabledMenuOption.Text = "UMDK Enabled";
             // 
             // toolStripMenuItem1
             // 
@@ -568,13 +578,12 @@
             this.splitContainer.SplitterDistance = 155;
             this.splitContainer.TabIndex = 8;
             // 
-            // UMDKEnabledMenuOption
+            // addWatchpointToolStripMenuItem
             // 
-            this.UMDKEnabledMenuOption.CheckOnClick = true;
-            this.UMDKEnabledMenuOption.Name = "UMDKEnabledMenuOption";
-            this.UMDKEnabledMenuOption.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
-            this.UMDKEnabledMenuOption.Size = new System.Drawing.Size(198, 22);
-            this.UMDKEnabledMenuOption.Text = "UMDK Enabled";
+            this.addWatchpointToolStripMenuItem.Name = "addWatchpointToolStripMenuItem";
+            this.addWatchpointToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.addWatchpointToolStripMenuItem.Text = "Add Watchpoint...";
+            this.addWatchpointToolStripMenuItem.Click += new System.EventHandler(this.addWatchpointToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -668,6 +677,7 @@
         private System.Windows.Forms.ToolStripMenuItem goToAddressToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fooToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem UMDKEnabledMenuOption;
+        private System.Windows.Forms.ToolStripMenuItem addWatchpointToolStripMenuItem;
     }
 }
 
