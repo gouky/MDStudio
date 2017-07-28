@@ -471,6 +471,14 @@ int GetCurrentPC()
 	return s_DGenInstance->m68k_get_pc();
 }
 
+void ReadMemory(unsigned int address, unsigned int size, BYTE* memory)
+{
+	for(unsigned int i = 0; i < size; i++)
+	{
+		memory[i] = s_DGenInstance->misc_readbyte(address + i);
+	}
+}
+
 int GetPaletteEntry(int i)
 {
 	unsigned char* cram = s_DGenInstance->vdp.cram;

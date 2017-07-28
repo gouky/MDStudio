@@ -1,4 +1,4 @@
-﻿//#define UMDK_SUPPORT
+﻿#define UMDK_SUPPORT
 
 using System;
 using System.Collections.Generic;
@@ -8,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -112,6 +113,14 @@ namespace MDStudio
 
         //Default config
         public const int kDefaultResolutionEntry = 1;
+
+        //Memory preview in register window
+        public const int kMaxMemPreviewSize = 16;
+
+        unsafe struct MemPreviewBuffer
+        {
+            public fixed byte dataBuffer[kMaxMemPreviewSize];
+        }
 
         private static readonly ReadOnlyCollection<string> kStepIntoInstrs = new ReadOnlyCollection<string>(new[]
         {
@@ -276,6 +285,41 @@ namespace MDStudio
                 m_RegisterView.SetRegs(dregs[0], dregs[1], dregs[2], dregs[3], dregs[4], dregs[5], dregs[6], dregs[7],
                                         aregs[0], aregs[1], aregs[2], aregs[3], aregs[4], aregs[5], aregs[6], 0,
                                         sr, (uint)currentPC);
+
+                //Dereference ARegs and fill memory previews
+                unsafe
+                {
+                    MemPreviewBuffer dataBuffer = new MemPreviewBuffer();
+                    byte[] localBuffer = new byte[kMaxMemPreviewSize];
+
+                    DGenThread.GetDGen().ReadMemory(aregs[0], kMaxMemPreviewSize, dataBuffer.dataBuffer);
+                    Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                    m_RegisterView.SetData_a0(localBuffer);
+
+                    DGenThread.GetDGen().ReadMemory(aregs[1], kMaxMemPreviewSize, dataBuffer.dataBuffer);
+                    Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                    m_RegisterView.SetData_a1(localBuffer);
+
+                    DGenThread.GetDGen().ReadMemory(aregs[2], kMaxMemPreviewSize, dataBuffer.dataBuffer);
+                    Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                    m_RegisterView.SetData_a2(localBuffer);
+
+                    DGenThread.GetDGen().ReadMemory(aregs[3], kMaxMemPreviewSize, dataBuffer.dataBuffer);
+                    Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                    m_RegisterView.SetData_a3(localBuffer);
+
+                    DGenThread.GetDGen().ReadMemory(aregs[4], kMaxMemPreviewSize, dataBuffer.dataBuffer);
+                    Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                    m_RegisterView.SetData_a4(localBuffer);
+
+                    DGenThread.GetDGen().ReadMemory(aregs[5], kMaxMemPreviewSize, dataBuffer.dataBuffer);
+                    Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                    m_RegisterView.SetData_a5(localBuffer);
+
+                    DGenThread.GetDGen().ReadMemory(aregs[6], kMaxMemPreviewSize, dataBuffer.dataBuffer);
+                    Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                    m_RegisterView.SetData_a6(localBuffer);
+                }
 
                 //Set status
                 statusLabel.Text = "PC 0x" + DGenThread.GetDGen().GetCurrentPC();
@@ -902,21 +946,24 @@ namespace MDStudio
             int lineNumber = currentLine.Item2 - 1;
 
             //Load file
-            if (m_CurrentSourcePath.ToLower() != filename.ToLower())
+            if(filename.Length > 0)
             {
-                codeEditor.LoadFile(filename);
-                m_CurrentSourcePath = filename;
+                if (m_CurrentSourcePath.ToLower() != filename.ToLower())
+                {
+                    codeEditor.LoadFile(filename);
+                    m_CurrentSourcePath = filename;
+                }
+
+                int offset = codeEditor.Document.PositionToOffset(new TextLocation(0, lineNumber));
+
+                codeEditor.Document.MarkerStrategy.Clear();
+                Marker marker = new Marker(offset, codeEditor.Document.LineSegmentCollection[lineNumber].Length, MarkerType.SolidBlock, Color.Yellow, Color.Black);//selection.Offset, selection.Length, MarkerType.SolidBlock, Color.DarkRed, Color.White);
+                codeEditor.Document.MarkerStrategy.AddMarker(marker);
+                codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber;
+                codeEditor.ActiveTextAreaControl.Caret.Column = 0;
+                codeEditor.ActiveTextAreaControl.CenterViewOn(lineNumber, -1);
+                codeEditor.ActiveTextAreaControl.Invalidate();
             }
-
-            int offset = codeEditor.Document.PositionToOffset(new TextLocation(0, lineNumber));
-
-            codeEditor.Document.MarkerStrategy.Clear();
-            Marker marker = new Marker(offset, codeEditor.Document.LineSegmentCollection[lineNumber].Length, MarkerType.SolidBlock, Color.Yellow, Color.Black);//selection.Offset, selection.Length, MarkerType.SolidBlock, Color.DarkRed, Color.White);
-            codeEditor.Document.MarkerStrategy.AddMarker(marker);
-            codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber;
-            codeEditor.ActiveTextAreaControl.Caret.Column = 0;
-            codeEditor.ActiveTextAreaControl.CenterViewOn(lineNumber, -1);
-            codeEditor.ActiveTextAreaControl.Invalidate();
         }
 
         public void UpdateViewBuildLog(bool flag)
@@ -1481,10 +1528,21 @@ namespace MDStudio
             
                     if(m_State != State.kStopped)
                     {
-                        DGenThread.GetDGen().AddWatchPoint((int)address, (int)address + 4);
+                        DGenThread.GetDGen().AddWatchPoint((int)address, (int)address + 3);
                     }
                 }
             }
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+#if UMDK_SUPPORT
+            string binaryFile = m_PathToProject + @"\" + m_ProjectName + ".bin";
+
+            m_UMDK.Open();
+            m_UMDK.WriteFile(binaryFile);
+            m_UMDK.Close();
+#endif
         }
     }
 }

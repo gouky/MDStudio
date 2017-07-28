@@ -46,6 +46,13 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.txt_a6_data = new System.Windows.Forms.TextBox();
+            this.txt_a0_data = new System.Windows.Forms.TextBox();
+            this.txt_a5_data = new System.Windows.Forms.TextBox();
+            this.txt_a4_data = new System.Windows.Forms.TextBox();
+            this.txt_a3_data = new System.Windows.Forms.TextBox();
+            this.txt_a2_data = new System.Windows.Forms.TextBox();
+            this.txt_a1_data = new System.Windows.Forms.TextBox();
             this.txt_usp = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
             this.txt_a6 = new System.Windows.Forms.TextBox();
@@ -72,6 +79,9 @@
             this.decimalViewMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.hexaViewMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.binaryViewMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataHexadecimalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataStringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -108,6 +118,7 @@
             this.txt_d7.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_d7.Location = new System.Drawing.Point(37, 202);
             this.txt_d7.Name = "txt_d7";
+            this.txt_d7.ReadOnly = true;
             this.txt_d7.Size = new System.Drawing.Size(87, 20);
             this.txt_d7.TabIndex = 15;
             // 
@@ -116,6 +127,7 @@
             this.txt_d6.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_d6.Location = new System.Drawing.Point(37, 176);
             this.txt_d6.Name = "txt_d6";
+            this.txt_d6.ReadOnly = true;
             this.txt_d6.Size = new System.Drawing.Size(87, 20);
             this.txt_d6.TabIndex = 14;
             // 
@@ -124,6 +136,7 @@
             this.txt_d5.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_d5.Location = new System.Drawing.Point(37, 150);
             this.txt_d5.Name = "txt_d5";
+            this.txt_d5.ReadOnly = true;
             this.txt_d5.Size = new System.Drawing.Size(87, 20);
             this.txt_d5.TabIndex = 13;
             // 
@@ -132,6 +145,7 @@
             this.txt_d4.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_d4.Location = new System.Drawing.Point(37, 124);
             this.txt_d4.Name = "txt_d4";
+            this.txt_d4.ReadOnly = true;
             this.txt_d4.Size = new System.Drawing.Size(87, 20);
             this.txt_d4.TabIndex = 12;
             // 
@@ -140,6 +154,7 @@
             this.txt_d3.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_d3.Location = new System.Drawing.Point(37, 99);
             this.txt_d3.Name = "txt_d3";
+            this.txt_d3.ReadOnly = true;
             this.txt_d3.Size = new System.Drawing.Size(87, 20);
             this.txt_d3.TabIndex = 11;
             // 
@@ -148,6 +163,7 @@
             this.txt_d2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_d2.Location = new System.Drawing.Point(37, 73);
             this.txt_d2.Name = "txt_d2";
+            this.txt_d2.ReadOnly = true;
             this.txt_d2.Size = new System.Drawing.Size(87, 20);
             this.txt_d2.TabIndex = 10;
             // 
@@ -156,6 +172,7 @@
             this.txt_d1.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_d1.Location = new System.Drawing.Point(37, 45);
             this.txt_d1.Name = "txt_d1";
+            this.txt_d1.ReadOnly = true;
             this.txt_d1.Size = new System.Drawing.Size(87, 20);
             this.txt_d1.TabIndex = 9;
             // 
@@ -164,6 +181,7 @@
             this.txt_d0.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_d0.Location = new System.Drawing.Point(37, 19);
             this.txt_d0.Name = "txt_d0";
+            this.txt_d0.ReadOnly = true;
             this.txt_d0.Size = new System.Drawing.Size(87, 20);
             this.txt_d0.TabIndex = 8;
             // 
@@ -241,6 +259,13 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.txt_a6_data);
+            this.groupBox2.Controls.Add(this.txt_a0_data);
+            this.groupBox2.Controls.Add(this.txt_a5_data);
+            this.groupBox2.Controls.Add(this.txt_a4_data);
+            this.groupBox2.Controls.Add(this.txt_a3_data);
+            this.groupBox2.Controls.Add(this.txt_a2_data);
+            this.groupBox2.Controls.Add(this.txt_a1_data);
             this.groupBox2.Controls.Add(this.txt_usp);
             this.groupBox2.Controls.Add(this.label18);
             this.groupBox2.Controls.Add(this.txt_a6);
@@ -259,17 +284,81 @@
             this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Location = new System.Drawing.Point(158, 27);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(145, 239);
+            this.groupBox2.Size = new System.Drawing.Size(327, 239);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Address";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
+            // 
+            // txt_a6_data
+            // 
+            this.txt_a6_data.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_a6_data.Location = new System.Drawing.Point(136, 176);
+            this.txt_a6_data.Name = "txt_a6_data";
+            this.txt_a6_data.ReadOnly = true;
+            this.txt_a6_data.Size = new System.Drawing.Size(178, 20);
+            this.txt_a6_data.TabIndex = 38;
+            // 
+            // txt_a0_data
+            // 
+            this.txt_a0_data.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_a0_data.Location = new System.Drawing.Point(136, 19);
+            this.txt_a0_data.Name = "txt_a0_data";
+            this.txt_a0_data.ReadOnly = true;
+            this.txt_a0_data.Size = new System.Drawing.Size(178, 20);
+            this.txt_a0_data.TabIndex = 32;
+            // 
+            // txt_a5_data
+            // 
+            this.txt_a5_data.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_a5_data.Location = new System.Drawing.Point(136, 150);
+            this.txt_a5_data.Name = "txt_a5_data";
+            this.txt_a5_data.ReadOnly = true;
+            this.txt_a5_data.Size = new System.Drawing.Size(178, 20);
+            this.txt_a5_data.TabIndex = 37;
+            // 
+            // txt_a4_data
+            // 
+            this.txt_a4_data.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_a4_data.Location = new System.Drawing.Point(136, 124);
+            this.txt_a4_data.Name = "txt_a4_data";
+            this.txt_a4_data.ReadOnly = true;
+            this.txt_a4_data.Size = new System.Drawing.Size(178, 20);
+            this.txt_a4_data.TabIndex = 36;
+            // 
+            // txt_a3_data
+            // 
+            this.txt_a3_data.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_a3_data.Location = new System.Drawing.Point(136, 99);
+            this.txt_a3_data.Name = "txt_a3_data";
+            this.txt_a3_data.ReadOnly = true;
+            this.txt_a3_data.Size = new System.Drawing.Size(178, 20);
+            this.txt_a3_data.TabIndex = 35;
+            // 
+            // txt_a2_data
+            // 
+            this.txt_a2_data.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_a2_data.Location = new System.Drawing.Point(136, 73);
+            this.txt_a2_data.Name = "txt_a2_data";
+            this.txt_a2_data.ReadOnly = true;
+            this.txt_a2_data.Size = new System.Drawing.Size(178, 20);
+            this.txt_a2_data.TabIndex = 34;
+            // 
+            // txt_a1_data
+            // 
+            this.txt_a1_data.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_a1_data.Location = new System.Drawing.Point(136, 45);
+            this.txt_a1_data.Name = "txt_a1_data";
+            this.txt_a1_data.ReadOnly = true;
+            this.txt_a1_data.Size = new System.Drawing.Size(178, 20);
+            this.txt_a1_data.TabIndex = 33;
             // 
             // txt_usp
             // 
             this.txt_usp.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_usp.Location = new System.Drawing.Point(43, 202);
             this.txt_usp.Name = "txt_usp";
+            this.txt_usp.ReadOnly = true;
             this.txt_usp.Size = new System.Drawing.Size(87, 20);
             this.txt_usp.TabIndex = 31;
             // 
@@ -287,6 +376,7 @@
             this.txt_a6.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_a6.Location = new System.Drawing.Point(43, 176);
             this.txt_a6.Name = "txt_a6";
+            this.txt_a6.ReadOnly = true;
             this.txt_a6.Size = new System.Drawing.Size(87, 20);
             this.txt_a6.TabIndex = 29;
             // 
@@ -295,6 +385,7 @@
             this.txt_a0.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_a0.Location = new System.Drawing.Point(43, 19);
             this.txt_a0.Name = "txt_a0";
+            this.txt_a0.ReadOnly = true;
             this.txt_a0.Size = new System.Drawing.Size(87, 20);
             this.txt_a0.TabIndex = 23;
             // 
@@ -303,6 +394,7 @@
             this.txt_a5.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_a5.Location = new System.Drawing.Point(43, 150);
             this.txt_a5.Name = "txt_a5";
+            this.txt_a5.ReadOnly = true;
             this.txt_a5.Size = new System.Drawing.Size(87, 20);
             this.txt_a5.TabIndex = 28;
             // 
@@ -320,6 +412,7 @@
             this.txt_a4.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_a4.Location = new System.Drawing.Point(43, 124);
             this.txt_a4.Name = "txt_a4";
+            this.txt_a4.ReadOnly = true;
             this.txt_a4.Size = new System.Drawing.Size(87, 20);
             this.txt_a4.TabIndex = 27;
             // 
@@ -337,6 +430,7 @@
             this.txt_a3.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_a3.Location = new System.Drawing.Point(43, 99);
             this.txt_a3.Name = "txt_a3";
+            this.txt_a3.ReadOnly = true;
             this.txt_a3.Size = new System.Drawing.Size(87, 20);
             this.txt_a3.TabIndex = 26;
             // 
@@ -354,6 +448,7 @@
             this.txt_a2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_a2.Location = new System.Drawing.Point(43, 73);
             this.txt_a2.Name = "txt_a2";
+            this.txt_a2.ReadOnly = true;
             this.txt_a2.Size = new System.Drawing.Size(87, 20);
             this.txt_a2.TabIndex = 25;
             // 
@@ -371,6 +466,7 @@
             this.txt_a1.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_a1.Location = new System.Drawing.Point(43, 45);
             this.txt_a1.Name = "txt_a1";
+            this.txt_a1.ReadOnly = true;
             this.txt_a1.Size = new System.Drawing.Size(87, 20);
             this.txt_a1.TabIndex = 24;
             // 
@@ -419,6 +515,7 @@
             this.txt_pc.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_pc.Location = new System.Drawing.Point(37, 48);
             this.txt_pc.Name = "txt_pc";
+            this.txt_pc.ReadOnly = true;
             this.txt_pc.Size = new System.Drawing.Size(87, 20);
             this.txt_pc.TabIndex = 12;
             // 
@@ -436,6 +533,7 @@
             this.txt_sr.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_sr.Location = new System.Drawing.Point(37, 22);
             this.txt_sr.Name = "txt_sr";
+            this.txt_sr.ReadOnly = true;
             this.txt_sr.Size = new System.Drawing.Size(87, 20);
             this.txt_sr.TabIndex = 10;
             // 
@@ -451,10 +549,11 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.viewToolStripMenuItem});
+            this.viewToolStripMenuItem,
+            this.dataToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(314, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(496, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -465,8 +564,9 @@
             this.hexaViewMenu,
             this.binaryViewMenu});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.viewToolStripMenuItem.Text = "View";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
+            this.viewToolStripMenuItem.Text = "Registers";
+            this.viewToolStripMenuItem.Click += new System.EventHandler(this.viewToolStripMenuItem_Click);
             // 
             // decimalViewMenu
             // 
@@ -489,11 +589,36 @@
             this.binaryViewMenu.Text = "Binary";
             this.binaryViewMenu.Click += new System.EventHandler(this.binaryViewMenu_Click);
             // 
+            // dataToolStripMenuItem
+            // 
+            this.dataToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dataHexadecimalToolStripMenuItem,
+            this.dataStringToolStripMenuItem});
+            this.dataToolStripMenuItem.Name = "dataToolStripMenuItem";
+            this.dataToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.dataToolStripMenuItem.Text = "Data";
+            // 
+            // dataHexadecimalToolStripMenuItem
+            // 
+            this.dataHexadecimalToolStripMenuItem.Checked = true;
+            this.dataHexadecimalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.dataHexadecimalToolStripMenuItem.Name = "dataHexadecimalToolStripMenuItem";
+            this.dataHexadecimalToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dataHexadecimalToolStripMenuItem.Text = "Hexadecimal";
+            this.dataHexadecimalToolStripMenuItem.Click += new System.EventHandler(this.dataHexaClick);
+            // 
+            // dataStringToolStripMenuItem
+            // 
+            this.dataStringToolStripMenuItem.Name = "dataStringToolStripMenuItem";
+            this.dataStringToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dataStringToolStripMenuItem.Text = "String";
+            this.dataStringToolStripMenuItem.Click += new System.EventHandler(this.dataStringClick);
+            // 
             // RegisterView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(314, 371);
+            this.ClientSize = new System.Drawing.Size(496, 371);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -562,8 +687,18 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.TextBox txt_a6_data;
+        private System.Windows.Forms.TextBox txt_a0_data;
+        private System.Windows.Forms.TextBox txt_a5_data;
+        private System.Windows.Forms.TextBox txt_a4_data;
+        private System.Windows.Forms.TextBox txt_a3_data;
+        private System.Windows.Forms.TextBox txt_a2_data;
+        private System.Windows.Forms.TextBox txt_a1_data;
         private System.Windows.Forms.ToolStripMenuItem decimalViewMenu;
         private System.Windows.Forms.ToolStripMenuItem hexaViewMenu;
         private System.Windows.Forms.ToolStripMenuItem binaryViewMenu;
+        private System.Windows.Forms.ToolStripMenuItem dataToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dataHexadecimalToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dataStringToolStripMenuItem;
     }
 }

@@ -63,6 +63,7 @@ namespace DGenInterface {
 		int		GetSR();
 		int		GetCurrentPC();
 		int		GetRegisters();
+		void    ReadMemory(unsigned int address, unsigned int size, BYTE* memory);
 
 		void	SetInputMapping(SDLInputs input, int mapping);
 		int		GetInputMapping(SDLInputs input);

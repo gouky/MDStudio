@@ -53,6 +53,7 @@ extern int		GetDReg(int index);
 extern int		GetAReg(int index);
 extern int		GetSR();
 extern int		GetCurrentPC();
+extern void		ReadMemory(unsigned int address, unsigned int size, BYTE* memory);
 
 extern void		SetInputMapping(int input, int mapping);
 extern int		GetInputMapping(int input);

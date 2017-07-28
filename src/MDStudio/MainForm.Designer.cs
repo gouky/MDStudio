@@ -70,6 +70,7 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.breakMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.addWatchpointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.vdpToolsRegistersMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,7 +87,6 @@
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.treeProjectFiles = new System.Windows.Forms.TreeView();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.addWatchpointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -436,6 +436,13 @@
             this.breakMenu.Text = "Break All";
             this.breakMenu.Click += new System.EventHandler(this.breakMenu_Click);
             // 
+            // addWatchpointToolStripMenuItem
+            // 
+            this.addWatchpointToolStripMenuItem.Name = "addWatchpointToolStripMenuItem";
+            this.addWatchpointToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.addWatchpointToolStripMenuItem.Text = "Add Watchpoint...";
+            this.addWatchpointToolStripMenuItem.Click += new System.EventHandler(this.addWatchpointToolStripMenuItem_Click);
+            // 
             // toolsToolStripMenuItem1
             // 
             this.toolsToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -518,6 +525,7 @@
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton1.Text = "toolStripButton1";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // codeEditor
             // 
@@ -577,13 +585,6 @@
             this.splitContainer.Size = new System.Drawing.Size(860, 420);
             this.splitContainer.SplitterDistance = 155;
             this.splitContainer.TabIndex = 8;
-            // 
-            // addWatchpointToolStripMenuItem
-            // 
-            this.addWatchpointToolStripMenuItem.Name = "addWatchpointToolStripMenuItem";
-            this.addWatchpointToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-            this.addWatchpointToolStripMenuItem.Text = "Add Watchpoint...";
-            this.addWatchpointToolStripMenuItem.Click += new System.EventHandler(this.addWatchpointToolStripMenuItem_Click);
             // 
             // MainForm
             // 

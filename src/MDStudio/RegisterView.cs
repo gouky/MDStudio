@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MDStudio.Properties;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace MDStudio
 {
@@ -18,9 +19,15 @@ namespace MDStudio
             eDecimal,
             eHexadecimal,
             eBinary,
+            eString
         }
 
         private kViewType m_ViewType;
+        private kViewType m_ViewTypeData = kViewType.eHexadecimal;
+
+        private byte[][] m_DataCache;
+
+        private const int kNumDataRegs = 7;
 
         public void SetRegs(uint d0, uint d1, uint d2, uint d3, uint d4, uint d5, uint d6, uint d7,
                             uint a0, uint a1, uint a2, uint a3, uint a4, uint a5, uint a6, uint usp,
@@ -46,6 +53,76 @@ namespace MDStudio
             SetRegText(txt_usp, usp);
             SetRegText(txt_pc, pc);
             SetRegText(txt_sr, sr);
+        }
+
+        private void SetDataView(TextBox textBox, byte[] data, kViewType viewType)
+        {
+            switch(viewType)
+            {
+                case kViewType.eHexadecimal:
+                    SoapHexBinary text = new SoapHexBinary(data);
+                    textBox.Text = text.ToString();
+                    break;
+                case kViewType.eString:
+                    textBox.Text = System.Text.Encoding.ASCII.GetString(data);
+                    break;
+                default:
+                    //TODO
+                    break;
+            }
+        }
+
+        public void SetData_a0(byte[] data)
+        {
+            SetDataView(txt_a0_data, data, m_ViewTypeData);
+            Array.Copy(data, m_DataCache[0], MainForm.kMaxMemPreviewSize);
+        }
+
+        public void SetData_a1(byte[] data)
+        {
+            SetDataView(txt_a1_data, data, m_ViewTypeData);
+            Array.Copy(data, m_DataCache[2], MainForm.kMaxMemPreviewSize);
+        }
+
+        public void SetData_a2(byte[] data)
+        {
+            SetDataView(txt_a2_data, data, m_ViewTypeData);
+            Array.Copy(data, m_DataCache[2], MainForm.kMaxMemPreviewSize);
+        }
+
+        public void SetData_a3(byte[] data)
+        {
+            SetDataView(txt_a3_data, data, m_ViewTypeData);
+            Array.Copy(data, m_DataCache[3], MainForm.kMaxMemPreviewSize);
+        }
+
+        public void SetData_a4(byte[] data)
+        {
+            SetDataView(txt_a4_data, data, m_ViewTypeData);
+            Array.Copy(data, m_DataCache[4], MainForm.kMaxMemPreviewSize);
+        }
+
+        public void SetData_a5(byte[] data)
+        {
+            SetDataView(txt_a5_data, data, m_ViewTypeData);
+            Array.Copy(data, m_DataCache[5], MainForm.kMaxMemPreviewSize);
+        }
+
+        public void SetData_a6(byte[] data)
+        {
+            SetDataView(txt_a6_data, data, m_ViewTypeData);
+            Array.Copy(data, m_DataCache[6], MainForm.kMaxMemPreviewSize);
+        }
+
+        private void RefreshDataViews()
+        {
+            SetDataView(txt_a0_data, m_DataCache[0], m_ViewTypeData);
+            SetDataView(txt_a1_data, m_DataCache[1], m_ViewTypeData);
+            SetDataView(txt_a2_data, m_DataCache[2], m_ViewTypeData);
+            SetDataView(txt_a3_data, m_DataCache[3], m_ViewTypeData);
+            SetDataView(txt_a4_data, m_DataCache[4], m_ViewTypeData);
+            SetDataView(txt_a5_data, m_DataCache[5], m_ViewTypeData);
+            SetDataView(txt_a6_data, m_DataCache[6], m_ViewTypeData);
         }
 
         private void SetRegText(TextBox textBox, uint value)
@@ -78,6 +155,12 @@ namespace MDStudio
 
         public RegisterView()
         {
+            m_DataCache = new byte[kNumDataRegs][];
+            for(int i = 0; i < kNumDataRegs; i++)
+            {
+                m_DataCache[i] = new byte[MainForm.kMaxMemPreviewSize];
+            }
+
             InitializeComponent();
         }
 
@@ -141,6 +224,25 @@ namespace MDStudio
         private void binaryViewMenu_Click(object sender, EventArgs e)
         {
             ChangeView(kViewType.eBinary);
+        }
+
+        private void viewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataHexaClick(object sender, EventArgs e)
+        {
+            dataStringToolStripMenuItem.Checked = false;
+            m_ViewTypeData = kViewType.eHexadecimal;
+            RefreshDataViews();
+        }
+
+        private void dataStringClick(object sender, EventArgs e)
+        {
+            dataHexadecimalToolStripMenuItem.Checked = false;
+            m_ViewTypeData = kViewType.eString;
+            RefreshDataViews();
         }
     }
 }

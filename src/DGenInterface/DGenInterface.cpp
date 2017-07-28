@@ -138,6 +138,11 @@ int DGenInterface::DGen::GetRegisters()
 	return 0;
 }
 
+void DGenInterface::DGen::ReadMemory(unsigned int address, unsigned int size, BYTE* memory)
+{
+	::ReadMemory(address, size, memory);
+}
+
 void DGenInterface::DGen::SetInputMapping(SDLInputs input, int mapping)
 {
 	::SetInputMapping((int)input, mapping);
