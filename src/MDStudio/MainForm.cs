@@ -630,9 +630,6 @@ namespace MDStudio
                     m_DebugSymbols = new Symbols();
                     m_DebugSymbols.Read(symbolFile);
 
-                    // Reset the vdp status
-                    m_VDPStatus.Reset();
-
 #if UMDK_SUPPORT
                     if (UMDKEnabledMenuOption.Checked)
                     {
@@ -683,6 +680,9 @@ namespace MDStudio
                     statusLabel.Text = "Running...";
 
                     codeEditor.Document.ReadOnly = true;
+
+                    // Reset the vdp status
+                    m_VDPStatus.Reset();
 
                     //  Hide the build window
                     m_BuildLog.Hide();
