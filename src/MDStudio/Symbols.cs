@@ -148,7 +148,7 @@ namespace MDStudio
 
         public bool Read(string filename)
         {
-            try
+            //try
             {
                 m_Symbols = new List<SymbolEntry>();
                 m_Filenames = new List<FilenameSection>();
@@ -290,6 +290,11 @@ namespace MDStudio
                             case ChunkId.EndOfSection:
                                 //Nothing of interest
                                 break;
+
+                            default:
+                                short mysteryWord = 0;
+                                bytesRead += Serialise(ref stream, out mysteryWord);
+                                break;
                         }
                     }
 
@@ -312,10 +317,10 @@ namespace MDStudio
                     return true;
                 }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //}
 
             return false;
         }

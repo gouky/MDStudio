@@ -16,12 +16,12 @@ namespace MDStudio
 
         private Thread myThread = null;
 
-        public void Init(int windowWidth, int windowHeight, IntPtr parent)
+        public void Init(int windowWidth, int windowHeight, IntPtr parent, bool pal, char region)
         {
             m_Instance = this;
 
             m_DGen = new DGen();
-            m_DGen.Init(windowWidth, windowHeight, parent);
+            m_DGen.Init(windowWidth, windowHeight, parent, pal, (sbyte)region);
 
             if(Settings.Default.DGenWindowLocation != null)
             {

@@ -82,6 +82,9 @@
             this.dataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataHexadecimalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataStringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.txt_sp_data = new System.Windows.Forms.TextBox();
+            this.txt_sp = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -259,6 +262,9 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.txt_sp_data);
+            this.groupBox2.Controls.Add(this.txt_sp);
+            this.groupBox2.Controls.Add(this.label19);
             this.groupBox2.Controls.Add(this.txt_a6_data);
             this.groupBox2.Controls.Add(this.txt_a0_data);
             this.groupBox2.Controls.Add(this.txt_a5_data);
@@ -284,7 +290,7 @@
             this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Location = new System.Drawing.Point(158, 27);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(327, 239);
+            this.groupBox2.Size = new System.Drawing.Size(327, 261);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Address";
@@ -356,7 +362,7 @@
             // txt_usp
             // 
             this.txt_usp.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_usp.Location = new System.Drawing.Point(43, 202);
+            this.txt_usp.Location = new System.Drawing.Point(43, 228);
             this.txt_usp.Name = "txt_usp";
             this.txt_usp.ReadOnly = true;
             this.txt_usp.Size = new System.Drawing.Size(87, 20);
@@ -365,7 +371,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(10, 205);
+            this.label18.Location = new System.Drawing.Point(8, 230);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(29, 13);
             this.label18.TabIndex = 30;
@@ -571,21 +577,21 @@
             // decimalViewMenu
             // 
             this.decimalViewMenu.Name = "decimalViewMenu";
-            this.decimalViewMenu.Size = new System.Drawing.Size(152, 22);
+            this.decimalViewMenu.Size = new System.Drawing.Size(117, 22);
             this.decimalViewMenu.Text = "Decimal";
             this.decimalViewMenu.Click += new System.EventHandler(this.decimalViewMenu_Click);
             // 
             // hexaViewMenu
             // 
             this.hexaViewMenu.Name = "hexaViewMenu";
-            this.hexaViewMenu.Size = new System.Drawing.Size(152, 22);
+            this.hexaViewMenu.Size = new System.Drawing.Size(117, 22);
             this.hexaViewMenu.Text = "Hexa";
             this.hexaViewMenu.Click += new System.EventHandler(this.hexaViewMenu_Click);
             // 
             // binaryViewMenu
             // 
             this.binaryViewMenu.Name = "binaryViewMenu";
-            this.binaryViewMenu.Size = new System.Drawing.Size(152, 22);
+            this.binaryViewMenu.Size = new System.Drawing.Size(117, 22);
             this.binaryViewMenu.Text = "Binary";
             this.binaryViewMenu.Click += new System.EventHandler(this.binaryViewMenu_Click);
             // 
@@ -603,16 +609,43 @@
             this.dataHexadecimalToolStripMenuItem.Checked = true;
             this.dataHexadecimalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.dataHexadecimalToolStripMenuItem.Name = "dataHexadecimalToolStripMenuItem";
-            this.dataHexadecimalToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dataHexadecimalToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.dataHexadecimalToolStripMenuItem.Text = "Hexadecimal";
             this.dataHexadecimalToolStripMenuItem.Click += new System.EventHandler(this.dataHexaClick);
             // 
             // dataStringToolStripMenuItem
             // 
             this.dataStringToolStripMenuItem.Name = "dataStringToolStripMenuItem";
-            this.dataStringToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dataStringToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.dataStringToolStripMenuItem.Text = "String";
             this.dataStringToolStripMenuItem.Click += new System.EventHandler(this.dataStringClick);
+            // 
+            // txt_sp_data
+            // 
+            this.txt_sp_data.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_sp_data.Location = new System.Drawing.Point(136, 202);
+            this.txt_sp_data.Name = "txt_sp_data";
+            this.txt_sp_data.ReadOnly = true;
+            this.txt_sp_data.Size = new System.Drawing.Size(178, 20);
+            this.txt_sp_data.TabIndex = 41;
+            // 
+            // txt_sp
+            // 
+            this.txt_sp.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_sp.Location = new System.Drawing.Point(43, 202);
+            this.txt_sp.Name = "txt_sp";
+            this.txt_sp.ReadOnly = true;
+            this.txt_sp.Size = new System.Drawing.Size(87, 20);
+            this.txt_sp.TabIndex = 40;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(16, 205);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(21, 13);
+            this.label19.TabIndex = 39;
+            this.label19.Text = "SP";
             // 
             // RegisterView
             // 
@@ -700,5 +733,8 @@
         private System.Windows.Forms.ToolStripMenuItem dataToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dataHexadecimalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dataStringToolStripMenuItem;
+        private System.Windows.Forms.TextBox txt_sp_data;
+        private System.Windows.Forms.TextBox txt_sp;
+        private System.Windows.Forms.Label label19;
     }
 }

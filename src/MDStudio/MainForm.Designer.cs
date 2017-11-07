@@ -87,6 +87,7 @@
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.treeProjectFiles = new System.Windows.Forms.TreeView();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.addLogpointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -392,7 +393,8 @@
             this.toolStripSeparator2,
             this.stopToolStripMenuItem,
             this.breakMenu,
-            this.addWatchpointToolStripMenuItem});
+            this.addWatchpointToolStripMenuItem,
+            this.addLogpointToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.debugToolStripMenuItem.Text = "&Debug";
@@ -586,6 +588,13 @@
             this.splitContainer.SplitterDistance = 155;
             this.splitContainer.TabIndex = 8;
             // 
+            // addLogpointToolStripMenuItem
+            // 
+            this.addLogpointToolStripMenuItem.Name = "addLogpointToolStripMenuItem";
+            this.addLogpointToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.addLogpointToolStripMenuItem.Text = "Add Logpoint...";
+            this.addLogpointToolStripMenuItem.Click += new System.EventHandler(this.addLogpointToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -679,6 +688,7 @@
         private System.Windows.Forms.ToolStripMenuItem fooToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem UMDKEnabledMenuOption;
         private System.Windows.Forms.ToolStripMenuItem addWatchpointToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addLogpointToolStripMenuItem;
     }
 }
 

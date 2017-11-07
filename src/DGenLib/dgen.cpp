@@ -77,9 +77,9 @@ void pd_message(const char *msg, ...)
 	pd_message_process();*/
 }
 
-int InitDGen(int windowWidth, int windowHeight, HWND parent)
+int InitDGen(int windowWidth, int windowHeight, HWND parent, int pal, char region)
 {
- 	s_DGenInstance = new md(false, 'J');
+ 	s_DGenInstance = new md(pal, region);
 
 	//	Init SDL
  	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
@@ -469,6 +469,23 @@ int GetCurrentPC()
 		return 0;
 
 	return s_DGenInstance->m68k_get_pc();
+}
+
+unsigned char ReadByte(unsigned int address)
+{
+	return s_DGenInstance->misc_readbyte(address);
+}
+
+unsigned short ReadWord(unsigned int address)
+{
+	return s_DGenInstance->misc_readword(address);
+}
+
+unsigned int ReadLong(unsigned int address)
+{
+	short hi = s_DGenInstance->misc_readword(address);
+	short lo = s_DGenInstance->misc_readword(address + 2);
+	return (hi << 16) | lo;
 }
 
 void ReadMemory(unsigned int address, unsigned int size, BYTE* memory)

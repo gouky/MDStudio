@@ -27,10 +27,10 @@ namespace MDStudio
 
         private byte[][] m_DataCache;
 
-        private const int kNumDataRegs = 7;
+        private const int kNumDataRegs = 8;
 
         public void SetRegs(uint d0, uint d1, uint d2, uint d3, uint d4, uint d5, uint d6, uint d7,
-                            uint a0, uint a1, uint a2, uint a3, uint a4, uint a5, uint a6, uint usp,
+                            uint a0, uint a1, uint a2, uint a3, uint a4, uint a5, uint a6, uint sp, uint usp,
                             uint sr, uint pc)
         {
             SetRegText(txt_d0, d0);
@@ -50,6 +50,7 @@ namespace MDStudio
             SetRegText(txt_a5, a5);
             SetRegText(txt_a6, a6);
 
+            SetRegText(txt_sp, sp);
             SetRegText(txt_usp, usp);
             SetRegText(txt_pc, pc);
             SetRegText(txt_sr, sr);
@@ -114,6 +115,12 @@ namespace MDStudio
             Array.Copy(data, m_DataCache[6], MainForm.kMaxMemPreviewSize);
         }
 
+        public void SetData_sp(byte[] data)
+        {
+            SetDataView(txt_sp_data, data, m_ViewTypeData);
+            Array.Copy(data, m_DataCache[7], MainForm.kMaxMemPreviewSize);
+        }
+
         private void RefreshDataViews()
         {
             SetDataView(txt_a0_data, m_DataCache[0], m_ViewTypeData);
@@ -123,6 +130,7 @@ namespace MDStudio
             SetDataView(txt_a4_data, m_DataCache[4], m_ViewTypeData);
             SetDataView(txt_a5_data, m_DataCache[5], m_ViewTypeData);
             SetDataView(txt_a6_data, m_DataCache[6], m_ViewTypeData);
+            SetDataView(txt_sp_data, m_DataCache[7], m_ViewTypeData);
         }
 
         private void SetRegText(TextBox textBox, uint value)

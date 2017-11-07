@@ -20,9 +20,9 @@ DGenInterface::DGen::~DGen()
 	::Shutdown();
 }
 
-int DGenInterface::DGen::Init(int windowWidth, int windowHeight, IntPtr hwnd)
+int DGenInterface::DGen::Init(int windowWidth, int windowHeight, IntPtr hwnd, bool pal, char region)
 {
-	return ::InitDGen(windowWidth, windowHeight, static_cast<HWND>(hwnd.ToPointer()));
+	return ::InitDGen(windowWidth, windowHeight, static_cast<HWND>(hwnd.ToPointer()), (int)pal, region);
 }
 
 void DGenInterface::DGen::SetWindowPosition(int x, int y)
@@ -136,6 +136,21 @@ int DGenInterface::DGen::Break()
 int DGenInterface::DGen::GetRegisters()
 {
 	return 0;
+}
+
+unsigned char DGenInterface::DGen::ReadByte(unsigned int address)
+{
+	return ::ReadByte(address);
+}
+
+unsigned short DGenInterface::DGen::ReadWord(unsigned int address)
+{
+	return ::ReadWord(address);
+}
+
+unsigned int DGenInterface::DGen::ReadLong(unsigned int address)
+{
+	return ::ReadLong(address);
 }
 
 void DGenInterface::DGen::ReadMemory(unsigned int address, unsigned int size, BYTE* memory)

@@ -32,7 +32,7 @@ namespace DGenInterface {
 		DGen();
 		~DGen();
 
-		int		Init(int windowWidth, int windowHeight, IntPtr hwnd);
+		int		Init(int windowWidth, int windowHeight, IntPtr hwnd, bool pal, char region);
 		void	SetWindowPosition(int x, int y);
 		int		GetWindowXPosition();
 		int		GetWindowYPosition();
@@ -63,6 +63,9 @@ namespace DGenInterface {
 		int		GetSR();
 		int		GetCurrentPC();
 		int		GetRegisters();
+		unsigned char	ReadByte(unsigned int address);
+		unsigned short	ReadWord(unsigned int address);
+		unsigned int	ReadLong(unsigned int address);
 		void    ReadMemory(unsigned int address, unsigned int size, BYTE* memory);
 
 		void	SetInputMapping(SDLInputs input, int mapping);

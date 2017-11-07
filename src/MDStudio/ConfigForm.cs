@@ -26,6 +26,17 @@ namespace MDStudio
             }
         }
 
+        public class RegionEntry
+        {
+            public string Text { get; set; }
+            public char RegionCode { get; set; }
+
+            public override string ToString()
+            {
+                return Text;
+            }
+        }
+
         public class KeycodeEntry
         {
             public SDL_Keycode.Keycode Keycode { get; set; }
@@ -60,6 +71,17 @@ namespace MDStudio
             }
 
             emuResolution.SelectedIndex = MainForm.kDefaultResolutionEntry;
+
+            //Populate region fields
+            foreach (Tuple<char, string> region in MainForm.kRegions)
+            {
+                RegionEntry entry = new RegionEntry();
+                entry.RegionCode = region.Item1;
+                entry.Text = region.Item2;
+                emuRegion.Items.Add(entry);
+            }
+
+            emuRegion.SelectedIndex = MainForm.kDefaultRegion;
 
             //Populate keycode fields
             foreach (SDL_Keycode.Keycode keycode in Enum.GetValues(typeof(SDL_Keycode.Keycode)))

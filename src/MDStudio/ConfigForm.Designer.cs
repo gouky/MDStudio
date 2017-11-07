@@ -59,6 +59,11 @@
             this.label13 = new System.Windows.Forms.Label();
             this.megaUSBPath = new System.Windows.Forms.TextBox();
             this.pathMegaUSBButton = new System.Windows.Forms.Button();
+            this.modeNTSC = new System.Windows.Forms.RadioButton();
+            this.label14 = new System.Windows.Forms.Label();
+            this.modePAL = new System.Windows.Forms.RadioButton();
+            this.label15 = new System.Windows.Forms.Label();
+            this.emuRegion = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,7 +86,7 @@
             // okBtn
             // 
             this.okBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okBtn.Location = new System.Drawing.Point(343, 289);
+            this.okBtn.Location = new System.Drawing.Point(343, 336);
             this.okBtn.Name = "okBtn";
             this.okBtn.Size = new System.Drawing.Size(75, 23);
             this.okBtn.TabIndex = 2;
@@ -102,7 +107,7 @@
             // cancelBtn
             // 
             this.cancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelBtn.Location = new System.Drawing.Point(246, 289);
+            this.cancelBtn.Location = new System.Drawing.Point(246, 336);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(75, 23);
             this.cancelBtn.TabIndex = 4;
@@ -162,7 +167,7 @@
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.inputUp);
             this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Location = new System.Drawing.Point(10, 145);
+            this.groupBox1.Location = new System.Drawing.Point(10, 192);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(408, 138);
             this.groupBox1.TabIndex = 9;
@@ -337,7 +342,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(42, 122);
+            this.label13.Location = new System.Drawing.Point(42, 169);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(87, 13);
             this.label13.TabIndex = 12;
@@ -345,14 +350,14 @@
             // 
             // megaUSBPath
             // 
-            this.megaUSBPath.Location = new System.Drawing.Point(137, 119);
+            this.megaUSBPath.Location = new System.Drawing.Point(135, 166);
             this.megaUSBPath.Name = "megaUSBPath";
             this.megaUSBPath.Size = new System.Drawing.Size(281, 20);
             this.megaUSBPath.TabIndex = 13;
             // 
             // pathMegaUSBButton
             // 
-            this.pathMegaUSBButton.Location = new System.Drawing.Point(424, 117);
+            this.pathMegaUSBButton.Location = new System.Drawing.Point(424, 164);
             this.pathMegaUSBButton.Name = "pathMegaUSBButton";
             this.pathMegaUSBButton.Size = new System.Drawing.Size(24, 23);
             this.pathMegaUSBButton.TabIndex = 14;
@@ -360,11 +365,66 @@
             this.pathMegaUSBButton.UseVisualStyleBackColor = true;
             this.pathMegaUSBButton.Click += new System.EventHandler(this.pathMegaUSBButton_Click);
             // 
+            // modeNTSC
+            // 
+            this.modeNTSC.AutoSize = true;
+            this.modeNTSC.Location = new System.Drawing.Point(135, 116);
+            this.modeNTSC.Name = "modeNTSC";
+            this.modeNTSC.Size = new System.Drawing.Size(54, 17);
+            this.modeNTSC.TabIndex = 15;
+            this.modeNTSC.TabStop = true;
+            this.modeNTSC.Text = "NTSC";
+            this.modeNTSC.UseVisualStyleBackColor = true;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(82, 115);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(47, 13);
+            this.label14.TabIndex = 16;
+            this.label14.Text = "Refresh:";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // modePAL
+            // 
+            this.modePAL.AutoSize = true;
+            this.modePAL.Location = new System.Drawing.Point(195, 116);
+            this.modePAL.Name = "modePAL";
+            this.modePAL.Size = new System.Drawing.Size(45, 17);
+            this.modePAL.TabIndex = 17;
+            this.modePAL.TabStop = true;
+            this.modePAL.Text = "PAL";
+            this.modePAL.UseVisualStyleBackColor = true;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(82, 139);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(44, 13);
+            this.label15.TabIndex = 18;
+            this.label15.Text = "Region:";
+            // 
+            // emuRegion
+            // 
+            this.emuRegion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.emuRegion.FormattingEnabled = true;
+            this.emuRegion.Location = new System.Drawing.Point(135, 136);
+            this.emuRegion.Name = "emuRegion";
+            this.emuRegion.Size = new System.Drawing.Size(144, 21);
+            this.emuRegion.TabIndex = 19;
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(456, 322);
+            this.ClientSize = new System.Drawing.Size(456, 369);
+            this.Controls.Add(this.emuRegion);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.modePAL);
+            this.Controls.Add(this.label14);
+            this.Controls.Add(this.modeNTSC);
             this.Controls.Add(this.pathMegaUSBButton);
             this.Controls.Add(this.megaUSBPath);
             this.Controls.Add(this.label13);
@@ -424,5 +484,10 @@
         private System.Windows.Forms.Label label13;
         public System.Windows.Forms.TextBox megaUSBPath;
         private System.Windows.Forms.Button pathMegaUSBButton;
+        private System.Windows.Forms.Label label14;
+        public System.Windows.Forms.RadioButton modeNTSC;
+        public System.Windows.Forms.RadioButton modePAL;
+        private System.Windows.Forms.Label label15;
+        public System.Windows.Forms.ComboBox emuRegion;
     }
 }

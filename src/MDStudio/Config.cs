@@ -16,6 +16,8 @@ namespace MDStudio
         public string Asm68kPath { get; set; }
         public string Asm68kArgs { get; set; }
         public int EmuResolution { get; set; }
+        public int EmuRegion { get; set; }
+        public bool Pal = false;
         public bool AutoOpenLastProject = true;
         public string LastProject { get; set; }
 
@@ -60,6 +62,8 @@ namespace MDStudio
                         Asm68kPath = config.Asm68kPath;
                         Asm68kArgs = config.Asm68kArgs;
                         EmuResolution = config.EmuResolution;
+                        EmuRegion = config.EmuRegion;
+                        Pal = config.Pal;
                         AutoOpenLastProject = config.AutoOpenLastProject;
                         LastProject = config.LastProject;
 

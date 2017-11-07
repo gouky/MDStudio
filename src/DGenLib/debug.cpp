@@ -523,7 +523,7 @@ uint32_t md::debug_m68k_get_reg(m68k_register_t reg)
 	{
 		return le2h32(m68k_state.d[reg - M68K_REG_D0]);
 	}
-	else if (reg >= M68K_REG_A0 && reg <= M68K_REG_A6)
+	else if (reg >= M68K_REG_A0 && reg <= M68K_REG_A7)
 	{
 		return le2h32(m68k_state.a[reg - M68K_REG_A0]);
 	}

@@ -1,4 +1,4 @@
-﻿#define UMDK_SUPPORT
+﻿//#define UMDK_SUPPORT
 
 using System;
 using System.Collections.Generic;
@@ -42,7 +42,8 @@ namespace MDStudio
         enum BreakMode
         {
             kBreakpoint,
-            kStepOver
+            kStepOver,
+            kLogPoint
         };
 
         private readonly Timer m_Timer = new Timer();
@@ -111,8 +112,16 @@ namespace MDStudio
             new Tuple<int,int>( 960, 720 )
         });
 
+        public static readonly ReadOnlyCollection<Tuple<char, string>> kRegions = new ReadOnlyCollection<Tuple<char, string>>(new[]
+        {
+            new Tuple<char, string>( 'J', "Japan" ),
+            new Tuple<char, string>( 'U', "USA" ),
+            new Tuple<char, string>( 'E', "Europe" )
+        });
+
         //Default config
         public const int kDefaultResolutionEntry = 1;
+        public const int kDefaultRegion = 0;
 
         //Memory preview in register window
         public const int kMaxMemPreviewSize = 16;
@@ -155,6 +164,7 @@ namespace MDStudio
             "DBPL",
             "DBVC",
             "DBVS",
+            "DBRA",
         });
 
         public MainForm()
@@ -239,6 +249,7 @@ namespace MDStudio
             stepOverMenu.Enabled = false;
             stopToolStripMenuItem.Enabled = false;
             breakMenu.Enabled = false;
+            m_Watchpoints.Clear();
         }
 
         private void UpdateCRAM()
@@ -263,91 +274,102 @@ namespace MDStudio
 #endif
                 && m_State == State.kRunning)
             {
-                //Breakpoint hit, go to address
-                int currentPC = DGenThread.GetDGen().GetCurrentPC();
-                GoTo((uint)currentPC);
-
-                //Get regs
-                uint[] dregs = new uint[8];
-                for (int i = 0; i < 8; i++)
+                if(m_BreakMode == BreakMode.kLogPoint && m_Watchpoints.Count > 0)
                 {
-                    dregs[i] = (uint)DGenThread.GetDGen().GetDReg(i);
+                    //Log point, fetch new value, log and continue
+                    uint value = DGenThread.GetDGen().ReadLong(m_Watchpoints[0]);
+                    String log = String.Format("LOGPOINT - Address 0x{0:x} = 0x{1:x}", m_Watchpoints[0], value);
+                    Console.WriteLine(log);
+                    DGenThread.GetDGen().Resume();
                 }
-
-                uint[] aregs = new uint[7];
-                for (int i = 0; i < 7; i++)
+                else
                 {
-                    aregs[i] = (uint)DGenThread.GetDGen().GetAReg(i);
-                }
+                    //Breakpoint hit, go to address
+                    int currentPC = DGenThread.GetDGen().GetCurrentPC();
+                    GoTo((uint)currentPC);
 
-                uint sr = (uint)DGenThread.GetDGen().GetSR();
-
-                m_RegisterView.SetRegs(dregs[0], dregs[1], dregs[2], dregs[3], dregs[4], dregs[5], dregs[6], dregs[7],
-                                        aregs[0], aregs[1], aregs[2], aregs[3], aregs[4], aregs[5], aregs[6], 0,
-                                        sr, (uint)currentPC);
-
-                //Dereference ARegs and fill memory previews
-                unsafe
-                {
-                    MemPreviewBuffer dataBuffer = new MemPreviewBuffer();
-                    byte[] localBuffer = new byte[kMaxMemPreviewSize];
-
-                    DGenThread.GetDGen().ReadMemory(aregs[0], kMaxMemPreviewSize, dataBuffer.dataBuffer);
-                    Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
-                    m_RegisterView.SetData_a0(localBuffer);
-
-                    DGenThread.GetDGen().ReadMemory(aregs[1], kMaxMemPreviewSize, dataBuffer.dataBuffer);
-                    Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
-                    m_RegisterView.SetData_a1(localBuffer);
-
-                    DGenThread.GetDGen().ReadMemory(aregs[2], kMaxMemPreviewSize, dataBuffer.dataBuffer);
-                    Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
-                    m_RegisterView.SetData_a2(localBuffer);
-
-                    DGenThread.GetDGen().ReadMemory(aregs[3], kMaxMemPreviewSize, dataBuffer.dataBuffer);
-                    Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
-                    m_RegisterView.SetData_a3(localBuffer);
-
-                    DGenThread.GetDGen().ReadMemory(aregs[4], kMaxMemPreviewSize, dataBuffer.dataBuffer);
-                    Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
-                    m_RegisterView.SetData_a4(localBuffer);
-
-                    DGenThread.GetDGen().ReadMemory(aregs[5], kMaxMemPreviewSize, dataBuffer.dataBuffer);
-                    Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
-                    m_RegisterView.SetData_a5(localBuffer);
-
-                    DGenThread.GetDGen().ReadMemory(aregs[6], kMaxMemPreviewSize, dataBuffer.dataBuffer);
-                    Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
-                    m_RegisterView.SetData_a6(localBuffer);
-                }
-
-                //Set status
-                statusLabel.Text = "PC 0x" + DGenThread.GetDGen().GetCurrentPC();
-
-                //Bring window to front
-                BringToFront();
-
-                UpdateCRAM();
-                m_VDPStatus.UpdateView();
-
-                //Determine break mode
-                if (m_BreakMode == BreakMode.kStepOver)
-                {
-                    //If hit desired step over address
-                    if (currentPC == m_StepOverAddress)
+                    //Get regs
+                    uint[] dregs = new uint[8];
+                    for (int i = 0; i < 8; i++)
                     {
-                        //Return to breakpoint mode
-                        m_StepOverAddress = 0;
-                        m_BreakMode = BreakMode.kBreakpoint;
-
-                        //Clear step over breakpoint
-                        //TODO: Add ClearBreakpoint() to DGen, clear all for now
-                        m_DGenThread.ClearBreakpoints();
+                        dregs[i] = (uint)DGenThread.GetDGen().GetDReg(i);
                     }
-                }
 
-                //In breakpoint state
-                m_State = State.kDebugging;
+                    uint[] aregs = new uint[8];
+                    for (int i = 0; i < 8; i++)
+                    {
+                        aregs[i] = (uint)DGenThread.GetDGen().GetAReg(i);
+                    }
+
+                    uint sr = (uint)DGenThread.GetDGen().GetSR();
+
+                    m_RegisterView.SetRegs(dregs[0], dregs[1], dregs[2], dregs[3], dregs[4], dregs[5], dregs[6], dregs[7],
+                                            aregs[0], aregs[1], aregs[2], aregs[3], aregs[4], aregs[5], aregs[6], aregs[7], 0,
+                                            sr, (uint)currentPC);
+
+                    //Dereference ARegs and fill memory previews
+                    unsafe
+                    {
+                        MemPreviewBuffer dataBuffer = new MemPreviewBuffer();
+                        byte[] localBuffer = new byte[kMaxMemPreviewSize];
+
+                        DGenThread.GetDGen().ReadMemory(aregs[0], kMaxMemPreviewSize, dataBuffer.dataBuffer);
+                        Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                        m_RegisterView.SetData_a0(localBuffer);
+
+                        DGenThread.GetDGen().ReadMemory(aregs[1], kMaxMemPreviewSize, dataBuffer.dataBuffer);
+                        Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                        m_RegisterView.SetData_a1(localBuffer);
+
+                        DGenThread.GetDGen().ReadMemory(aregs[2], kMaxMemPreviewSize, dataBuffer.dataBuffer);
+                        Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                        m_RegisterView.SetData_a2(localBuffer);
+
+                        DGenThread.GetDGen().ReadMemory(aregs[3], kMaxMemPreviewSize, dataBuffer.dataBuffer);
+                        Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                        m_RegisterView.SetData_a3(localBuffer);
+
+                        DGenThread.GetDGen().ReadMemory(aregs[4], kMaxMemPreviewSize, dataBuffer.dataBuffer);
+                        Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                        m_RegisterView.SetData_a4(localBuffer);
+
+                        DGenThread.GetDGen().ReadMemory(aregs[5], kMaxMemPreviewSize, dataBuffer.dataBuffer);
+                        Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                        m_RegisterView.SetData_a5(localBuffer);
+
+                        DGenThread.GetDGen().ReadMemory(aregs[6], kMaxMemPreviewSize, dataBuffer.dataBuffer);
+                        Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                        m_RegisterView.SetData_a6(localBuffer);
+                    }
+
+                    //Set status
+                    statusLabel.Text = "PC 0x" + DGenThread.GetDGen().GetCurrentPC();
+
+                    //Bring window to front
+                    BringToFront();
+
+                    UpdateCRAM();
+                    m_VDPStatus.UpdateView();
+
+                    //Determine break mode
+                    if (m_BreakMode == BreakMode.kStepOver)
+                    {
+                        //If hit desired step over address
+                        if (currentPC == m_StepOverAddress)
+                        {
+                            //Return to breakpoint mode
+                            m_StepOverAddress = 0;
+                            m_BreakMode = BreakMode.kBreakpoint;
+
+                            //Clear step over breakpoint
+                            //TODO: Add ClearBreakpoint() to DGen, clear all for now
+                            m_DGenThread.ClearBreakpoints();
+                        }
+                    }
+
+                    //In breakpoint state
+                    m_State = State.kDebugging;
+                }
             }
             else if (DGenThread.GetDGen() != null && m_State == State.kRunning)
             {
@@ -360,28 +382,35 @@ namespace MDStudio
             List<string> includes = new List<string>();
             List<string> localIncludes = new List<string>();
 
-            using (System.IO.StreamReader file = System.IO.File.OpenText(filename))
+            try
             {
-                string line;
-                while ((line = file.ReadLine()) != null)
+                using (System.IO.StreamReader file = System.IO.File.OpenText(filename))
                 {
-                    // all whitespace, followed by 'include', followed by all whitespace, followed by filename in quotes (relative to first assembled file)
-                    // e.g. "	include '..\framewk\dmaqueue.asm'"
-                    string pattern = "^\\sinclude(\\s+)*[\'\\\"](.+)*[\'\\\"]";
-                    Match match = Regex.Match(line, pattern);
-
-                    if (match.Success)
+                    string line;
+                    while ((line = file.ReadLine()) != null)
                     {
-                        //Convert relative paths to absolute
-                        string include = System.IO.Path.GetFullPath(System.IO.Path.Combine(rootPath, match.Groups[2].Value));
-                        includes.Add(include);
-                        localIncludes.Add(include);
+                        // all whitespace, followed by 'include', followed by all whitespace, followed by filename in quotes (relative to first assembled file)
+                        // e.g. "	include '..\framewk\dmaqueue.asm'"
+                        string pattern = "^\\sinclude(\\s+)*[\'\\\"](.+)*[\'\\\"]";
+                        Match match = Regex.Match(line, pattern);
+
+                        if (match.Success)
+                        {
+                            //Convert relative paths to absolute
+                            string include = System.IO.Path.GetFullPath(System.IO.Path.Combine(rootPath, match.Groups[2].Value));
+                            includes.Add(include);
+                            localIncludes.Add(include);
+                        }
                     }
                 }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine("build exception: " + e.Message);
+            }
 
             //Recurse
-            foreach(string include in localIncludes)
+            foreach (string include in localIncludes)
             {
                 includes.AddRange(ScanIncludes(rootPath, include));
             }
@@ -640,7 +669,7 @@ namespace MDStudio
                     {
                         //Init emu
                         Tuple<int, int> resolution = kValidResolutions[m_Config.EmuResolution];
-                        m_DGenThread.Init(resolution.Item1, resolution.Item2, this.Handle);
+                        m_DGenThread.Init(resolution.Item1, resolution.Item2, this.Handle, m_Config.Pal, kRegions[m_Config.EmuRegion].Item1);
 
                         //Set input mappings
                         DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputUp, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeUp));
@@ -1010,6 +1039,7 @@ namespace MDStudio
             configForm.asmPath.Text = m_Config.Asm68kPath;
             configForm.asmArgs.Text = m_Config.Asm68kArgs;
             configForm.emuResolution.SelectedIndex = m_Config.EmuResolution;
+            configForm.emuRegion.SelectedIndex = m_Config.EmuRegion;
             configForm.autoOpenLastProject.Checked = m_Config.AutoOpenLastProject;
 
             configForm.inputUp.SelectedIndex = m_Config.KeycodeUp;
@@ -1021,6 +1051,9 @@ namespace MDStudio
             configForm.inputC.SelectedIndex = m_Config.KeycodeC;
             configForm.inputStart.SelectedIndex = m_Config.KeycodeStart;
 
+            configForm.modePAL.Checked = m_Config.Pal;
+            configForm.modeNTSC.Checked = !m_Config.Pal;
+
             configForm.megaUSBPath.Text = m_Config.MegaUSBPath;
 
             if (configForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -1028,6 +1061,7 @@ namespace MDStudio
                 m_Config.Asm68kPath = configForm.asmPath.Text;
                 m_Config.Asm68kArgs = configForm.asmArgs.Text;
                 m_Config.EmuResolution = configForm.emuResolution.SelectedIndex;
+                m_Config.EmuRegion = configForm.emuRegion.SelectedIndex;
                 m_Config.AutoOpenLastProject = configForm.autoOpenLastProject.Checked;
                 m_Config.LastProject = m_ProjectFile;
 
@@ -1039,6 +1073,8 @@ namespace MDStudio
                 m_Config.KeycodeB = configForm.inputB.SelectedIndex;
                 m_Config.KeycodeC = configForm.inputC.SelectedIndex;
                 m_Config.KeycodeStart = configForm.inputStart.SelectedIndex;
+
+                m_Config.Pal = configForm.modePAL.Checked;
 
                 m_Config.MegaUSBPath = configForm.megaUSBPath.Text;
 
@@ -1521,14 +1557,17 @@ namespace MDStudio
             if (gotoForm.ShowDialog() == DialogResult.OK)
             {
                 uint address;
-            
+
                 if (uint.TryParse(gotoForm.textLineNumber.Text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out address))
                 {
-                    m_Watchpoints.Add(address);
-            
-                    if(m_State != State.kStopped)
+                    if(address > 0)
                     {
-                        DGenThread.GetDGen().AddWatchPoint((int)address, (int)address + 3);
+                        m_Watchpoints.Add(address);
+
+                        if (m_State != State.kStopped)
+                        {
+                            DGenThread.GetDGen().AddWatchPoint((int)address, (int)address + 3);
+                        }
                     }
                 }
             }
@@ -1543,6 +1582,28 @@ namespace MDStudio
             m_UMDK.WriteFile(binaryFile);
             m_UMDK.Close();
 #endif
+        }
+
+        private void addLogpointToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GoToForm gotoForm = new GoToForm(GoToForm.Type.Address);
+
+            if (gotoForm.ShowDialog() == DialogResult.OK)
+            {
+                uint address;
+
+                if (uint.TryParse(gotoForm.textLineNumber.Text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out address))
+                {
+                    m_Watchpoints.Add(address);
+
+                    if (m_State != State.kStopped)
+                    {
+                        DGenThread.GetDGen().AddWatchPoint((int)address, (int)address + 3);
+                    }
+
+                    m_BreakMode = BreakMode.kLogPoint;
+                }
+            }
         }
     }
 }

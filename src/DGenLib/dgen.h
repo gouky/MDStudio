@@ -21,7 +21,7 @@
 #define eInputMode		11
 #define eInput_COUNT	12
 
-extern int		InitDGen(int windowWidth, int windowHeight, HWND parent);
+extern int		InitDGen(int windowWidth, int windowHeight, HWND parent, int pal, char region);
 extern void		SetDGenWindowPosition(int x, int y);
 extern int		GetDGenWindowXPosition();
 extern int		GetDGenWindowYPosition();
@@ -53,6 +53,9 @@ extern int		GetDReg(int index);
 extern int		GetAReg(int index);
 extern int		GetSR();
 extern int		GetCurrentPC();
+extern unsigned char	ReadByte(unsigned int address);
+extern unsigned short	ReadWord(unsigned int address);
+extern unsigned int		ReadLong(unsigned int address);
 extern void		ReadMemory(unsigned int address, unsigned int size, BYTE* memory);
 
 extern void		SetInputMapping(int input, int mapping);
