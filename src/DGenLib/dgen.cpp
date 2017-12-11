@@ -15,12 +15,15 @@ extern "C"
 #define	IS_MAIN_CPP
 #include "rc-vars.h"
 
+#define AUDIO_CHANNELS 2
+
 FILE *debug_log = NULL;
 
 md*				s_DGenInstance = NULL;
 SDL_Window*		g_SDLWindow = NULL;
 SDL_Renderer*	g_SDLRenderer = NULL;
 SDL_Texture*	g_BackBuffer = NULL;
+SDL_AudioSpec	g_AudioSpec;
 HWND			g_HWND = NULL;
 
 int usec = 0;
@@ -33,6 +36,67 @@ int sdlWindowHeight;
 static unsigned char*	mdpal = NULL;
 static struct sndinfo	sndi;
 static struct bmap		mdscr;
+
+/// Circular buffer and related functions.
+typedef struct
+{
+	size_t i; ///< data start index
+	size_t s; ///< data size
+	size_t size; ///< buffer size
+	union
+	{
+		uint8_t *u8;
+		int16_t *i16;
+	} data; ///< storage
+} cbuf_t;
+
+cbuf_t cbuf;
+
+size_t cbuf_write(cbuf_t *cbuf, uint8_t *src, size_t size)
+{
+	size_t j;
+	size_t k;
+
+	if(size > cbuf->size) {
+		src += (size - cbuf->size);
+		size = cbuf->size;
+	}
+	k = (cbuf->size - cbuf->s);
+	j = ((cbuf->i + cbuf->s) % cbuf->size);
+	if(size > k) {
+		cbuf->i = ((cbuf->i + (size - k)) % cbuf->size);
+		cbuf->s = cbuf->size;
+	}
+	else
+		cbuf->s += size;
+	k = (cbuf->size - j);
+	if(k >= size) {
+		memcpy(&cbuf->data.u8[j], src, size);
+	}
+	else {
+		memcpy(&cbuf->data.u8[j], src, k);
+		memcpy(&cbuf->data.u8[0], &src[k], (size - k));
+	}
+	return size;
+}
+
+size_t cbuf_read(uint8_t *dst, cbuf_t *cbuf, size_t size)
+{
+	if(size > cbuf->s)
+		size = cbuf->s;
+	if((cbuf->i + size) > cbuf->size) {
+		size_t k = (cbuf->size - cbuf->i);
+
+		memcpy(&dst[0], &cbuf->data.u8[(cbuf->i)], k);
+		memcpy(&dst[k], &cbuf->data.u8[0], (size - k));
+	}
+	else
+		memcpy(&dst[0], &cbuf->data.u8[(cbuf->i)], size);
+	cbuf->i = ((cbuf->i + size) % cbuf->size);
+	cbuf->s -= size;
+	return size;
+}
+
 
 struct SDLInputMapping
 {
@@ -77,6 +141,16 @@ void pd_message(const char *msg, ...)
 	pd_message_process();*/
 }
 
+void DGenAudioCallback(void *userdata, Uint8 * stream, int len)
+{
+	size_t wrote = cbuf_read(stream, &cbuf, len);
+	if(wrote != (size_t)len)
+	{
+		//Fill remainder with silence
+		memset(&stream[wrote], 0, ((size_t)len - wrote));
+	}
+}
+
 int InitDGen(int windowWidth, int windowHeight, HWND parent, int pal, char region)
 {
  	s_DGenInstance = new md(pal, region);
@@ -106,6 +180,35 @@ int InitDGen(int windowWidth, int windowHeight, HWND parent, int pal, char regio
 	SDL_GetWindowWMInfo(g_SDLWindow, &wmInfo);
 
 	SetParent(wmInfo.info.win.window, parent);
+
+	// Init audio
+	g_AudioSpec.channels = 2;
+	g_AudioSpec.samples = dgen_soundsamples;
+	g_AudioSpec.size = 0;
+	g_AudioSpec.freq = dgen_soundrate;
+	g_AudioSpec.callback = DGenAudioCallback;
+	g_AudioSpec.userdata = NULL;
+
+#ifdef WORDS_BIGENDIAN
+	g_AudioSpec.format = AUDIO_S16MSB;
+#else
+	g_AudioSpec.format = AUDIO_S16LSB;
+#endif
+
+	if(int audioResult = SDL_OpenAudio(&g_AudioSpec, &g_AudioSpec) < 0)
+	{
+		printf("SDL_OpenAudio() failed with 0x%08x", audioResult);
+	}
+
+	// Alloc audio buffer
+	sndi.len = (dgen_soundrate / dgen_hz);
+	sndi.lr = (int16_t *)calloc(2, (sndi.len * sizeof(sndi.lr[0])));
+
+	// Alloc ringbuffer
+	cbuf.size = (dgen_soundsegs * (dgen_soundrate / dgen_hz)) + (g_AudioSpec.samples * (2 * (16 / 8)));
+	cbuf.data.i16 = (int16_t *)calloc(1, cbuf.size);
+	cbuf.i = 0;
+	cbuf.s = 0;
 
 	return 1;
 }
@@ -164,6 +267,7 @@ int		LoadRom(const char* path)
 	s_DGenInstance->debug_init();
 	
 	ShowSDLWindow();
+	SDL_PauseAudio(0);
 
 	return 1;
 }
@@ -179,8 +283,11 @@ int		Shutdown()
 	SDL_DestroyTexture(g_BackBuffer);
 	SDL_DestroyRenderer(g_SDLRenderer);
 	SDL_DestroyWindow(g_SDLWindow);
+	SDL_CloseAudio();
 
 	delete s_DGenInstance;
+	free(sndi.lr);
+	free(cbuf.data.i16);
 
 	return 1;
 }
@@ -350,6 +457,11 @@ int UpdateDGen()
 	SDL_LockTexture(g_BackBuffer, NULL, &pixels, &pitch);
 	memcpy(pixels, mdscr.data, mdscr.h * mdscr.pitch);
 	SDL_UnlockTexture(g_BackBuffer);
+
+	//Write sound buffer to ringbuffer
+	SDL_LockAudio();
+	cbuf_write(&cbuf, (uint8_t*)sndi.lr, (sndi.len * 4));
+	SDL_UnlockAudio();
 
 	EndFrame();
 	return 1;

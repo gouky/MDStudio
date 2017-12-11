@@ -123,6 +123,9 @@
     <ClCompile Include="linenoise\utf8.c">
       <Filter>Source Files\linenoise</Filter>
     </ClCompile>
+    <ClCompile Include="cz80\cz80.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ckvp.h">
