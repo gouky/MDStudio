@@ -11,7 +11,13 @@ extern "C"
 }
 
 #include "sdl/pd-defs.h"
+
+#ifdef WITH_MUSA
+extern "C" {
 #include "musa/m68k.h"
+}
+#endif
+
 #define	IS_MAIN_CPP
 #include "rc-vars.h"
 
@@ -436,7 +442,13 @@ int UpdateDGen()
 	}
 	else
 	{
+#ifdef WITH_MUSA
 		s_DGenInstance->md_set_musa(true);
+#endif
+
+#ifdef WITH_STAR
+		s_DGenInstance->md_set_star(true);
+#endif
 
 		int pc = s_DGenInstance->m68k_get_pc();
 
@@ -552,12 +564,21 @@ int IsDebugging()
 
 unsigned int* GetProfilerResults(int* instructionCount)
 {
+#ifdef WITH_PROFILER
 	return s_DGenInstance->md_profiler_get_instr_run_counts(instructionCount);
+#else
+	*instructionCount = 0;
+	return NULL;
+#endif
 }
 
 unsigned int GetInstructionCycleCount(unsigned int address)
 {
+#ifdef WITH_PROFILER
 	return s_DGenInstance->md_profiler_get_instr_num_cycles(address);
+#else
+	return 0;
+#endif
 }
 
 int GetDReg(int index)

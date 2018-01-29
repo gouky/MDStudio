@@ -12,7 +12,12 @@ extern "C"
 }
 
 #include "sdl/pd-defs.h"
+
+#ifdef WITH_MUSA
+extern "C" {
 #include "musa/m68k.h"
+}
+#endif
 
 extern "C" char* m68ki_disassemble_quick(unsigned int pc, unsigned int cpu_type, unsigned int* instr_size);
 
@@ -146,8 +151,13 @@ int process()
 	megadrive = new md(false, 'J');
 	megadrive->load("test.bin");
 
+#ifdef WITH_MUSA
 	md::md_musa = megadrive;
+#endif
 
+#ifdef WITH_STAR
+	md::md_star = megadrive;
+#endif
 
 	megadrive->debug_set_bp_m68k(0x2a6a4);
 
@@ -191,14 +201,22 @@ int process()
 		}
 		else
 		{
+#ifdef WITH_MUSA
 			megadrive->md_set_musa(true);
+#endif
+
+#ifdef WITH_STAR
+			megadrive->md_set_star(true);
+#endif
 
 			int pc = megadrive->m68k_get_pc();
 
 			for(int i = 0; i < 32 ;++i)
 			{
 				unsigned int instrsize;
+#ifdef WITH_MUSA
 				const char* code = m68ki_disassemble_quick(pc, M68K_CPU_TYPE_68000, &instrsize);
+#endif
 				//SDL_Log("#$%x\t%s", pc, code);
 				pc += instrsize;
 			}
