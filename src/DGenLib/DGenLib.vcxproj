@@ -46,7 +46,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WITH_MUSA;WITH_CZ80;WITH_DEBUGGER;WITH_PROFILER;_CRT_SECURE_NO_WARNINGS;NO_COMPLETION;_DZ80_EXCLUDE_SCRIPT;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WITH_MUSA;WITH_CZ80;WITH_DEBUGGER;_CRT_SECURE_NO_WARNINGS;NO_COMPLETION;_DZ80_EXCLUDE_SCRIPT;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SDL2_PATH)\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -68,7 +68,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WITH_MUSA;WITH_CZ80;WITH_DEBUGGER;WITH_PROFILER;_CRT_SECURE_NO_WARNINGS;NO_COMPLETION;_DZ80_EXCLUDE_SCRIPT;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WITH_MUSA;WITH_CZ80;WITH_DEBUGGER;_CRT_SECURE_NO_WARNINGS;NO_COMPLETION;_DZ80_EXCLUDE_SCRIPT;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SDL2_PATH)\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -111,6 +111,7 @@
     <ClCompile Include="mem.cpp" />
     <ClCompile Include="musa\m68kcpu.c" />
     <ClCompile Include="musa\m68kdasm.c" />
+    <ClCompile Include="musa\m68kmake.c" />
     <ClCompile Include="musa\m68kops.c" />
     <ClCompile Include="myfm.cpp" />
     <ClCompile Include="ras.cpp" />
@@ -118,6 +119,8 @@
     <ClCompile Include="romload.c" />
     <ClCompile Include="save.cpp" />
     <ClCompile Include="sn76496.c" />
+    <ClCompile Include="star\cpudebug.c" />
+    <ClCompile Include="star\star.c" />
     <ClCompile Include="system.c" />
     <ClCompile Include="vdp.cpp" />
   </ItemGroup>
@@ -136,6 +139,7 @@
     <ClInclude Include="mem.h" />
     <ClInclude Include="memcpy.h" />
     <ClInclude Include="musa\m68k.h" />
+    <ClInclude Include="musa\m68kconf.h" />
     <ClInclude Include="musa\m68kcpu.h" />
     <ClInclude Include="musa\m68kops.h" />
     <ClInclude Include="pd.h" />
@@ -145,6 +149,8 @@
     <ClInclude Include="romload.h" />
     <ClInclude Include="sdl\pd-defs.h" />
     <ClInclude Include="sn76496.h" />
+    <ClInclude Include="star\cpudebug.h" />
+    <ClInclude Include="star\starcpu.h" />
     <ClInclude Include="system.h" />
   </ItemGroup>
   <ItemGroup>

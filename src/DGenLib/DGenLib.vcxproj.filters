@@ -13,17 +13,26 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\dz80">
-      <UniqueIdentifier>{f0c003bf-1e3c-4b19-8c13-74f32ccaff0d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\linenoise">
       <UniqueIdentifier>{899d3bce-af4e-4c51-b9c3-585d1e2f9562}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\musa">
-      <UniqueIdentifier>{00fdf477-af56-41a3-8dde-dfc8e91b7ea0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\sdl">
       <UniqueIdentifier>{eecb98d2-1456-4934-bbc5-5110b29f63f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\68k_cpus">
+      <UniqueIdentifier>{67b7427a-e817-49a2-b495-473c3a223f52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\68k_cpus\star">
+      <UniqueIdentifier>{573e6856-3377-4f6e-a809-4445e0eb5d0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\68k_cpus\musa">
+      <UniqueIdentifier>{00fdf477-af56-41a3-8dde-dfc8e91b7ea0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\z80_cpus">
+      <UniqueIdentifier>{54e7e697-839f-46c7-8135-2d2cb065f847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\z80_cpus\dz80">
+      <UniqueIdentifier>{f0c003bf-1e3c-4b19-8c13-74f32ccaff0d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -84,15 +93,6 @@
     <ClCompile Include="mem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="musa\m68kcpu.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="musa\m68kdasm.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="musa\m68kops.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="myfm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -125,6 +125,24 @@
     </ClCompile>
     <ClCompile Include="cz80\cz80.c">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="star\cpudebug.c">
+      <Filter>Source Files\68k_cpus\star</Filter>
+    </ClCompile>
+    <ClCompile Include="star\star.c">
+      <Filter>Source Files\68k_cpus\star</Filter>
+    </ClCompile>
+    <ClCompile Include="musa\m68kcpu.c">
+      <Filter>Source Files\68k_cpus\musa</Filter>
+    </ClCompile>
+    <ClCompile Include="musa\m68kdasm.c">
+      <Filter>Source Files\68k_cpus\musa</Filter>
+    </ClCompile>
+    <ClCompile Include="musa\m68kmake.c">
+      <Filter>Source Files\68k_cpus\musa</Filter>
+    </ClCompile>
+    <ClCompile Include="musa\m68kops.c">
+      <Filter>Source Files\68k_cpus\musa</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -177,19 +195,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dz80\dissz80.h">
-      <Filter>Source Files\dz80</Filter>
+      <Filter>Source Files\z80_cpus\dz80</Filter>
     </ClInclude>
     <ClInclude Include="dz80\dissz80p.h">
-      <Filter>Source Files\dz80</Filter>
-    </ClInclude>
-    <ClInclude Include="musa\m68k.h">
-      <Filter>Source Files\musa</Filter>
-    </ClInclude>
-    <ClInclude Include="musa\m68kcpu.h">
-      <Filter>Source Files\musa</Filter>
-    </ClInclude>
-    <ClInclude Include="musa\m68kops.h">
-      <Filter>Source Files\musa</Filter>
+      <Filter>Source Files\z80_cpus\dz80</Filter>
     </ClInclude>
     <ClInclude Include="memcpy.h">
       <Filter>Source Files\sdl</Filter>
@@ -199,6 +208,24 @@
     </ClInclude>
     <ClInclude Include="linenoise\utf8.h">
       <Filter>Source Files\linenoise</Filter>
+    </ClInclude>
+    <ClInclude Include="star\cpudebug.h">
+      <Filter>Source Files\68k_cpus\star</Filter>
+    </ClInclude>
+    <ClInclude Include="star\starcpu.h">
+      <Filter>Source Files\68k_cpus\star</Filter>
+    </ClInclude>
+    <ClInclude Include="musa\m68k.h">
+      <Filter>Source Files\68k_cpus\musa</Filter>
+    </ClInclude>
+    <ClInclude Include="musa\m68kconf.h">
+      <Filter>Source Files\68k_cpus\musa</Filter>
+    </ClInclude>
+    <ClInclude Include="musa\m68kcpu.h">
+      <Filter>Source Files\68k_cpus\musa</Filter>
+    </ClInclude>
+    <ClInclude Include="musa\m68kops.h">
+      <Filter>Source Files\68k_cpus\musa</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
