@@ -312,6 +312,22 @@ int md::reset()
   return 0;
 }
 
+void md::soft_reset()
+{
+#ifdef WITH_STAR
+	s68000reset();
+#endif
+#ifdef WITH_MUSA
+	m68k_pulse_reset();
+#endif
+#ifdef WITH_CYCLONE
+	CycloneReset(&cyclonecpu);
+#endif
+
+	z80_reset();
+	fm_reset();
+}
+
 #ifdef WITH_MZ80
 
 extern "C" UINT8 mz80_read(UINT32 a, struct MemoryReadByte *unused);

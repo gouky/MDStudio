@@ -284,6 +284,11 @@ int		Reset()
 	return s_DGenInstance->reset();
 }
 
+void	SoftReset()
+{
+	s_DGenInstance->soft_reset();
+}
+
 int		Shutdown()
 {
 	SDL_DestroyTexture(g_BackBuffer);
@@ -549,11 +554,17 @@ int StepInto()
 
 int Resume()
 {
+	//s_DGenInstance->debug_context = DBG_CONTEXT_Z80;
+	//s_DGenInstance->debug_cmd_cont(0, NULL);
+	//s_DGenInstance->debug_context = DBG_CONTEXT_M68K;
 	return s_DGenInstance->debug_cmd_cont(0, NULL);
 }
 
 int Break()
 {
+	//s_DGenInstance->debug_context = DBG_CONTEXT_Z80;
+	//s_DGenInstance->debug_cmd_step(0, NULL);
+	//s_DGenInstance->debug_context = DBG_CONTEXT_M68K;
 	return s_DGenInstance->debug_cmd_step(0, NULL);
 }
 
@@ -604,6 +615,11 @@ int GetCurrentPC()
 	return s_DGenInstance->m68k_get_pc();
 }
 
+int GetZ80Reg(int index)
+{
+	return s_DGenInstance->debug_z80_get_reg(index);
+}
+
 unsigned char ReadByte(unsigned int address)
 {
 	return s_DGenInstance->misc_readbyte(address);
@@ -627,6 +643,11 @@ void ReadMemory(unsigned int address, unsigned int size, BYTE* memory)
 	{
 		memory[i] = s_DGenInstance->misc_readbyte(address + i);
 	}
+}
+
+unsigned char ReadZ80Byte(unsigned int address)
+{
+	return s_DGenInstance->z80_read(address);
 }
 
 int GetPaletteEntry(int i)

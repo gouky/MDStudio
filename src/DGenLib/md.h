@@ -241,6 +241,22 @@ typedef struct {
 	uint8_t irq_vector; /* IRQ vector */
 } z80_state_t;
 
+enum Z80Regs
+{
+	Z80_REG_FA,
+	Z80_REG_CB,
+	Z80_REG_ED,
+	Z80_REG_LH,
+	Z80_REG_FA_ALT,
+	Z80_REG_CB_ALT,
+	Z80_REG_ED_ALT,
+	Z80_REG_LH_ALT,
+	Z80_REG_IX,
+	Z80_REG_IY,
+	Z80_REG_SP,
+	Z80_REG_PC
+};
+
 #define MCLK_CYCLES_PER_LINE 3416 /* XXX ideally 3415.597 */
 #define M68K_CYCLES_PER_LINE (MCLK_CYCLES_PER_LINE / 7)
 #define M68K_CYCLES_HBLANK ((M68K_CYCLES_PER_LINE * 36) / 209)
@@ -582,6 +598,7 @@ public:
   int load(const char *name);
 
   int reset();
+  void soft_reset();
 
 	uint8_t misc_readbyte(uint32_t a);
 	void misc_writebyte(uint32_t a, uint8_t d);
@@ -721,6 +738,7 @@ public:
 	uint32_t m68k_get_pc();
 	uint16_t z80_get_pc();
 	uint32_t debug_m68k_get_reg(m68k_register_t reg);
+	uint16_t debug_z80_get_reg(int reg);
 	bool debug_m68k_check_bps();
 	bool debug_m68k_check_wps();
 	bool debug_z80_check_bps();

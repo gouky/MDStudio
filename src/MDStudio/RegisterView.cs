@@ -22,6 +22,13 @@ namespace MDStudio
             eString
         }
 
+        private enum kDataSize
+        {
+            eByte,
+            eWord,
+            eLong
+        }
+
         private kViewType m_ViewType;
         private kViewType m_ViewTypeData = kViewType.eHexadecimal;
 
@@ -54,6 +61,32 @@ namespace MDStudio
             SetRegText(txt_usp, usp);
             SetRegText(txt_pc, pc);
             SetRegText(txt_sr, sr);
+        }
+
+        public void SetZ80Regs( uint af, uint bc, uint de, uint hl,
+                                uint af2, uint bc2, uint de2, uint hl2,
+                                uint ix, uint iy, uint sr, uint pc)
+        {
+            SetRegText(txt_a, af >> 8, kDataSize.eByte);
+            SetRegText(txt_f, af & 0xF, kDataSize.eByte);
+            SetRegText(txt_b, bc >> 8, kDataSize.eByte);
+            SetRegText(txt_c, bc & 0xF, kDataSize.eByte);
+            SetRegText(txt_d, de >> 8, kDataSize.eByte);
+            SetRegText(txt_e, de & 0xF, kDataSize.eByte);
+            SetRegText(txt_h, hl >> 8, kDataSize.eByte);
+            SetRegText(txt_l, hl & 0xF, kDataSize.eByte);
+            SetRegText(txt_a_alt, af2 >> 8, kDataSize.eByte);
+            SetRegText(txt_f_alt, af2 & 0xF, kDataSize.eByte);
+            SetRegText(txt_b_alt, bc2 >> 8, kDataSize.eByte);
+            SetRegText(txt_c_alt, bc2 & 0xF, kDataSize.eByte);
+            SetRegText(txt_d_alt, de2 >> 8, kDataSize.eByte);
+            SetRegText(txt_e_alt, de2 & 0xF, kDataSize.eByte);
+            SetRegText(txt_h_alt, hl2 >> 8, kDataSize.eByte);
+            SetRegText(txt_l_alt, hl2 & 0xF, kDataSize.eByte);
+            SetRegText(txt_ix, ix, kDataSize.eWord);
+            SetRegText(txt_iy, iy, kDataSize.eWord);
+            SetRegText(txt_z80_sr, sr, kDataSize.eWord);
+            SetRegText(txt_z80_pc, pc, kDataSize.eWord);
         }
 
         private void SetDataView(TextBox textBox, byte[] data, kViewType viewType)
@@ -133,7 +166,7 @@ namespace MDStudio
             SetDataView(txt_sp_data, m_DataCache[7], m_ViewTypeData);
         }
 
-        private void SetRegText(TextBox textBox, uint value)
+        private void SetRegText(TextBox textBox, uint value, kDataSize dataSize = kDataSize.eLong)
         {
             string text;
             
@@ -147,7 +180,12 @@ namespace MDStudio
                     break;
                 default:
                 case kViewType.eHexadecimal:
-                    text = value.ToString("X8");
+                    if(dataSize == kDataSize.eByte)
+                        text = value.ToString("X2");
+                    else if (dataSize == kDataSize.eWord)
+                        text = value.ToString("X4");
+                    else
+                        text = value.ToString("X8");
                     break;
             }
             if (textBox.Text == text)

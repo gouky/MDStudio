@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MDStudio</RootNamespace>
     <AssemblyName>MDStudio</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -24,7 +25,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -239,10 +239,6 @@
     <ProjectReference Include="..\DGenInterface\DGenInterface.vcxproj">
       <Project>{487b0d06-3797-47cb-9c8d-b32301b4f1e1}</Project>
       <Name>DGenInterface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UMDK\UMDK.vcxproj">
-      <Project>{dd61f5ba-5b00-41c8-9f03-2c7fef7eb391}</Project>
-      <Name>UMDK</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

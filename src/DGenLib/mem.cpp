@@ -324,6 +324,18 @@ void md::m68k_IO_write(uint32_t a, uint8_t d)
 		z80_write((a & 0xffff), d);
 		return;
 	}
+	/* ctrl 1 */
+	if (a == 0xa10009)
+	{
+		pad_com[0] = d;
+		return;
+	}
+	/* ctrl 3 */
+	if (a == 0xa1000b)
+	{
+		pad_com[1] = d;
+		return;
+	}
 	if (a == 0xa11100) {
 		/* Z80 BUSREQ */
 		if (d & 0x01)

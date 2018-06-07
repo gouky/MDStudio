@@ -144,6 +144,7 @@ namespace MDStudio
 
         public void UpdateView()
         {
+            /*
             if (DGenThread.GetDGen() != null)
             {
                 for(int i=0; i<m_VDPRegisters.Length; ++i)
@@ -168,6 +169,7 @@ namespace MDStudio
                     }
                 }
             }
+            */
         }
 
         public void Reset()

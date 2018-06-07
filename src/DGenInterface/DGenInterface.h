@@ -29,6 +29,22 @@ namespace DGenInterface {
 			eInput_COUNT
 		};
 
+		enum class Z80Regs
+		{
+			Z80_REG_FA,
+			Z80_REG_CB,
+			Z80_REG_ED,
+			Z80_REG_LH,
+			Z80_REG_FA_ALT,
+			Z80_REG_CB_ALT,
+			Z80_REG_ED_ALT,
+			Z80_REG_LH_ALT,
+			Z80_REG_IX,
+			Z80_REG_IY,
+			Z80_REG_SP,
+			Z80_REG_PC
+		};
+
 		DGen();
 		~DGen();
 
@@ -38,6 +54,7 @@ namespace DGenInterface {
 		int		GetWindowYPosition();
 		void	BringToFront();
 		int		Reset();
+		void	SoftReset();
 		int		LoadRom(String^ path);
 		int		Update();
 
@@ -67,6 +84,9 @@ namespace DGenInterface {
 		unsigned short	ReadWord(unsigned int address);
 		unsigned int	ReadLong(unsigned int address);
 		void    ReadMemory(unsigned int address, unsigned int size, BYTE* memory);
+
+		int		GetZ80Reg(Z80Regs reg);
+		unsigned char	ReadZ80Byte(unsigned int address);
 
 		void	SetInputMapping(SDLInputs input, int mapping);
 		int		GetInputMapping(SDLInputs input);

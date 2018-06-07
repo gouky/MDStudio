@@ -550,6 +550,41 @@ uint16_t md::z80_get_pc()
 	return le2h16(z80_state.pc);
 }
 
+uint16_t md::debug_z80_get_reg(int reg)
+{
+	z80_state_dump();
+
+	switch (reg)
+	{
+	case Z80_REG_FA:
+		return le2h16(z80_state.alt[0].fa);
+	case Z80_REG_CB:
+		return le2h16(z80_state.alt[0].cb);
+	case Z80_REG_ED:
+		return le2h16(z80_state.alt[0].ed);
+	case Z80_REG_LH:
+		return le2h16(z80_state.alt[0].lh);
+	case Z80_REG_FA_ALT:
+		return le2h16(z80_state.alt[1].fa);
+	case Z80_REG_CB_ALT:
+		return le2h16(z80_state.alt[1].cb);
+	case Z80_REG_ED_ALT:
+		return le2h16(z80_state.alt[1].ed);
+	case Z80_REG_LH_ALT:
+		return le2h16(z80_state.alt[1].lh);
+	case Z80_REG_IX:
+		return le2h16(z80_state.ix);
+	case Z80_REG_IY:
+		return le2h16(z80_state.iy);
+	case Z80_REG_SP:
+		return le2h16(z80_state.sp);
+	case Z80_REG_PC:
+		return le2h16(z80_state.pc);
+	}
+
+	return 0;
+};
+
 /**
  * Breakpoint handler fired before every M68K instruction.
  */

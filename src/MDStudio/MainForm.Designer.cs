@@ -69,8 +69,10 @@
             this.stepOverMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pauseResumeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.breakMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.addWatchpointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addLogpointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.vdpToolsRegistersMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -87,7 +89,7 @@
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.treeProjectFiles = new System.Windows.Forms.TreeView();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.addLogpointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.softResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -392,6 +394,8 @@
             this.stepOverMenu,
             this.toolStripSeparator2,
             this.stopToolStripMenuItem,
+            this.softResetToolStripMenuItem,
+            this.pauseResumeToolStripMenuItem,
             this.breakMenu,
             this.addWatchpointToolStripMenuItem,
             this.addLogpointToolStripMenuItem});
@@ -429,6 +433,14 @@
             this.stopToolStripMenuItem.Text = "Stop";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
+            // pauseResumeToolStripMenuItem
+            // 
+            this.pauseResumeToolStripMenuItem.Name = "pauseResumeToolStripMenuItem";
+            this.pauseResumeToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
+            this.pauseResumeToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.pauseResumeToolStripMenuItem.Text = "Pause/Resume";
+            this.pauseResumeToolStripMenuItem.Click += new System.EventHandler(this.pauseResumeToolStripMenuItem_Click);
+            // 
             // breakMenu
             // 
             this.breakMenu.Name = "breakMenu";
@@ -445,6 +457,13 @@
             this.addWatchpointToolStripMenuItem.Text = "Add Watchpoint...";
             this.addWatchpointToolStripMenuItem.Click += new System.EventHandler(this.addWatchpointToolStripMenuItem_Click);
             // 
+            // addLogpointToolStripMenuItem
+            // 
+            this.addLogpointToolStripMenuItem.Name = "addLogpointToolStripMenuItem";
+            this.addLogpointToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.addLogpointToolStripMenuItem.Text = "Add Logpoint...";
+            this.addLogpointToolStripMenuItem.Click += new System.EventHandler(this.addLogpointToolStripMenuItem_Click);
+            // 
             // toolsToolStripMenuItem1
             // 
             this.toolsToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -456,7 +475,7 @@
             // vdpToolsRegistersMenu
             // 
             this.vdpToolsRegistersMenu.Name = "vdpToolsRegistersMenu";
-            this.vdpToolsRegistersMenu.Size = new System.Drawing.Size(146, 22);
+            this.vdpToolsRegistersMenu.Size = new System.Drawing.Size(152, 22);
             this.vdpToolsRegistersMenu.Text = "VDP Registers";
             this.vdpToolsRegistersMenu.Click += new System.EventHandler(this.vDPRegistersToolStripMenuItem_Click);
             // 
@@ -588,12 +607,12 @@
             this.splitContainer.SplitterDistance = 155;
             this.splitContainer.TabIndex = 8;
             // 
-            // addLogpointToolStripMenuItem
+            // softResetToolStripMenuItem
             // 
-            this.addLogpointToolStripMenuItem.Name = "addLogpointToolStripMenuItem";
-            this.addLogpointToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-            this.addLogpointToolStripMenuItem.Text = "Add Logpoint...";
-            this.addLogpointToolStripMenuItem.Click += new System.EventHandler(this.addLogpointToolStripMenuItem_Click);
+            this.softResetToolStripMenuItem.Name = "softResetToolStripMenuItem";
+            this.softResetToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.softResetToolStripMenuItem.Text = "Soft Reset";
+            this.softResetToolStripMenuItem.Click += new System.EventHandler(this.softResetToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -689,6 +708,8 @@
         private System.Windows.Forms.ToolStripMenuItem UMDKEnabledMenuOption;
         private System.Windows.Forms.ToolStripMenuItem addWatchpointToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addLogpointToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pauseResumeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem softResetToolStripMenuItem;
     }
 }
 

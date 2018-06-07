@@ -36,7 +36,8 @@ namespace MDStudio
         {
             kStopped,
             kRunning,
-            kDebugging
+            kDebugging,
+            kPaused
         };
 
         enum BreakMode
@@ -142,6 +143,7 @@ namespace MDStudio
             "BGE",
             "BGT",
             "BHI",
+            "BHS",
             "BLE",
             "BLS",
             "BLT",
@@ -212,7 +214,14 @@ namespace MDStudio
             // Set the syntax-highlighting for C#
             codeEditor.Document.HighlightingStrategy = HighlightingManager.Manager.FindHighlighter("ASM68k");
 
-            m_DGenThread = new DGenThread();
+            try
+            {
+                m_DGenThread = new DGenThread();
+            }
+            catch (Exception e)
+            {
+                throw (e);
+            }
 
             m_Timer.Interval = 16;
             m_Timer.Tick += TimerTick;
@@ -265,6 +274,24 @@ namespace MDStudio
             }
         }
 
+        private void DumpZ80State()
+        {
+            Console.WriteLine("Z80 fa = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_FA));
+            Console.WriteLine("Z80 cb = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_CB));
+            Console.WriteLine("Z80 ed = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_ED));
+            Console.WriteLine("Z80 lh = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_LH));
+            Console.WriteLine("Z80 fa' = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_FA_ALT));
+            Console.WriteLine("Z80 cb' = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_CB_ALT));
+            Console.WriteLine("Z80 ed' = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_ED_ALT));
+            Console.WriteLine("Z80 lh' = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_LH_ALT));
+            Console.WriteLine("Z80 ix = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_IX));
+            Console.WriteLine("Z80 iy = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_IY));
+            Console.WriteLine("Z80 sp = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_SP));
+            Console.WriteLine("Z80 pc = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_PC));
+            Console.WriteLine("1FFF = 0x{0:x}", DGenThread.GetDGen().ReadZ80Byte((int)0x1FFF));
+            Console.WriteLine("1FFB = 0x{0:x}", DGenThread.GetDGen().ReadZ80Byte((int)0x1FFB));
+        }
+
         void TimerTick(object sender, EventArgs e)
         {
             if (
@@ -306,6 +333,22 @@ namespace MDStudio
                     m_RegisterView.SetRegs(dregs[0], dregs[1], dregs[2], dregs[3], dregs[4], dregs[5], dregs[6], dregs[7],
                                             aregs[0], aregs[1], aregs[2], aregs[3], aregs[4], aregs[5], aregs[6], aregs[7], 0,
                                             sr, (uint)currentPC);
+
+                    m_RegisterView.SetZ80Regs(
+                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_FA),
+                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_CB),
+                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_ED),
+                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_LH),
+                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_FA_ALT),
+                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_CB_ALT),
+                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_ED_ALT),
+                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_LH_ALT),
+                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_IX),
+                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_IY),
+                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_SP),
+                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_PC));
+
+                    DumpZ80State();
 
                     //Dereference ARegs and fill memory previews
                     unsafe
@@ -517,29 +560,69 @@ namespace MDStudio
 
             try
             {
-                // For some reason we don't get the standardoutput for asm68k when running in release
-                // using standarderror seems to work but standardoutput needs to be enabled as well for some reason however it's not working
-                // with the debugger dettached ¯\_(ツ)_/¯
-                Process proc = new Process();
+                int timeout = 60 * 1000 * 1000;
 
-                proc.StartInfo.FileName = m_Config.Asm68kPath;
-                proc.StartInfo.WorkingDirectory = m_PathToProject + @"\";
-                proc.StartInfo.Arguments =  @"/p /c /zd " + m_Config.Asm68kArgs + " " + m_SourceFileName + "," + m_ProjectName + ".bin," + m_ProjectName + ".symb," + m_ProjectName + ".list";
-                proc.StartInfo.UseShellExecute = false;
-                proc.StartInfo.RedirectStandardOutput = true;
-                proc.StartInfo.RedirectStandardError = true;
-                proc.StartInfo.CreateNoWindow = true;
-                proc.Start();
-
-                while (!proc.HasExited)
+                using (System.Threading.AutoResetEvent outputWaitHandle = new System.Threading.AutoResetEvent(false))
+                using (System.Threading.AutoResetEvent errorWaitHandle = new System.Threading.AutoResetEvent(false))
                 {
-                    processErrorOutput.Append(proc.StandardError.ReadToEnd());
-                    processStandardOutput.Append(proc.StandardError.ReadToEnd());
-                }
-                processErrorOutput.Append(proc.StandardError.ReadToEnd());
-                processStandardOutput.Append(proc.StandardOutput.ReadToEnd());
+                    using (Process process = new Process())
+                    {
+                        process.StartInfo.FileName = m_Config.Asm68kPath;
+                        process.StartInfo.WorkingDirectory = m_PathToProject + @"\";
+                        process.StartInfo.Arguments = @"/p /c /zd " + m_Config.Asm68kArgs + " " + m_SourceFileName + "," + m_ProjectName + ".bin," + m_ProjectName + ".symb," + m_ProjectName + ".list";
+                        process.StartInfo.UseShellExecute = false;
+                        process.StartInfo.RedirectStandardOutput = true;
+                        process.StartInfo.RedirectStandardError = true;
+                        process.StartInfo.CreateNoWindow = true;
 
-                proc.WaitForExit();
+                        Console.WriteLine("Assembler: {0} {1}", process.StartInfo.FileName, process.StartInfo.Arguments);
+                        m_BuildLog.AddRaw(process.StartInfo.FileName + " " + process.StartInfo.Arguments);
+                        m_BuildLog.Refresh();
+
+                        process.Start();
+
+                        try
+                        {
+                            process.OutputDataReceived += (sender, e) =>
+                            {
+                                if (e.Data == null)
+                                {
+                                    outputWaitHandle.Set();
+                                }
+                                else
+                                {
+                                    processStandardOutput.AppendLine(e.Data);
+                                }
+                            };
+                            process.ErrorDataReceived += (sender, e) =>
+                            {
+                                if (e.Data == null)
+                                {
+                                    errorWaitHandle.Set();
+                                }
+                                else
+                                {
+                                    processErrorOutput.AppendLine(e.Data);
+                                }
+                            };
+
+                            process.Start();
+
+                            process.BeginOutputReadLine();
+                            process.BeginErrorReadLine();
+
+                            if (!process.WaitForExit(timeout))
+                            {
+                                processErrorOutput.Append("Process timed out");
+                            }
+                        }
+                        finally
+                        {
+                            outputWaitHandle.WaitOne(timeout);
+                            errorWaitHandle.WaitOne(timeout);
+                        }
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -769,6 +852,17 @@ namespace MDStudio
             if(match.Success)
             {
                 string opcode = match.Groups[1].ToString().ToUpper();
+
+                //Strip whitespace
+                Regex.Replace(opcode, @"\s+", "");
+
+                //Strip all after .
+                int dotPos = opcode.LastIndexOf(".");
+                if(dotPos >= 0)
+                {
+                    opcode = opcode.Substring(0, dotPos);
+                }
+
                 if (kStepIntoInstrs.Contains(opcode))
                 {
                     stepIntoMenu_Click(sender, e);
@@ -946,6 +1040,7 @@ namespace MDStudio
             }
             m_SourceWatcher.EnableRaisingEvents = false;
 
+            codeEditor.Encoding = Encoding.ASCII;
             codeEditor.SaveFile(m_CurrentSourcePath);
 
             m_SourceWatcher.Path = Path.GetDirectoryName(m_CurrentSourcePath);
@@ -986,11 +1081,21 @@ namespace MDStudio
                 int offset = codeEditor.Document.PositionToOffset(new TextLocation(0, lineNumber));
 
                 codeEditor.Document.MarkerStrategy.Clear();
-                Marker marker = new Marker(offset, codeEditor.Document.LineSegmentCollection[lineNumber].Length, MarkerType.SolidBlock, Color.Yellow, Color.Black);//selection.Offset, selection.Length, MarkerType.SolidBlock, Color.DarkRed, Color.White);
-                codeEditor.Document.MarkerStrategy.AddMarker(marker);
-                codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber;
+
+                if(lineNumber < codeEditor.Document.LineSegmentCollection.Count)
+                {
+                    Marker marker = new Marker(offset, codeEditor.Document.LineSegmentCollection[lineNumber].Length, MarkerType.SolidBlock, Color.Yellow, Color.Black);//selection.Offset, selection.Length, MarkerType.SolidBlock, Color.DarkRed, Color.White);
+                    codeEditor.Document.MarkerStrategy.AddMarker(marker);
+                    codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber;
+                    codeEditor.ActiveTextAreaControl.CenterViewOn(lineNumber, -1);
+                }
+                else
+                {
+                    codeEditor.ActiveTextAreaControl.Caret.Line = lineNumber;
+                    codeEditor.ActiveTextAreaControl.CenterViewOn(0, -1);
+                }
+
                 codeEditor.ActiveTextAreaControl.Caret.Column = 0;
-                codeEditor.ActiveTextAreaControl.CenterViewOn(lineNumber, -1);
                 codeEditor.ActiveTextAreaControl.Invalidate();
             }
         }
@@ -1556,9 +1661,9 @@ namespace MDStudio
             
             if (gotoForm.ShowDialog() == DialogResult.OK)
             {
-                uint address;
+                uint address = Convert.ToUInt32(gotoForm.textLineNumber.Text, 16);
 
-                if (uint.TryParse(gotoForm.textLineNumber.Text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out address))
+                //if (uint.TryParse(gotoForm.textLineNumber.Text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out address))
                 {
                     if(address > 0)
                     {
@@ -1604,6 +1709,25 @@ namespace MDStudio
                     m_BreakMode = BreakMode.kLogPoint;
                 }
             }
+        }
+
+        private void pauseResumeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(m_State == State.kRunning)
+            {
+                DGenThread.GetDGen().Break();
+                m_State = State.kPaused;
+            }
+            else if(m_State == State.kPaused)
+            {
+                DGenThread.GetDGen().Resume();
+                m_State = State.kRunning;
+            }
+        }
+
+        private void softResetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DGenThread.GetDGen().SoftReset();
         }
     }
 }

@@ -1,11 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalRune.Windows.TextEditor", "..\3rdparty\DigitalRune.Windows.TextEditor\DigitalRune.Windows.TextEditor\DigitalRune.Windows.TextEditor.csproj", "{2D18BE89-D210-49EB-A9DD-2246FBB3DF6D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDStudio", "MDStudio\MDStudio.csproj", "{8A7C7EB1-2A39-4ED7-88F5-CED29D3A05DA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2D18BE89-D210-49EB-A9DD-2246FBB3DF6D} = {2D18BE89-D210-49EB-A9DD-2246FBB3DF6D}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{9F747238-FC9C-481B-9E5B-897F9D7CE1BE}"
 EndProject
@@ -81,14 +84,11 @@ Global
 		{487B0D06-3797-47CB-9C8D-B32301B4F1E1}.Release|x64.ActiveCfg = Release|Win32
 		{DD61F5BA-5B00-41C8-9F03-2C7FEF7EB391}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{DD61F5BA-5B00-41C8-9F03-2C7FEF7EB391}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{DD61F5BA-5B00-41C8-9F03-2C7FEF7EB391}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{DD61F5BA-5B00-41C8-9F03-2C7FEF7EB391}.Debug|Win32.ActiveCfg = Debug|Win32
 		{DD61F5BA-5B00-41C8-9F03-2C7FEF7EB391}.Debug|Win32.Build.0 = Debug|Win32
 		{DD61F5BA-5B00-41C8-9F03-2C7FEF7EB391}.Debug|x64.ActiveCfg = Debug|x64
-		{DD61F5BA-5B00-41C8-9F03-2C7FEF7EB391}.Debug|x64.Build.0 = Debug|x64
 		{DD61F5BA-5B00-41C8-9F03-2C7FEF7EB391}.Release|Any CPU.ActiveCfg = Release|Win32
 		{DD61F5BA-5B00-41C8-9F03-2C7FEF7EB391}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{DD61F5BA-5B00-41C8-9F03-2C7FEF7EB391}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{DD61F5BA-5B00-41C8-9F03-2C7FEF7EB391}.Release|Win32.ActiveCfg = Release|Win32
 		{DD61F5BA-5B00-41C8-9F03-2C7FEF7EB391}.Release|Win32.Build.0 = Release|Win32
 		{DD61F5BA-5B00-41C8-9F03-2C7FEF7EB391}.Release|x64.ActiveCfg = Release|x64
@@ -101,5 +101,8 @@ Global
 		{41A0F3FD-5486-4D96-9FF7-76C50F032E76} = {9F747238-FC9C-481B-9E5B-897F9D7CE1BE}
 		{487B0D06-3797-47CB-9C8D-B32301B4F1E1} = {9F747238-FC9C-481B-9E5B-897F9D7CE1BE}
 		{DD61F5BA-5B00-41C8-9F03-2C7FEF7EB391} = {9F747238-FC9C-481B-9E5B-897F9D7CE1BE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {09A0903E-75BE-4945-99FE-4454A0413F64}
 	EndGlobalSection
 EndGlobal

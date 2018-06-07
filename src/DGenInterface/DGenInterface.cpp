@@ -45,6 +45,11 @@ int DGenInterface::DGen::Reset()
 	return ::Reset();
 }
 
+void DGenInterface::DGen::SoftReset()
+{
+	return ::SoftReset();
+}
+
 void DGenInterface::DGen::BringToFront()
 {
 	::BringToFront();
@@ -123,6 +128,11 @@ int DGenInterface::DGen::GetCurrentPC()
 	return ::GetCurrentPC();
 }
 
+int DGenInterface::DGen::GetZ80Reg(Z80Regs reg)
+{
+	return ::GetZ80Reg((int)reg);
+}
+
 int DGenInterface::DGen::Resume()
 {
 	return ::Resume();
@@ -156,6 +166,11 @@ unsigned int DGenInterface::DGen::ReadLong(unsigned int address)
 void DGenInterface::DGen::ReadMemory(unsigned int address, unsigned int size, BYTE* memory)
 {
 	::ReadMemory(address, size, memory);
+}
+
+unsigned char DGenInterface::DGen::ReadZ80Byte(unsigned int address)
+{
+	return ::ReadZ80Byte(address);
 }
 
 void DGenInterface::DGen::SetInputMapping(SDLInputs input, int mapping)

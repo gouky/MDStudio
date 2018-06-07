@@ -28,6 +28,7 @@ extern int		GetDGenWindowYPosition();
 extern void		BringToFront();
 extern int		LoadRom(const char* path);
 extern int		Reset();
+extern void		SoftReset();
 extern int		Shutdown();
 
 extern void		ShowSDLWindow();
@@ -53,10 +54,12 @@ extern int		GetDReg(int index);
 extern int		GetAReg(int index);
 extern int		GetSR();
 extern int		GetCurrentPC();
+extern int		GetZ80Reg(int index);
 extern unsigned char	ReadByte(unsigned int address);
 extern unsigned short	ReadWord(unsigned int address);
 extern unsigned int		ReadLong(unsigned int address);
 extern void		ReadMemory(unsigned int address, unsigned int size, BYTE* memory);
+extern unsigned char	ReadZ80Byte(unsigned int address);
 
 extern void		SetInputMapping(int input, int mapping);
 extern int		GetInputMapping(int input);
