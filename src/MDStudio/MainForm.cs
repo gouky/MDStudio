@@ -1268,7 +1268,7 @@ namespace MDStudio
         {
             OpenFileDialog pathSelect = new OpenFileDialog();
 
-            pathSelect.Filter = "ASM|*.s;*.asm;*.68k";
+            pathSelect.Filter = "ASM|*.s;*.asm;*.68k;*.i";
 
             if (pathSelect.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
