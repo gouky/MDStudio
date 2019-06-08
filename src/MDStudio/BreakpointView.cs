@@ -43,6 +43,7 @@ namespace MDStudio
         public BreakpointView(MainForm mainForm, Symbols symbols)
         {
             InitializeComponent();
+            Owner = mainForm;
             m_mainForm = mainForm;
             m_symbols = symbols;
         }

@@ -52,6 +52,8 @@
             this.Controls.Add(this.breakpointList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "BreakpointView";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Breakpoints";
             this.Load += new System.EventHandler(this.BreakpointView_Load);
             this.ResumeLayout(false);

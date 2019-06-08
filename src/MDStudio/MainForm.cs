@@ -1841,14 +1841,11 @@ namespace MDStudio
 
         private void breakpointsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (m_BreakpointView == null)
-            {
-                m_BreakpointView = new BreakpointView(this, m_DebugSymbols);
+            m_BreakpointView = new BreakpointView(this, m_DebugSymbols);
                 
-                foreach(uint addr in m_Breakpoints)
-                {
-                    m_BreakpointView.SetBreakpoint(addr);
-                }
+            foreach(uint addr in m_Breakpoints)
+            {
+                m_BreakpointView.SetBreakpoint(addr);
             }
 
             m_BreakpointView.Show();
