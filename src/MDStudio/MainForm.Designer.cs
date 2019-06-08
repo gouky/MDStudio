@@ -69,6 +69,7 @@
             this.stepOverMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.softResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pauseResumeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.breakMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.addWatchpointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,7 +90,7 @@
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.treeProjectFiles = new System.Windows.Forms.TreeView();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.softResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.breakpointsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -298,7 +299,8 @@
             this.viewBuildLogMenu,
             this.viewCRAMmenu,
             this.viewVDPStatusMenu,
-            this.profilerVDPStatusMenu});
+            this.profilerVDPStatusMenu,
+            this.breakpointsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.toolsToolStripMenuItem.Text = "&View";
@@ -307,28 +309,28 @@
             // viewBuildLogMenu
             // 
             this.viewBuildLogMenu.Name = "viewBuildLogMenu";
-            this.viewBuildLogMenu.Size = new System.Drawing.Size(146, 22);
+            this.viewBuildLogMenu.Size = new System.Drawing.Size(180, 22);
             this.viewBuildLogMenu.Text = "Build Log";
             this.viewBuildLogMenu.Click += new System.EventHandler(this.viewBuildLogMenu_Click);
             // 
             // viewCRAMmenu
             // 
             this.viewCRAMmenu.Name = "viewCRAMmenu";
-            this.viewCRAMmenu.Size = new System.Drawing.Size(146, 22);
+            this.viewCRAMmenu.Size = new System.Drawing.Size(180, 22);
             this.viewCRAMmenu.Text = "CRAM Viewer";
             this.viewCRAMmenu.Click += new System.EventHandler(this.viewCRAMBtn_Click);
             // 
             // viewVDPStatusMenu
             // 
             this.viewVDPStatusMenu.Name = "viewVDPStatusMenu";
-            this.viewVDPStatusMenu.Size = new System.Drawing.Size(146, 22);
+            this.viewVDPStatusMenu.Size = new System.Drawing.Size(180, 22);
             this.viewVDPStatusMenu.Text = "VDP Status";
             this.viewVDPStatusMenu.Click += new System.EventHandler(this.viewVDPStatusMenu_Click);
             // 
             // profilerVDPStatusMenu
             // 
             this.profilerVDPStatusMenu.Name = "profilerVDPStatusMenu";
-            this.profilerVDPStatusMenu.Size = new System.Drawing.Size(146, 22);
+            this.profilerVDPStatusMenu.Size = new System.Drawing.Size(180, 22);
             this.profilerVDPStatusMenu.Text = "&Profiler";
             this.profilerVDPStatusMenu.Click += new System.EventHandler(this.profilerToolStripMenuItem_Click);
             // 
@@ -433,6 +435,13 @@
             this.stopToolStripMenuItem.Text = "Stop";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
+            // softResetToolStripMenuItem
+            // 
+            this.softResetToolStripMenuItem.Name = "softResetToolStripMenuItem";
+            this.softResetToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.softResetToolStripMenuItem.Text = "Soft Reset";
+            this.softResetToolStripMenuItem.Click += new System.EventHandler(this.softResetToolStripMenuItem_Click);
+            // 
             // pauseResumeToolStripMenuItem
             // 
             this.pauseResumeToolStripMenuItem.Name = "pauseResumeToolStripMenuItem";
@@ -475,7 +484,7 @@
             // vdpToolsRegistersMenu
             // 
             this.vdpToolsRegistersMenu.Name = "vdpToolsRegistersMenu";
-            this.vdpToolsRegistersMenu.Size = new System.Drawing.Size(152, 22);
+            this.vdpToolsRegistersMenu.Size = new System.Drawing.Size(146, 22);
             this.vdpToolsRegistersMenu.Text = "VDP Registers";
             this.vdpToolsRegistersMenu.Click += new System.EventHandler(this.vDPRegistersToolStripMenuItem_Click);
             // 
@@ -607,12 +616,12 @@
             this.splitContainer.SplitterDistance = 155;
             this.splitContainer.TabIndex = 8;
             // 
-            // softResetToolStripMenuItem
+            // breakpointsToolStripMenuItem
             // 
-            this.softResetToolStripMenuItem.Name = "softResetToolStripMenuItem";
-            this.softResetToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-            this.softResetToolStripMenuItem.Text = "Soft Reset";
-            this.softResetToolStripMenuItem.Click += new System.EventHandler(this.softResetToolStripMenuItem_Click);
+            this.breakpointsToolStripMenuItem.Name = "breakpointsToolStripMenuItem";
+            this.breakpointsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.breakpointsToolStripMenuItem.Text = "Breakpoints";
+            this.breakpointsToolStripMenuItem.Click += new System.EventHandler(this.breakpointsToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -710,6 +719,7 @@
         private System.Windows.Forms.ToolStripMenuItem addLogpointToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pauseResumeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem softResetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem breakpointsToolStripMenuItem;
     }
 }
 

@@ -72,6 +72,12 @@
     <Compile Include="AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="BreakpointView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BreakpointView.Designer.cs">
+      <DependentUpon>BreakpointView.cs</DependentUpon>
+    </Compile>
     <Compile Include="BuildLog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -167,6 +173,9 @@
     </Compile>
     <EmbeddedResource Include="AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BreakpointView.resx">
+      <DependentUpon>BreakpointView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BuildLog.resx">
       <DependentUpon>BuildLog.cs</DependentUpon>

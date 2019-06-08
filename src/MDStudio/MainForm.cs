@@ -65,6 +65,7 @@ namespace MDStudio
         private CRamViewer m_CRAMViewer;
         private VDPStatusWindow m_VDPStatus;
         private ProfilerView m_ProfilerView;
+        private BreakpointView m_BreakpointView;
 
         private Config m_Config;
 
@@ -86,6 +87,7 @@ namespace MDStudio
         private BreakMode m_BreakMode = BreakMode.kBreakpoint;
         private uint m_StepOverAddress;
 
+        private List<uint> m_Breakpoints;
         private List<uint> m_Watchpoints;
 
 #if UMDK_SUPPORT
@@ -176,6 +178,7 @@ namespace MDStudio
             m_ErrorMarkers = new List<Marker>();
             m_SearchMarkers= new List<Marker>();
             m_SearchResults = new List<TextLocation>();
+            m_Breakpoints = new List<uint>();
             m_Watchpoints = new List<uint>();
 
             //
@@ -260,6 +263,51 @@ namespace MDStudio
             stopToolStripMenuItem.Enabled = false;
             breakMenu.Enabled = false;
             m_Watchpoints.Clear();
+        }
+
+        public void SetBreakpoint(uint address)
+        {
+            if(m_BreakpointView != null)
+            {
+                m_BreakpointView.SetBreakpoint(address);
+            }
+
+            if(m_Target != null)
+            {
+                m_Target.AddBreakpoint(address);
+            }
+
+            m_Breakpoints.Add(address);
+        }
+
+        public void RemoveBreakpoint(uint address)
+        {
+            if (m_BreakpointView != null)
+            {
+                m_BreakpointView.RemoveBreakpoint(address);
+            }
+
+            if (m_Target != null)
+            {
+                m_Target.RemoveBreakpoint(address);
+            }
+
+            m_Breakpoints.Remove(address);
+        }
+
+        public void ClearBreakpoints()
+        {
+            if (m_BreakpointView != null)
+            {
+                m_BreakpointView.ClearBreakpoints();
+            }
+
+            if (m_Target != null)
+            {
+                m_Target.RemoveAllBreakpoints();
+            }
+
+            m_Breakpoints.Clear();
         }
 
         private void UpdateCRAM()
@@ -740,6 +788,11 @@ namespace MDStudio
                     m_DebugSymbols = new Symbols();
                     m_DebugSymbols.Read(symbolFile);
 
+                    if(m_BreakpointView != null)
+                    {
+                        m_BreakpointView.UpdateSymbols(m_DebugSymbols);
+                    }
+
 #if UMDK_SUPPORT
                     if (UMDKEnabledMenuOption.Checked)
                     {
@@ -775,11 +828,21 @@ namespace MDStudio
                         //  Load Rom
                         m_Target.LoadBinary(binaryFile);
 
-                        //  Set breakpoints
-                        m_Target.RemoveAllBreakpoints();
+                        //  Set initial breakpoints
+                        var breakpoints = m_Breakpoints.ToList();
+                        foreach(uint breakpoint in breakpoints)
+                        {
+                            SetBreakpoint(breakpoint);
+                        }
+
+                        //  Add all breakpoints from current markers
                         foreach (Bookmark mark in codeEditor.Document.BookmarkManager.Marks)
                         {
-                            m_Target.AddBreakpoint(m_DebugSymbols.GetAddress(m_CurrentSourcePath, mark.LineNumber + 1));
+                            uint address = m_DebugSymbols.GetAddress(m_CurrentSourcePath, mark.LineNumber + 1);
+                            if (m_Breakpoints.Find(addr => addr == address) == 0)
+                            {
+                                SetBreakpoint(address);
+                            }
                         }
 
                         // Set watchpoints
@@ -815,17 +878,34 @@ namespace MDStudio
         private void toggleBreakpoint_Click(object sender, EventArgs e)
         {
             int line = codeEditor.ActiveTextAreaControl.Caret.Line;
-            codeEditor.Document.BookmarkManager.ToggleMarkAt(new TextLocation(0, line));
-            codeEditor.Refresh();
 
             //If running, set on running instance
             if(m_State == State.kRunning || m_State == State.kDebugging)
             {
-                if (codeEditor.Document.BookmarkManager.IsMarked(line))
-                    m_Target.AddBreakpoint(m_DebugSymbols.GetAddress(m_CurrentSourcePath, line + 1));
+                uint address = m_DebugSymbols.GetAddress(m_CurrentSourcePath, line + 1);
+
+                if (m_Breakpoints.Find(addr => addr == address) == 0)
+                {
+                    SetBreakpoint(m_DebugSymbols.GetAddress(m_CurrentSourcePath, line + 1));
+
+                    if(!codeEditor.Document.BookmarkManager.IsMarked(line))
+                        codeEditor.Document.BookmarkManager.ToggleMarkAt(new TextLocation(0, line));
+                }
                 else
-                    m_Target.RemoveBreakpoint(m_DebugSymbols.GetAddress(m_CurrentSourcePath, line + 1));
+                {
+                    RemoveBreakpoint(m_DebugSymbols.GetAddress(m_CurrentSourcePath, line + 1));
+
+                    if (codeEditor.Document.BookmarkManager.IsMarked(line))
+                        codeEditor.Document.BookmarkManager.ToggleMarkAt(new TextLocation(0, line));
+                }
             }
+            else
+            {
+                //Just toggle marker
+                codeEditor.Document.BookmarkManager.ToggleMarkAt(new TextLocation(0, line));
+            }
+
+            codeEditor.Refresh();
         }
 
         private void debugToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1757,6 +1837,21 @@ namespace MDStudio
             {
                 m_Target.Reset();
             }
+        }
+
+        private void breakpointsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (m_BreakpointView == null)
+            {
+                m_BreakpointView = new BreakpointView(this, m_DebugSymbols);
+                
+                foreach(uint addr in m_Breakpoints)
+                {
+                    m_BreakpointView.SetBreakpoint(addr);
+                }
+            }
+
+            m_BreakpointView.Show();
         }
     }
 }
