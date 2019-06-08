@@ -60,6 +60,9 @@ namespace MDStudio
             AcceptButton = okBtn;
             CancelButton = cancelBtn;
 
+            //Populate target fields
+
+
             //Populate resolution fields
             foreach(Tuple<int, int> resolution in MainForm.kValidResolutions)
             {

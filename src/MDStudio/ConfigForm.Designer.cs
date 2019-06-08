@@ -64,13 +64,15 @@
             this.modePAL = new System.Windows.Forms.RadioButton();
             this.label15 = new System.Windows.Forms.Label();
             this.emuRegion = new System.Windows.Forms.ComboBox();
+            this.target = new System.Windows.Forms.ComboBox();
+            this.label16 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(55, 15);
+            this.label1.Location = new System.Drawing.Point(54, 36);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(76, 13);
             this.label1.TabIndex = 0;
@@ -78,7 +80,7 @@
             // 
             // asmPath
             // 
-            this.asmPath.Location = new System.Drawing.Point(137, 12);
+            this.asmPath.Location = new System.Drawing.Point(136, 33);
             this.asmPath.Name = "asmPath";
             this.asmPath.Size = new System.Drawing.Size(281, 20);
             this.asmPath.TabIndex = 1;
@@ -86,7 +88,7 @@
             // okBtn
             // 
             this.okBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okBtn.Location = new System.Drawing.Point(343, 336);
+            this.okBtn.Location = new System.Drawing.Point(342, 356);
             this.okBtn.Name = "okBtn";
             this.okBtn.Size = new System.Drawing.Size(75, 23);
             this.okBtn.TabIndex = 2;
@@ -96,7 +98,7 @@
             // 
             // pathButton
             // 
-            this.pathButton.Location = new System.Drawing.Point(424, 10);
+            this.pathButton.Location = new System.Drawing.Point(423, 31);
             this.pathButton.Name = "pathButton";
             this.pathButton.Size = new System.Drawing.Size(24, 23);
             this.pathButton.TabIndex = 3;
@@ -107,7 +109,7 @@
             // cancelBtn
             // 
             this.cancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelBtn.Location = new System.Drawing.Point(246, 336);
+            this.cancelBtn.Location = new System.Drawing.Point(245, 356);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(75, 23);
             this.cancelBtn.TabIndex = 4;
@@ -118,7 +120,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(72, 42);
+            this.label2.Location = new System.Drawing.Point(71, 63);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(57, 13);
             this.label2.TabIndex = 5;
@@ -126,7 +128,7 @@
             // 
             // asmArgs
             // 
-            this.asmArgs.Location = new System.Drawing.Point(137, 39);
+            this.asmArgs.Location = new System.Drawing.Point(136, 60);
             this.asmArgs.Name = "asmArgs";
             this.asmArgs.Size = new System.Drawing.Size(281, 20);
             this.asmArgs.TabIndex = 6;
@@ -134,7 +136,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(30, 69);
+            this.label3.Location = new System.Drawing.Point(29, 89);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(99, 13);
             this.label3.TabIndex = 7;
@@ -144,7 +146,7 @@
             // 
             this.emuResolution.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.emuResolution.FormattingEnabled = true;
-            this.emuResolution.Location = new System.Drawing.Point(137, 66);
+            this.emuResolution.Location = new System.Drawing.Point(136, 86);
             this.emuResolution.Name = "emuResolution";
             this.emuResolution.Size = new System.Drawing.Size(144, 21);
             this.emuResolution.TabIndex = 8;
@@ -167,7 +169,7 @@
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.inputUp);
             this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Location = new System.Drawing.Point(10, 192);
+            this.groupBox1.Location = new System.Drawing.Point(9, 212);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(408, 138);
             this.groupBox1.TabIndex = 9;
@@ -322,7 +324,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(16, 93);
+            this.label12.Location = new System.Drawing.Point(15, 113);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(115, 13);
             this.label12.TabIndex = 10;
@@ -333,7 +335,7 @@
             this.autoOpenLastProject.AutoSize = true;
             this.autoOpenLastProject.Checked = true;
             this.autoOpenLastProject.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.autoOpenLastProject.Location = new System.Drawing.Point(137, 93);
+            this.autoOpenLastProject.Location = new System.Drawing.Point(136, 113);
             this.autoOpenLastProject.Name = "autoOpenLastProject";
             this.autoOpenLastProject.Size = new System.Drawing.Size(15, 14);
             this.autoOpenLastProject.TabIndex = 11;
@@ -342,7 +344,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(42, 169);
+            this.label13.Location = new System.Drawing.Point(41, 189);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(87, 13);
             this.label13.TabIndex = 12;
@@ -350,14 +352,14 @@
             // 
             // megaUSBPath
             // 
-            this.megaUSBPath.Location = new System.Drawing.Point(135, 166);
+            this.megaUSBPath.Location = new System.Drawing.Point(134, 186);
             this.megaUSBPath.Name = "megaUSBPath";
             this.megaUSBPath.Size = new System.Drawing.Size(281, 20);
             this.megaUSBPath.TabIndex = 13;
             // 
             // pathMegaUSBButton
             // 
-            this.pathMegaUSBButton.Location = new System.Drawing.Point(424, 164);
+            this.pathMegaUSBButton.Location = new System.Drawing.Point(423, 184);
             this.pathMegaUSBButton.Name = "pathMegaUSBButton";
             this.pathMegaUSBButton.Size = new System.Drawing.Size(24, 23);
             this.pathMegaUSBButton.TabIndex = 14;
@@ -368,7 +370,7 @@
             // modeNTSC
             // 
             this.modeNTSC.AutoSize = true;
-            this.modeNTSC.Location = new System.Drawing.Point(135, 116);
+            this.modeNTSC.Location = new System.Drawing.Point(134, 136);
             this.modeNTSC.Name = "modeNTSC";
             this.modeNTSC.Size = new System.Drawing.Size(54, 17);
             this.modeNTSC.TabIndex = 15;
@@ -379,7 +381,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(82, 115);
+            this.label14.Location = new System.Drawing.Point(81, 135);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(47, 13);
             this.label14.TabIndex = 16;
@@ -389,7 +391,7 @@
             // modePAL
             // 
             this.modePAL.AutoSize = true;
-            this.modePAL.Location = new System.Drawing.Point(195, 116);
+            this.modePAL.Location = new System.Drawing.Point(194, 136);
             this.modePAL.Name = "modePAL";
             this.modePAL.Size = new System.Drawing.Size(45, 17);
             this.modePAL.TabIndex = 17;
@@ -400,7 +402,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(82, 139);
+            this.label15.Location = new System.Drawing.Point(81, 159);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(44, 13);
             this.label15.TabIndex = 18;
@@ -410,16 +412,36 @@
             // 
             this.emuRegion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.emuRegion.FormattingEnabled = true;
-            this.emuRegion.Location = new System.Drawing.Point(135, 136);
+            this.emuRegion.Location = new System.Drawing.Point(134, 156);
             this.emuRegion.Name = "emuRegion";
             this.emuRegion.Size = new System.Drawing.Size(144, 21);
             this.emuRegion.TabIndex = 19;
+            // 
+            // target
+            // 
+            this.target.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.target.FormattingEnabled = true;
+            this.target.Location = new System.Drawing.Point(136, 6);
+            this.target.Name = "target";
+            this.target.Size = new System.Drawing.Size(279, 21);
+            this.target.TabIndex = 20;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(87, 9);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(41, 13);
+            this.label16.TabIndex = 21;
+            this.label16.Text = "Target:";
             // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(456, 369);
+            this.ClientSize = new System.Drawing.Size(456, 394);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.target);
             this.Controls.Add(this.emuRegion);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.modePAL);
@@ -489,5 +511,7 @@
         public System.Windows.Forms.RadioButton modePAL;
         private System.Windows.Forms.Label label15;
         public System.Windows.Forms.ComboBox emuRegion;
+        public System.Windows.Forms.ComboBox target;
+        private System.Windows.Forms.Label label16;
     }
 }

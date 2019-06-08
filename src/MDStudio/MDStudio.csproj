@@ -145,6 +145,8 @@
     <Compile Include="SymbolView.Designer.cs">
       <DependentUpon>SymbolView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Target.cs" />
+    <Compile Include="TargetDGen.cs" />
     <Compile Include="VDPRegs.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -56,7 +56,7 @@ namespace MDStudio
         private List<string> m_ProjectFiles;
         private string m_BuildArgs;
 
-        private DGenThread m_DGenThread;
+        private Target m_Target;
         public Symbols m_DebugSymbols;
 
         private RegisterView m_RegisterView;
@@ -84,7 +84,7 @@ namespace MDStudio
         private FileSystemWatcher m_SourceWatcher;
 
         private BreakMode m_BreakMode = BreakMode.kBreakpoint;
-        private int m_StepOverAddress;
+        private uint m_StepOverAddress;
 
         private List<uint> m_Watchpoints;
 
@@ -216,7 +216,8 @@ namespace MDStudio
 
             try
             {
-                m_DGenThread = new DGenThread();
+                //TODO: Determine target type
+                m_Target = new TargetDGen();
             }
             catch (Exception e)
             {
@@ -263,39 +264,42 @@ namespace MDStudio
 
         private void UpdateCRAM()
         {
-            // Update palette
-            if (m_CRAMViewer.Visible)
+            if(m_Target is EmulatorTarget)
             {
-                for (int i = 0; i < 64; i++)
+                // Update palette
+                if (m_CRAMViewer.Visible)
                 {
-                    uint rgb = (uint)DGenThread.GetDGen().GetColor(i);
-                    m_CRAMViewer.SetColor(i, rgb);
+                    for (int i = 0; i < 64; i++)
+                    {
+                        uint rgb = (m_Target as EmulatorTarget).GetColor(i);
+                        m_CRAMViewer.SetColor(i, rgb);
+                    }
                 }
             }
         }
 
         private void DumpZ80State()
         {
-            Console.WriteLine("Z80 fa = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_FA));
-            Console.WriteLine("Z80 cb = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_CB));
-            Console.WriteLine("Z80 ed = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_ED));
-            Console.WriteLine("Z80 lh = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_LH));
-            Console.WriteLine("Z80 fa' = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_FA_ALT));
-            Console.WriteLine("Z80 cb' = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_CB_ALT));
-            Console.WriteLine("Z80 ed' = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_ED_ALT));
-            Console.WriteLine("Z80 lh' = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_LH_ALT));
-            Console.WriteLine("Z80 ix = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_IX));
-            Console.WriteLine("Z80 iy = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_IY));
-            Console.WriteLine("Z80 sp = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_SP));
-            Console.WriteLine("Z80 pc = 0x{0:x}", DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_PC));
-            Console.WriteLine("1FFF = 0x{0:x}", DGenThread.GetDGen().ReadZ80Byte((int)0x1FFF));
-            Console.WriteLine("1FFB = 0x{0:x}", DGenThread.GetDGen().ReadZ80Byte((int)0x1FFB));
+            Console.WriteLine("Z80 fa = 0x{0:x}", m_Target.GetZ80Reg(Z80Regs.Z80_REG_FA));
+            Console.WriteLine("Z80 cb = 0x{0:x}", m_Target.GetZ80Reg(Z80Regs.Z80_REG_CB));
+            Console.WriteLine("Z80 ed = 0x{0:x}", m_Target.GetZ80Reg(Z80Regs.Z80_REG_ED));
+            Console.WriteLine("Z80 lh = 0x{0:x}", m_Target.GetZ80Reg(Z80Regs.Z80_REG_LH));
+            Console.WriteLine("Z80 fa' = 0x{0:x}", m_Target.GetZ80Reg(Z80Regs.Z80_REG_FA_ALT));
+            Console.WriteLine("Z80 cb' = 0x{0:x}", m_Target.GetZ80Reg(Z80Regs.Z80_REG_CB_ALT));
+            Console.WriteLine("Z80 ed' = 0x{0:x}", m_Target.GetZ80Reg(Z80Regs.Z80_REG_ED_ALT));
+            Console.WriteLine("Z80 lh' = 0x{0:x}", m_Target.GetZ80Reg(Z80Regs.Z80_REG_LH_ALT));
+            Console.WriteLine("Z80 ix = 0x{0:x}", m_Target.GetZ80Reg(Z80Regs.Z80_REG_IX));
+            Console.WriteLine("Z80 iy = 0x{0:x}", m_Target.GetZ80Reg(Z80Regs.Z80_REG_IY));
+            Console.WriteLine("Z80 sp = 0x{0:x}", m_Target.GetZ80Reg(Z80Regs.Z80_REG_SP));
+            Console.WriteLine("Z80 pc = 0x{0:x}", m_Target.GetZ80Reg(Z80Regs.Z80_REG_PC));
+            Console.WriteLine("1FFF = 0x{0:x}", m_Target.ReadZ80Byte((int)0x1FFF));
+            Console.WriteLine("1FFB = 0x{0:x}", m_Target.ReadZ80Byte((int)0x1FFB));
         }
 
         void TimerTick(object sender, EventArgs e)
         {
             if (
-                (DGenThread.GetDGen() != null && DGenThread.GetDGen().IsDebugging())
+                (m_Target != null && m_Target.IsHalted())
 #if UMDK_SUPPORT
 //                 || ()
 #endif
@@ -304,93 +308,84 @@ namespace MDStudio
                 if(m_BreakMode == BreakMode.kLogPoint && m_Watchpoints.Count > 0)
                 {
                     //Log point, fetch new value, log and continue
-                    uint value = DGenThread.GetDGen().ReadLong(m_Watchpoints[0]);
+                    uint value = m_Target.ReadLong(m_Watchpoints[0]);
                     String log = String.Format("LOGPOINT - Address 0x{0:x} = 0x{1:x}", m_Watchpoints[0], value);
                     Console.WriteLine(log);
-                    DGenThread.GetDGen().Resume();
+                    m_Target.Resume();
                 }
                 else
                 {
                     //Breakpoint hit, go to address
-                    int currentPC = DGenThread.GetDGen().GetCurrentPC();
-                    GoTo((uint)currentPC);
+                    uint currentPC = m_Target.GetPC();
+                    GoTo(currentPC);
 
                     //Get regs
                     uint[] dregs = new uint[8];
                     for (int i = 0; i < 8; i++)
                     {
-                        dregs[i] = (uint)DGenThread.GetDGen().GetDReg(i);
+                        dregs[i] = m_Target.GetDReg(i);
                     }
 
                     uint[] aregs = new uint[8];
                     for (int i = 0; i < 8; i++)
                     {
-                        aregs[i] = (uint)DGenThread.GetDGen().GetAReg(i);
+                        aregs[i] = m_Target.GetAReg(i);
                     }
 
-                    uint sr = (uint)DGenThread.GetDGen().GetSR();
+                    uint sr = m_Target.GetSR();
 
                     m_RegisterView.SetRegs(dregs[0], dregs[1], dregs[2], dregs[3], dregs[4], dregs[5], dregs[6], dregs[7],
                                             aregs[0], aregs[1], aregs[2], aregs[3], aregs[4], aregs[5], aregs[6], aregs[7], 0,
                                             sr, (uint)currentPC);
 
                     m_RegisterView.SetZ80Regs(
-                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_FA),
-                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_CB),
-                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_ED),
-                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_LH),
-                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_FA_ALT),
-                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_CB_ALT),
-                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_ED_ALT),
-                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_LH_ALT),
-                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_IX),
-                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_IY),
-                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_SP),
-                        (uint)DGenThread.GetDGen().GetZ80Reg(DGen.Z80Regs.Z80_REG_PC));
+                        m_Target.GetZ80Reg(Z80Regs.Z80_REG_FA),
+                        m_Target.GetZ80Reg(Z80Regs.Z80_REG_CB),
+                        m_Target.GetZ80Reg(Z80Regs.Z80_REG_ED),
+                        m_Target.GetZ80Reg(Z80Regs.Z80_REG_LH),
+                        m_Target.GetZ80Reg(Z80Regs.Z80_REG_FA_ALT),
+                        m_Target.GetZ80Reg(Z80Regs.Z80_REG_CB_ALT),
+                        m_Target.GetZ80Reg(Z80Regs.Z80_REG_ED_ALT),
+                        m_Target.GetZ80Reg(Z80Regs.Z80_REG_LH_ALT),
+                        m_Target.GetZ80Reg(Z80Regs.Z80_REG_IX),
+                        m_Target.GetZ80Reg(Z80Regs.Z80_REG_IY),
+                        m_Target.GetZ80Reg(Z80Regs.Z80_REG_SP),
+                        m_Target.GetZ80Reg(Z80Regs.Z80_REG_PC));
 
                     DumpZ80State();
 
                     //Dereference ARegs and fill memory previews
                     unsafe
                     {
-                        MemPreviewBuffer dataBuffer = new MemPreviewBuffer();
                         byte[] localBuffer = new byte[kMaxMemPreviewSize];
 
-                        DGenThread.GetDGen().ReadMemory(aregs[0], kMaxMemPreviewSize, dataBuffer.dataBuffer);
-                        Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                        m_Target.ReadMemory(aregs[0], kMaxMemPreviewSize, localBuffer);
                         m_RegisterView.SetData_a0(localBuffer);
 
-                        DGenThread.GetDGen().ReadMemory(aregs[1], kMaxMemPreviewSize, dataBuffer.dataBuffer);
-                        Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                        m_Target.ReadMemory(aregs[1], kMaxMemPreviewSize, localBuffer);
                         m_RegisterView.SetData_a1(localBuffer);
 
-                        DGenThread.GetDGen().ReadMemory(aregs[2], kMaxMemPreviewSize, dataBuffer.dataBuffer);
-                        Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                        m_Target.ReadMemory(aregs[2], kMaxMemPreviewSize, localBuffer);
                         m_RegisterView.SetData_a2(localBuffer);
 
-                        DGenThread.GetDGen().ReadMemory(aregs[3], kMaxMemPreviewSize, dataBuffer.dataBuffer);
-                        Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                        m_Target.ReadMemory(aregs[3], kMaxMemPreviewSize, localBuffer);
                         m_RegisterView.SetData_a3(localBuffer);
 
-                        DGenThread.GetDGen().ReadMemory(aregs[4], kMaxMemPreviewSize, dataBuffer.dataBuffer);
-                        Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                        m_Target.ReadMemory(aregs[4], kMaxMemPreviewSize, localBuffer);
                         m_RegisterView.SetData_a4(localBuffer);
 
-                        DGenThread.GetDGen().ReadMemory(aregs[5], kMaxMemPreviewSize, dataBuffer.dataBuffer);
-                        Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                        m_Target.ReadMemory(aregs[5], kMaxMemPreviewSize, localBuffer);
                         m_RegisterView.SetData_a5(localBuffer);
 
-                        DGenThread.GetDGen().ReadMemory(aregs[6], kMaxMemPreviewSize, dataBuffer.dataBuffer);
-                        Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                        m_Target.ReadMemory(aregs[6], kMaxMemPreviewSize, localBuffer);
                         m_RegisterView.SetData_a6(localBuffer);
 
-                        DGenThread.GetDGen().ReadMemory(aregs[7], kMaxMemPreviewSize, dataBuffer.dataBuffer);
-                        Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                        m_Target.ReadMemory(aregs[7], kMaxMemPreviewSize, localBuffer);
                         m_RegisterView.SetData_sp(localBuffer);
                     }
 
                     //Set status
-                    statusLabel.Text = "PC 0x" + DGenThread.GetDGen().GetCurrentPC();
+                    statusLabel.Text = "PC 0x" + m_Target.GetPC();
 
                     //Bring window to front
                     BringToFront();
@@ -409,8 +404,7 @@ namespace MDStudio
                             m_BreakMode = BreakMode.kBreakpoint;
 
                             //Clear step over breakpoint
-                            //TODO: Add ClearBreakpoint() to DGen, clear all for now
-                            m_DGenThread.ClearBreakpoints();
+                            m_Target.RemoveBreakpoint(m_StepOverAddress);
                         }
                     }
 
@@ -418,7 +412,7 @@ namespace MDStudio
                     m_State = State.kDebugging;
                 }
             }
-            else if (DGenThread.GetDGen() != null && m_State == State.kRunning)
+            else if (m_Target != null && m_State == State.kRunning)
             {
                 UpdateCRAM();
             }
@@ -720,7 +714,7 @@ namespace MDStudio
                 codeEditor.ActiveTextAreaControl.Invalidate();
                 codeEditor.Refresh();
 
-                DGenThread.GetDGen().Resume();
+                m_Target.Resume();
 
                 statusLabel.Text = "Running...";
                 //TODO: Bring emu window to front
@@ -756,36 +750,46 @@ namespace MDStudio
                     {
                         //Init emu
                         Tuple<int, int> resolution = kValidResolutions[m_Config.EmuResolution];
-                        m_DGenThread.Init(resolution.Item1, resolution.Item2, this.Handle, m_Config.Pal, kRegions[m_Config.EmuRegion].Item1);
+
+                        if(m_Target is EmulatorTarget)
+                        {
+                            (m_Target as EmulatorTarget).Initialise(resolution.Item1, resolution.Item2, this.Handle, m_Config.Pal, kRegions[m_Config.EmuRegion].Item1);
+                        }
 
                         //Set input mappings
-                        DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputUp, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeUp));
-                        DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputDown, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeDown));
-                        DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputLeft, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeLeft));
-                        DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputRight, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeRight));
-                        DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputA, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeA));
-                        DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputB, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeB));
-                        DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputC, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeC));
-                        DGenThread.GetDGen().SetInputMapping(DGen.SDLInputs.eInputStart, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeStart));
+                        if(m_Target is EmulatorTarget)
+                        {
+                            EmulatorTarget emulator = m_Target as EmulatorTarget;
+
+                            emulator.SetInputMapping(SDLInputs.eInputUp, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeUp));
+                            emulator.SetInputMapping(SDLInputs.eInputDown, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeDown));
+                            emulator.SetInputMapping(SDLInputs.eInputLeft, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeLeft));
+                            emulator.SetInputMapping(SDLInputs.eInputRight, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeRight));
+                            emulator.SetInputMapping(SDLInputs.eInputA, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeA));
+                            emulator.SetInputMapping(SDLInputs.eInputB, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeB));
+                            emulator.SetInputMapping(SDLInputs.eInputC, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeC));
+                            emulator.SetInputMapping(SDLInputs.eInputStart, (int)Enum.GetValues(typeof(SDL_Keycode.Keycode)).GetValue(m_Config.KeycodeStart));
+                        }
+
 
                         //  Load Rom
-                        m_DGenThread.LoadRom(binaryFile);
+                        m_Target.LoadBinary(binaryFile);
 
                         //  Set breakpoints
-                        DGenThread.GetDGen().ClearBreakpoints();
+                        m_Target.RemoveAllBreakpoints();
                         foreach (Bookmark mark in codeEditor.Document.BookmarkManager.Marks)
                         {
-                            DGenThread.GetDGen().AddBreakpoint((int)m_DebugSymbols.GetAddress(m_CurrentSourcePath, mark.LineNumber + 1));
+                            m_Target.AddBreakpoint(m_DebugSymbols.GetAddress(m_CurrentSourcePath, mark.LineNumber + 1));
                         }
 
                         // Set watchpoints
                         foreach (uint address in m_Watchpoints)
                         {
-                            DGenThread.GetDGen().AddWatchPoint((int)address, (int)address + 4);
+                            m_Target.AddWatchPoint(address, address + 4);
                         }
 
                         //  Start
-                        m_DGenThread.Start();
+                        m_Target.Run();
 
                         //  profiling?
                         m_Profile = profilerEnabledMenuOptions.Checked;
@@ -817,7 +821,7 @@ namespace MDStudio
             //If running, set on running instance
             if(m_State == State.kRunning || m_State == State.kDebugging)
             {
-                DGenThread.GetDGen().AddBreakpoint((int)m_DebugSymbols.GetAddress(m_CurrentSourcePath, line + 1));
+                m_Target.AddBreakpoint(m_DebugSymbols.GetAddress(m_CurrentSourcePath, line + 1));
             }
         }
 
@@ -829,11 +833,11 @@ namespace MDStudio
         private void stepIntoMenu_Click(object sender, EventArgs e)
         {
             //Step to next instruction (blocking)
-            DGenThread.GetDGen().StepInto();
+            m_Target.Step();
 
             //Go to address
-            int currentPC = DGenThread.GetDGen().GetCurrentPC();
-            GoTo((uint)currentPC);
+            uint currentPC = m_Target.GetPC();
+            GoTo(currentPC);
 
             //Re-evaluate on next timer tick
             m_State = State.kRunning;
@@ -842,8 +846,8 @@ namespace MDStudio
         private void stepOverMenu_Click(object sender, EventArgs e)
         {
             //Get current address
-            int currentPC = DGenThread.GetDGen().GetCurrentPC();
-            int nextPC = currentPC;
+            uint currentPC = m_Target.GetPC();
+            uint nextPC = currentPC;
 
             //Get current file/line
             Tuple<string,int> currentLine = m_DebugSymbols.GetFileLine((uint)currentPC);
@@ -892,18 +896,18 @@ namespace MDStudio
                 }
 
                 //Get address of next line
-                nextPC = (int)m_DebugSymbols.GetAddress(currentLine.Item1, nextLine);
+                nextPC = m_DebugSymbols.GetAddress(currentLine.Item1, nextLine);
             }
 
             //Set breakpoint at next address
-            DGenThread.GetDGen().AddBreakpoint(nextPC);
+            m_Target.AddBreakpoint(nextPC);
 
             //Set StepOver mode
             m_BreakMode = BreakMode.kStepOver;
             m_StepOverAddress = nextPC;
 
             //Run to StepOver breakpoint
-            DGenThread.GetDGen().Resume();
+            m_Target.Resume();
             m_State = State.kRunning;
         }
 
@@ -915,52 +919,58 @@ namespace MDStudio
                 {
                     uint totalCycles = 0;
 
-                    unsafe
+                    //TODO: Profiler interface for all targets
+                    if(m_Target is TargetDGen)
                     {
-                        int numInstructions = 0;
-                        uint* profileResults = DGenThread.GetDGen().GetProfilerResults(&numInstructions);
-
-                        m_ProfileResults = new List<ProfilerEntry>();
-
-                        for (int i = 0; i < numInstructions; i++)
+                        unsafe
                         {
-                            if (profileResults[i] > 0)
+                            int numInstructions = 0;
+                            uint* profileResults = DGenThread.GetDGen().GetProfilerResults(&numInstructions);
+
+                            m_ProfileResults = new List<ProfilerEntry>();
+
+                            for (int i = 0; i < numInstructions; i++)
                             {
-                                ProfilerEntry entry = new ProfilerEntry();
+                                if (profileResults[i] > 0)
+                                {
+                                    ProfilerEntry entry = new ProfilerEntry();
 
-                                entry.address = (uint)i * sizeof(short);
-                                entry.hitCount = profileResults[i];
-                                Tuple<string, int> line = m_DebugSymbols.GetFileLine(entry.address);
-                                entry.cyclesPerHit = DGenThread.GetDGen().GetInstructionCycleCount(entry.address);
-                                entry.totalCycles = entry.cyclesPerHit * entry.hitCount;
-                                entry.filename = line.Item1;
-                                entry.line = line.Item2;
+                                    entry.address = (uint)i * sizeof(short);
+                                    entry.hitCount = profileResults[i];
+                                    Tuple<string, int> line = m_DebugSymbols.GetFileLine(entry.address);
+                                    entry.cyclesPerHit = DGenThread.GetDGen().GetInstructionCycleCount(entry.address);
+                                    entry.totalCycles = entry.cyclesPerHit * entry.hitCount;
+                                    entry.filename = line.Item1;
+                                    entry.line = line.Item2;
 
-                                m_ProfileResults.Add(entry);
+                                    m_ProfileResults.Add(entry);
 
-                                totalCycles += entry.totalCycles;
+                                    totalCycles += entry.totalCycles;
+                                }
                             }
                         }
-                    }
 
-                    if (m_ProfileResults.Count > 0)
-                    {
-                        //Calcuate percentage cost
-                        foreach (var entry in m_ProfileResults)
+                        if (m_ProfileResults.Count > 0)
                         {
-                            entry.percentCost = ((float)entry.totalCycles / (float)totalCycles);
+                            //Calcuate percentage cost
+                            foreach (var entry in m_ProfileResults)
+                            {
+                                entry.percentCost = ((float)entry.totalCycles / (float)totalCycles);
+                            }
+
+                            //Sort by hit count
+                            m_ProfileResults.Sort((a, b) => (int)(b.totalCycles - a.totalCycles));
+
+                            m_ProfilerView.SetResults(m_ProfileResults);
+                            m_ProfilerView.Show();
                         }
-
-                        //Sort by hit count
-                        m_ProfileResults.Sort((a, b) => (int)(b.totalCycles - a.totalCycles));
-
-                        m_ProfilerView.SetResults(m_ProfileResults);
-                        m_ProfilerView.Show();
                     }
                 }
 
-                m_DGenThread.Stop();
-                m_DGenThread.Destroy();
+                if(m_Target is EmulatorTarget)
+                {
+                    (m_Target as EmulatorTarget).Shutdown();
+                }
 
                 m_RegisterView.Hide();
 
@@ -978,13 +988,15 @@ namespace MDStudio
 
         private void breakMenu_Click(object sender, EventArgs e)
         {
-            DGenThread.GetDGen().Break();
+            m_Target.Break();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            m_DGenThread.Stop();
-            m_DGenThread.Destroy();
+            if (m_Target is EmulatorTarget)
+            {
+                (m_Target as EmulatorTarget).Shutdown();
+            }
 
             if (m_Modified)
             {
@@ -1416,9 +1428,12 @@ namespace MDStudio
 
         private void MainForm_Enter(object sender, EventArgs e)
         {
-            if (DGenThread.GetDGen() != null && m_State != State.kStopped)
+            if (m_Target != null && m_State != State.kStopped)
             {
-                DGenThread.GetDGen().BringToFront();
+                if(m_Target is EmulatorTarget)
+                {
+                    (m_Target as EmulatorTarget).BringToFront();
+                }
             }
         }
 
@@ -1675,7 +1690,7 @@ namespace MDStudio
 
                         if (m_State != State.kStopped)
                         {
-                            DGenThread.GetDGen().AddWatchPoint((int)address, (int)address + 3);
+                            m_Target.AddWatchPoint(address, address + 3);
                         }
                     }
                 }
@@ -1707,7 +1722,7 @@ namespace MDStudio
 
                     if (m_State != State.kStopped)
                     {
-                        DGenThread.GetDGen().AddWatchPoint((int)address, (int)address + 3);
+                        m_Target.AddWatchPoint(address, address + 3);
                     }
 
                     m_BreakMode = BreakMode.kLogPoint;
@@ -1719,19 +1734,26 @@ namespace MDStudio
         {
             if(m_State == State.kRunning)
             {
-                DGenThread.GetDGen().Break();
+                m_Target.Break();
                 m_State = State.kPaused;
             }
             else if(m_State == State.kPaused)
             {
-                DGenThread.GetDGen().Resume();
+                m_Target.Resume();
                 m_State = State.kRunning;
             }
         }
 
         private void softResetToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DGenThread.GetDGen().SoftReset();
+            if(m_Target is EmulatorTarget)
+            {
+                (m_Target as EmulatorTarget).SoftReset();
+            }
+            else
+            {
+                m_Target.Reset();
+            }
         }
     }
 }
