@@ -84,16 +84,6 @@ namespace MDStudio
                 m_DGen = null;
             }
         }
-        
-        public void AddBreakpoint(int addr)
-        {
-            m_DGen.AddBreakpoint(addr);
-        }
-
-        public void ClearBreakpoints()
-        {
-            m_DGen.ClearBreakpoints();
-        }
 
         static public DGen GetDGen()
         {

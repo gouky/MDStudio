@@ -754,6 +754,7 @@ public:
 	int debug_set_bp_m68k(uint32_t);
 	int debug_set_bp_z80(uint16_t);
 	void debug_clear_bp_m68k();
+	void debug_clear_bp_m68k(uint32_t);
 
 public:
 
@@ -793,6 +794,8 @@ public:
   void debug_update_fired_m68k_wps(void);
   void debug_update_fired_z80_wps(void);
   void debug_set_wp_m68k(uint32_t start_addr, uint32_t end_addr);
+  void debug_clear_wp_m68k();
+  void debug_clear_wp_m68k(uint32_t start_addr);
   void debug_set_wp_z80(uint16_t start_addr, uint16_t end_addr);
   void debug_print_m68k_disassemble(uint32_t from, int len);
   void debug_print_z80_disassemble(uint16_t, unsigned int);

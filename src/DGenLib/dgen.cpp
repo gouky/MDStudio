@@ -494,20 +494,30 @@ int		AddBreakpoint(int addr)
 	return 1;
 }
 
+void	ClearBreakpoint(int addr)
+{
+	s_DGenInstance->debug_clear_bp_m68k(addr);
+}
+
 void	ClearBreakpoints()
 {
 	s_DGenInstance->debug_clear_bp_m68k();
 }
 
-int AddWatchPoint(int fromAddr, int toAddr)
+int AddWatchpoint(int fromAddr, int toAddr)
 {
 	s_DGenInstance->debug_set_wp_m68k(fromAddr, toAddr);
 	return 1;
 }
 
+void	ClearWatchpoint(int addr)
+{
+	s_DGenInstance->debug_clear_wp_m68k(addr);
+}
+
 void ClearWatchpoints()
 {
-	// TODO
+	s_DGenInstance->debug_clear_wp_m68k();
 }
 
 int	KeyPressed(int vkCode, int keyDown)

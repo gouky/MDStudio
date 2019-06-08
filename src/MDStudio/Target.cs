@@ -82,9 +82,9 @@ namespace MDStudio
 
         //Breakpoints
         public abstract bool AddBreakpoint(uint addr);
-        public abstract bool AddWatchPoint(uint fromAddr, uint toAddr);
+        public abstract bool AddWatchpoint(uint fromAddr, uint toAddr);
         public abstract void RemoveBreakpoint(uint addr);
-        public abstract void RemoveWatchPoint(uint addr);
+        public abstract void RemoveWatchpoint(uint addr);
         public abstract void RemoveAllBreakpoints();
         public abstract void RemoveAllWatchPoints();
     }

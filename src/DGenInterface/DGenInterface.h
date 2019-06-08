@@ -59,8 +59,10 @@ namespace DGenInterface {
 		int		Update();
 
 		int		AddBreakpoint(int addr);
+		void	ClearBreakpoint(int addr);
 		void	ClearBreakpoints();
-		int		AddWatchPoint(int fromAddr, int toAddr);
+		int		AddWatchpoint(int fromAddr, int toAddr);
+		void	ClearWatchpoint(int fromAddr);
 		void	ClearWatchpoints();
 		int		StepInto();
 		int		Resume();

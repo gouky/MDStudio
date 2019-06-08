@@ -785,7 +785,7 @@ namespace MDStudio
                         // Set watchpoints
                         foreach (uint address in m_Watchpoints)
                         {
-                            m_Target.AddWatchPoint(address, address + 4);
+                            m_Target.AddWatchpoint(address, address + 4);
                         }
 
                         //  Start
@@ -821,7 +821,10 @@ namespace MDStudio
             //If running, set on running instance
             if(m_State == State.kRunning || m_State == State.kDebugging)
             {
-                m_Target.AddBreakpoint(m_DebugSymbols.GetAddress(m_CurrentSourcePath, line + 1));
+                if (codeEditor.Document.BookmarkManager.IsMarked(line))
+                    m_Target.AddBreakpoint(m_DebugSymbols.GetAddress(m_CurrentSourcePath, line + 1));
+                else
+                    m_Target.RemoveBreakpoint(m_DebugSymbols.GetAddress(m_CurrentSourcePath, line + 1));
             }
         }
 
@@ -1690,7 +1693,7 @@ namespace MDStudio
 
                         if (m_State != State.kStopped)
                         {
-                            m_Target.AddWatchPoint(address, address + 3);
+                            m_Target.AddWatchpoint(address, address + 3);
                         }
                     }
                 }
@@ -1722,7 +1725,7 @@ namespace MDStudio
 
                     if (m_State != State.kStopped)
                     {
-                        m_Target.AddWatchPoint(address, address + 3);
+                        m_Target.AddWatchpoint(address, address + 3);
                     }
 
                     m_BreakMode = BreakMode.kLogPoint;

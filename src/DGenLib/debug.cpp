@@ -939,6 +939,28 @@ void md::debug_clear_bp_m68k()
 	memset(debug_bp_m68k, 0, sizeof(debug_bp_m68k));
 }
 
+void md::debug_clear_bp_m68k(uint32_t addr)
+{
+	int shuffleIndex = -1;
+
+	for (int i = 0; i < MAX_BREAKPOINTS && shuffleIndex == -1; i++)
+	{
+		if (debug_bp_m68k[i].addr == addr)
+		{
+			debug_bp_m68k[i].addr = 0;
+			debug_bp_m68k[i].flags = 0;
+			shuffleIndex = i + 1;
+		}
+	}
+
+	if (shuffleIndex > 0 && shuffleIndex < (MAX_BREAKPOINTS-1))
+	{
+		dgen_bp temp[MAX_BREAKPOINTS];
+		memcpy(temp, &debug_bp_m68k[shuffleIndex], sizeof(dgen_bp) * (MAX_BREAKPOINTS - shuffleIndex));
+		memcpy(&debug_bp_m68k[shuffleIndex-1], temp, sizeof(dgen_bp) * (MAX_BREAKPOINTS - shuffleIndex));
+	}
+}
+
 /**
  * Add a Z80 breakpoint.
  *
@@ -1041,6 +1063,35 @@ void md::debug_set_wp_m68k(uint32_t start_addr, uint32_t end_addr)
 	    slot, start_addr, end_addr, end_addr - start_addr + 1);
 out:
 	fflush(stdout);
+}
+
+void md::debug_clear_wp_m68k()
+{
+	memset(debug_wp_m68k, 0, sizeof(debug_wp_m68k));
+}
+
+void md::debug_clear_wp_m68k(uint32_t start_addr)
+{
+	int shuffleIndex = -1;
+
+	for (int i = 0; i < MAX_WATCHPOINTS && shuffleIndex == -1; i++)
+	{
+		if (debug_wp_m68k[i].start_addr == start_addr)
+		{
+			debug_wp_m68k[i].start_addr = 0;
+			debug_wp_m68k[i].end_addr = 0;
+			debug_wp_m68k[i].flags = 0;
+			debug_wp_m68k[i].bytes = 0;
+			shuffleIndex = i + 1;
+		}
+	}
+
+	if (shuffleIndex > 0 && shuffleIndex < (MAX_BREAKPOINTS - 1))
+	{
+		dgen_wp temp[MAX_WATCHPOINTS];
+		memcpy(temp, &debug_wp_m68k[shuffleIndex], sizeof(dgen_wp) * (MAX_WATCHPOINTS - shuffleIndex));
+		memcpy(&debug_wp_m68k[shuffleIndex-1], temp, sizeof(dgen_wp) * (MAX_WATCHPOINTS - shuffleIndex));
+	}
 }
 
 /**

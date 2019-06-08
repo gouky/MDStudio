@@ -149,36 +149,34 @@ namespace MDStudio
 
         public override bool AddBreakpoint(uint addr)
         {
-            m_DGenThread.AddBreakpoint((int)addr);
+            DGenThread.GetDGen().AddBreakpoint((int)addr);
             return true;
         }
 
-        public override bool AddWatchPoint(uint fromAddr, uint toAddr)
+        public override bool AddWatchpoint(uint fromAddr, uint toAddr)
         {
-            return DGenThread.GetDGen().AddWatchPoint((int)fromAddr, (int)toAddr) != 0;
+            return DGenThread.GetDGen().AddWatchpoint((int)fromAddr, (int)toAddr) != 0;
         }
 
         public override void RemoveBreakpoint(uint addr)
         {
-            //TODO
-            m_DGenThread.ClearBreakpoints();
+            DGenThread.GetDGen().ClearBreakpoint((int)addr);
         }
 
-        public override void RemoveWatchPoint(uint addr)
+        public override void RemoveWatchpoint(uint addr)
         {
-            //TODO
-            m_DGenThread.ClearBreakpoints();
+            DGenThread.GetDGen().ClearWatchpoint((int)addr);
         }
 
         public override void RemoveAllBreakpoints()
         {
-            m_DGenThread.ClearBreakpoints();
+            DGenThread.GetDGen().ClearBreakpoints();
         }
 
         public override void RemoveAllWatchPoints()
         {
             //TODO
-            m_DGenThread.ClearBreakpoints();
+            DGenThread.GetDGen().ClearBreakpoints();
         }
 
         public override uint GetColor(int index)
