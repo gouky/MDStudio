@@ -383,6 +383,10 @@ namespace MDStudio
                         DGenThread.GetDGen().ReadMemory(aregs[6], kMaxMemPreviewSize, dataBuffer.dataBuffer);
                         Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
                         m_RegisterView.SetData_a6(localBuffer);
+
+                        DGenThread.GetDGen().ReadMemory(aregs[7], kMaxMemPreviewSize, dataBuffer.dataBuffer);
+                        Marshal.Copy((IntPtr)dataBuffer.dataBuffer, localBuffer, 0, kMaxMemPreviewSize);
+                        m_RegisterView.SetData_sp(localBuffer);
                     }
 
                     //Set status
