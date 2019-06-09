@@ -12,6 +12,8 @@ namespace MDStudio
     [XmlRoot("Root")]
     public class Config
     {
+        public string TargetName { get; set; }
+
         [XmlElement("ASM68KPath")]
         public string Asm68kPath { get; set; }
         public string Asm68kArgs { get; set; }
@@ -36,7 +38,7 @@ namespace MDStudio
 
         public Config()
         {
-
+            TargetName = typeof(TargetDGen).Name;
         }
 
         public void Read()
@@ -59,6 +61,7 @@ namespace MDStudio
 
                         config = (Config)xs.Deserialize(sr);
 
+                        TargetName = config.TargetName;
                         Asm68kPath = config.Asm68kPath;
                         Asm68kArgs = config.Asm68kArgs;
                         EmuResolution = config.EmuResolution;

@@ -118,34 +118,6 @@ namespace MDStudio
             return length;
         }
 
-        private void EndianSwap(ref int value)
-        {
-            byte[] temp = BitConverter.GetBytes(value);
-            Array.Reverse(temp);
-            value = BitConverter.ToInt32(temp, 0);
-        }
-
-        private void EndianSwap(ref uint value)
-        {
-            byte[] temp = BitConverter.GetBytes(value);
-            Array.Reverse(temp);
-            value = BitConverter.ToUInt32(temp, 0);
-        }
-
-        private void EndianSwap(ref short value)
-        {
-            byte[] temp = BitConverter.GetBytes(value);
-            Array.Reverse(temp);
-            value = BitConverter.ToInt16(temp, 0);
-        }
-
-        private void EndianSwap(ref ushort value)
-        {
-            byte[] temp = BitConverter.GetBytes(value);
-            Array.Reverse(temp);
-            value = BitConverter.ToUInt16(temp, 0);
-        }
-
         public bool Read(string filename)
         {
             //try
@@ -187,7 +159,7 @@ namespace MDStudio
                                 {
                                     //Read filename header
                                     bytesRead += Serialise(ref stream, out filenameHeader);
-                                    EndianSwap(ref filenameHeader.length);
+                                    filenameHeader.length = Endian.Swap(filenameHeader.length);
 
                                     //Read string
                                     bytesRead += Serialise(ref stream, filenameHeader.length, out readString);

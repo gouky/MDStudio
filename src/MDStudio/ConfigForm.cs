@@ -61,10 +61,17 @@ namespace MDStudio
             CancelButton = cancelBtn;
 
             //Populate target fields
+            List<string> targets = TargetFactory.GetTargetNames();
 
+            foreach(string target in targets)
+            {
+                targetList.Items.Add(target);
+            }
+
+            targetList.SelectedIndex = 0;
 
             //Populate resolution fields
-            foreach(Tuple<int, int> resolution in MainForm.kValidResolutions)
+            foreach (Tuple<int, int> resolution in MainForm.kValidResolutions)
             {
                 ResolutionEntry entry = new ResolutionEntry();
                 entry.Width = resolution.Item1;

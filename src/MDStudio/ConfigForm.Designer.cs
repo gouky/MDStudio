@@ -64,7 +64,7 @@
             this.modePAL = new System.Windows.Forms.RadioButton();
             this.label15 = new System.Windows.Forms.Label();
             this.emuRegion = new System.Windows.Forms.ComboBox();
-            this.target = new System.Windows.Forms.ComboBox();
+            this.targetList = new System.Windows.Forms.ComboBox();
             this.label16 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -417,14 +417,14 @@
             this.emuRegion.Size = new System.Drawing.Size(144, 21);
             this.emuRegion.TabIndex = 19;
             // 
-            // target
+            // targetList
             // 
-            this.target.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.target.FormattingEnabled = true;
-            this.target.Location = new System.Drawing.Point(136, 6);
-            this.target.Name = "target";
-            this.target.Size = new System.Drawing.Size(279, 21);
-            this.target.TabIndex = 20;
+            this.targetList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.targetList.FormattingEnabled = true;
+            this.targetList.Location = new System.Drawing.Point(136, 6);
+            this.targetList.Name = "targetList";
+            this.targetList.Size = new System.Drawing.Size(279, 21);
+            this.targetList.TabIndex = 20;
             // 
             // label16
             // 
@@ -441,7 +441,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(456, 394);
             this.Controls.Add(this.label16);
-            this.Controls.Add(this.target);
+            this.Controls.Add(this.targetList);
             this.Controls.Add(this.emuRegion);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.modePAL);
@@ -511,7 +511,7 @@
         public System.Windows.Forms.RadioButton modePAL;
         private System.Windows.Forms.Label label15;
         public System.Windows.Forms.ComboBox emuRegion;
-        public System.Windows.Forms.ComboBox target;
+        public System.Windows.Forms.ComboBox targetList;
         private System.Windows.Forms.Label label16;
     }
 }

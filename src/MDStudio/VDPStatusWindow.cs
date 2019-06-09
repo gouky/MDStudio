@@ -174,9 +174,12 @@ namespace MDStudio
 
         public void Reset()
         {
-            for (int i = 0; i < m_VDPRegisters.Length; ++i)
+            if(m_Parent.m_Target is EmulatorTarget)
             {
-                m_VDPRegisters[i].value = DGenThread.GetDGen().GetVDPRegisterValue(m_VDPRegisters[i].baseIndex);
+                for (int i = 0; i < m_VDPRegisters.Length; ++i)
+                {
+                    m_VDPRegisters[i].value = (m_Parent.m_Target as EmulatorTarget).GetVDPRegisterValue(m_VDPRegisters[i].baseIndex);
+                }
             }
         }
 

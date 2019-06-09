@@ -179,6 +179,11 @@ namespace MDStudio
             DGenThread.GetDGen().ClearBreakpoints();
         }
 
+        public override byte GetVDPRegisterValue(int index)
+        {
+            return DGenThread.GetDGen().GetVDPRegisterValue(index);
+        }
+
         public override uint GetColor(int index)
         {
             return (uint)DGenThread.GetDGen().GetColor(index);

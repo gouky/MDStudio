@@ -34,7 +34,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;TARGET_TITAN</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -98,6 +98,7 @@
       <DependentUpon>CRamViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="DGenThread.cs" />
+    <Compile Include="Endian.cs" />
     <Compile Include="GoToForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -153,6 +154,8 @@
     </Compile>
     <Compile Include="Target.cs" />
     <Compile Include="TargetDGen.cs" />
+    <Compile Include="TargetFactory.cs" />
+    <Compile Include="TargetTitan.cs" />
     <Compile Include="VDPRegs.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -250,6 +253,10 @@
     <ProjectReference Include="..\DGenInterface\DGenInterface.vcxproj">
       <Project>{487b0d06-3797-47cb-9c8d-b32301b4f1e1}</Project>
       <Name>DGenInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TiTAN-dev\TiTAN-dev.vcxproj">
+      <Project>{4a4c1dc5-756c-41b3-8e96-b7141d976c58}</Project>
+      <Name>TiTAN-dev</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

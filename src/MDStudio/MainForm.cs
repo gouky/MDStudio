@@ -56,7 +56,7 @@ namespace MDStudio
         private List<string> m_ProjectFiles;
         private string m_BuildArgs;
 
-        private Target m_Target;
+        public Target m_Target;
         public Symbols m_DebugSymbols;
 
         private RegisterView m_RegisterView;
@@ -217,14 +217,16 @@ namespace MDStudio
             // Set the syntax-highlighting for C#
             codeEditor.Document.HighlightingStrategy = HighlightingManager.Manager.FindHighlighter("ASM68k");
 
+            //Create target
             try
             {
-                //TODO: Determine target type
-                m_Target = new TargetDGen();
+                m_Target = TargetFactory.Create(m_Config.TargetName);
             }
             catch (Exception e)
             {
-                throw (e);
+                Console.WriteLine("Could not create target of type \'" + m_Config.TargetName + "\', defaulting to TargetDGen");
+                m_Target = new TargetDGen();
+                m_Config.TargetName = typeof(TargetDGen).Name;
             }
 
             m_Timer.Interval = 16;
@@ -400,8 +402,6 @@ namespace MDStudio
                         m_Target.GetZ80Reg(Z80Regs.Z80_REG_SP),
                         m_Target.GetZ80Reg(Z80Regs.Z80_REG_PC));
 
-                    DumpZ80State();
-
                     //Dereference ARegs and fill memory previews
                     unsafe
                     {
@@ -447,12 +447,19 @@ namespace MDStudio
                         //If hit desired step over address
                         if (currentPC == m_StepOverAddress)
                         {
+                            //Clear step over breakpoint, if we don't have a user breakpoint here
+                            if (m_Breakpoints.IndexOf(m_StepOverAddress) == -1)
+                            {
+                                m_Target.RemoveBreakpoint(m_StepOverAddress);
+                            }
+
                             //Return to breakpoint mode
                             m_StepOverAddress = 0;
                             m_BreakMode = BreakMode.kBreakpoint;
-
-                            //Clear step over breakpoint
-                            m_Target.RemoveBreakpoint(m_StepOverAddress);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Step-over hit unexpected breakpoint at " + currentPC);
                         }
                     }
 
@@ -1239,7 +1246,8 @@ namespace MDStudio
             ConfigForm configForm = new ConfigForm();
 
             configForm.StartPosition = FormStartPosition.CenterParent;
-            
+
+            configForm.targetList.SelectedIndex = configForm.targetList.FindString(m_Config.TargetName);
             configForm.asmPath.Text = m_Config.Asm68kPath;
             configForm.asmArgs.Text = m_Config.Asm68kArgs;
             configForm.emuResolution.SelectedIndex = m_Config.EmuResolution;
@@ -1262,6 +1270,7 @@ namespace MDStudio
 
             if (configForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                m_Config.TargetName = configForm.targetList.GetItemText(configForm.targetList.SelectedItem);
                 m_Config.Asm68kPath = configForm.asmPath.Text;
                 m_Config.Asm68kArgs = configForm.asmArgs.Text;
                 m_Config.EmuResolution = configForm.emuResolution.SelectedIndex;
@@ -1286,6 +1295,9 @@ namespace MDStudio
 
                 Console.WriteLine(configForm.asmPath.Text);
                 Console.WriteLine(configForm.asmArgs.Text);
+
+                //Recreate target
+                m_Target = TargetFactory.Create(m_Config.TargetName);
             }
         }
 
@@ -1669,7 +1681,10 @@ namespace MDStudio
         {
             if(m_State == State.kRunning)
             {
-                DGenThread.GetDGen().KeyPressed(vkCode, 1);
+                if(m_Target is EmulatorTarget)
+                {
+                    (m_Target as EmulatorTarget).SendKeyPress(vkCode, 1);
+                }
             }
         }
 
@@ -1677,7 +1692,10 @@ namespace MDStudio
         {
             if (m_State == State.kRunning)
             {
-                DGenThread.GetDGen().KeyPressed(vkCode, 0);
+                if (m_Target is EmulatorTarget)
+                {
+                    (m_Target as EmulatorTarget).SendKeyPress(vkCode, 0);
+                }
             }
         }
 

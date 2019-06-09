@@ -11,13 +11,6 @@ using System.Threading.Tasks;
 
 namespace MDStudio
 {
-    public enum TargetType
-    {
-        Emulator_DGen,
-        Hardware_UMDK,
-        Hardware_TITANdev,
-    }
-
     public enum Z80Regs
     {
         Z80_REG_FA = 0,
@@ -51,7 +44,7 @@ namespace MDStudio
         eInput_COUNT = 12
     }
 
-    abstract class Target
+    public abstract class Target
     {
         //Initialisation
         public abstract bool LoadBinary(string filename);
@@ -100,7 +93,8 @@ namespace MDStudio
         public abstract void SetInputMapping(SDLInputs input, int mapping);
         public abstract void SendKeyPress(int vkCode, int keyDown);
 
-        //CRAM
+        //VDP
+        public abstract byte GetVDPRegisterValue(int index);
         public abstract uint GetColor(int index);
 
         //Control
