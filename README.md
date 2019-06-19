@@ -1,3 +1,3 @@
 # MDStudio
 
-![](https://github.com/gouky/MDStudio/MDStudio.png)
+![](https://github.com/gouky/MDStudio/blob/master/MDStudio.png)
