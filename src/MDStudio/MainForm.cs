@@ -220,7 +220,7 @@ namespace MDStudio
             //Create target
             try
             {
-                m_Target = TargetFactory.Create("MDStudio." + m_Config.TargetName);
+                m_Target = TargetFactory.Create(m_Config.TargetName);
             }
             catch (Exception e)
             {
