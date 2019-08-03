@@ -487,13 +487,32 @@ namespace MDStudio
                     {
                         // all whitespace, followed by 'include', followed by all whitespace, followed by filename in quotes (relative to first assembled file)
                         // e.g. "	include '..\framewk\dmaqueue.asm'"
-                        string pattern = "^\\sinclude(\\s+)*[\'\\\"](.+)*[\'\\\"]";
+                        string pattern = "^\\s*include(\\s+)*[\'\\\"](.+)*[\'\\\"]";
                         Match match = Regex.Match(line, pattern);
 
                         if (match.Success)
                         {
                             //Convert relative paths to absolute
                             string include = System.IO.Path.GetFullPath(System.IO.Path.Combine(rootPath, match.Groups[2].Value));
+
+                            //If absolute path doesn't exist, try each include directory
+                            if (!System.IO.File.Exists(include))
+                            {
+                                if (m_Config.Asm68kIncludePaths != null)
+                                {
+                                    foreach (string includePath in m_Config.Asm68kIncludePaths)
+                                    {
+                                        string fullPath = System.IO.Path.Combine(includePath, match.Groups[2].Value);
+
+                                        if (System.IO.File.Exists(fullPath))
+                                        {
+                                            include = fullPath;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            
                             includes.Add(include);
                             localIncludes.Add(include);
                         }
@@ -516,6 +535,14 @@ namespace MDStudio
 
         private void PopulateFileView()
         {
+            //Scan for includes
+            m_ProjectFiles = ScanIncludes(m_PathToProject, m_ProjectFile);
+
+            //Add current file and sort
+            m_ProjectFiles.Add(m_CurrentSourcePath);
+            m_ProjectFiles.Sort();
+
+            //Populate view
             TreeNode lastNode = null;
             string subPathAgg;
 
@@ -527,6 +554,7 @@ namespace MDStudio
                 {
                     subPathAgg += subPathAgg.Length > 0 ? treeProjectFiles.PathSeparator[0] + subPath : subPath;
                     string absPath = System.IO.Path.GetFullPath(subPathAgg);
+
                     TreeNode[] nodes = treeProjectFiles.Nodes.Find(absPath, true);
                     if (nodes.Length == 0)
                     {
@@ -1322,6 +1350,9 @@ namespace MDStudio
 
                 //Recreate target
                 m_Target = TargetFactory.Create(m_Config.TargetName);
+
+                //Rebuild directory view
+                PopulateFileView();
             }
         }
 
@@ -1359,10 +1390,6 @@ namespace MDStudio
 
                 m_ProjectName = Path.GetFileNameWithoutExtension(filename);
                 m_SourceFileName = Path.GetFileName(filename);
-
-                m_ProjectFiles = ScanIncludes(m_PathToProject, filename);
-                m_ProjectFiles.Add(m_CurrentSourcePath);
-                m_ProjectFiles.Sort();
 
                 PopulateFileView();
 
