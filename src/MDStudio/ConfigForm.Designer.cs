@@ -66,6 +66,10 @@
             this.emuRegion = new System.Windows.Forms.ComboBox();
             this.targetList = new System.Windows.Forms.ComboBox();
             this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.listIncludes = new System.Windows.Forms.ListBox();
+            this.btnIncludeAdd = new System.Windows.Forms.Button();
+            this.btnInlcudesRemove = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -88,7 +92,7 @@
             // okBtn
             // 
             this.okBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okBtn.Location = new System.Drawing.Point(342, 356);
+            this.okBtn.Location = new System.Drawing.Point(340, 490);
             this.okBtn.Name = "okBtn";
             this.okBtn.Size = new System.Drawing.Size(75, 23);
             this.okBtn.TabIndex = 2;
@@ -109,7 +113,7 @@
             // cancelBtn
             // 
             this.cancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelBtn.Location = new System.Drawing.Point(245, 356);
+            this.cancelBtn.Location = new System.Drawing.Point(243, 490);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(75, 23);
             this.cancelBtn.TabIndex = 4;
@@ -169,7 +173,7 @@
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.inputUp);
             this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Location = new System.Drawing.Point(9, 212);
+            this.groupBox1.Location = new System.Drawing.Point(7, 346);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(408, 138);
             this.groupBox1.TabIndex = 9;
@@ -435,11 +439,52 @@
             this.label16.TabIndex = 21;
             this.label16.Text = "Target:";
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(29, 219);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(99, 13);
+            this.label17.TabIndex = 22;
+            this.label17.Text = "ASM include paths:";
+            // 
+            // listIncludes
+            // 
+            this.listIncludes.FormattingEnabled = true;
+            this.listIncludes.Location = new System.Drawing.Point(134, 219);
+            this.listIncludes.Name = "listIncludes";
+            this.listIncludes.Size = new System.Drawing.Size(281, 121);
+            this.listIncludes.TabIndex = 23;
+            // 
+            // btnIncludeAdd
+            // 
+            this.btnIncludeAdd.Location = new System.Drawing.Point(423, 219);
+            this.btnIncludeAdd.Name = "btnIncludeAdd";
+            this.btnIncludeAdd.Size = new System.Drawing.Size(24, 23);
+            this.btnIncludeAdd.TabIndex = 24;
+            this.btnIncludeAdd.Text = "+";
+            this.btnIncludeAdd.UseVisualStyleBackColor = true;
+            this.btnIncludeAdd.Click += new System.EventHandler(this.btnIncludeAdd_Click);
+            // 
+            // btnInlcudesRemove
+            // 
+            this.btnInlcudesRemove.Location = new System.Drawing.Point(423, 248);
+            this.btnInlcudesRemove.Name = "btnInlcudesRemove";
+            this.btnInlcudesRemove.Size = new System.Drawing.Size(24, 23);
+            this.btnInlcudesRemove.TabIndex = 25;
+            this.btnInlcudesRemove.Text = "-";
+            this.btnInlcudesRemove.UseVisualStyleBackColor = true;
+            this.btnInlcudesRemove.Click += new System.EventHandler(this.btnInlcudesRemove_Click);
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(456, 394);
+            this.ClientSize = new System.Drawing.Size(456, 522);
+            this.Controls.Add(this.btnInlcudesRemove);
+            this.Controls.Add(this.btnIncludeAdd);
+            this.Controls.Add(this.listIncludes);
+            this.Controls.Add(this.label17);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.targetList);
             this.Controls.Add(this.emuRegion);
@@ -513,5 +558,9 @@
         public System.Windows.Forms.ComboBox emuRegion;
         public System.Windows.Forms.ComboBox targetList;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Button btnIncludeAdd;
+        private System.Windows.Forms.Button btnInlcudesRemove;
+        public System.Windows.Forms.ListBox listIncludes;
     }
 }

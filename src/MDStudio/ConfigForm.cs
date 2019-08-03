@@ -149,5 +149,23 @@ namespace MDStudio
                 megaUSBPath.Text = pathSelect.FileName;
             }
         }
+
+        private void btnIncludeAdd_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
+
+            if(dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                listIncludes.Items.Add(dialog.SelectedPath);
+            }
+        }
+
+        private void btnInlcudesRemove_Click(object sender, EventArgs e)
+        {
+            if(listIncludes.SelectedIndex >= 0)
+            {
+                listIncludes.Items.RemoveAt(listIncludes.SelectedIndex);
+            }
+        }
     }
 }

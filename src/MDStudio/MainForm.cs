@@ -620,9 +620,23 @@ namespace MDStudio
                 {
                     using (Process process = new Process())
                     {
+                        string includeArgs = "";
+                        if(m_Config.Asm68kIncludePaths != null && m_Config.Asm68kIncludePaths.Length > 0)
+                        {
+                            includeArgs += "/j";
+
+                            foreach(string include in m_Config.Asm68kIncludePaths)
+                            {
+                                includeArgs += " ";
+                                includeArgs += include;
+                            }
+
+                            includeArgs += "*";
+                        }
+
                         process.StartInfo.FileName = m_Config.Asm68kPath;
                         process.StartInfo.WorkingDirectory = m_PathToProject + @"\";
-                        process.StartInfo.Arguments = @"/p /c /zd " + m_Config.Asm68kArgs + " " + m_SourceFileName + "," + m_ProjectName + ".bin," + m_ProjectName + ".symb," + m_ProjectName + ".list";
+                        process.StartInfo.Arguments = @"/p /c /zd " + m_Config.Asm68kArgs + " " + includeArgs + " " + m_SourceFileName + "," + m_ProjectName + ".bin," + m_ProjectName + ".symb," + m_ProjectName + ".list";
                         process.StartInfo.UseShellExecute = false;
                         process.StartInfo.RedirectStandardOutput = true;
                         process.StartInfo.RedirectStandardError = true;
@@ -1268,6 +1282,13 @@ namespace MDStudio
 
             configForm.megaUSBPath.Text = m_Config.MegaUSBPath;
 
+            configForm.listIncludes.Items.Clear();
+            if(m_Config.Asm68kIncludePaths != null)
+            {
+                foreach(string include in m_Config.Asm68kIncludePaths)
+                    configForm.listIncludes.Items.Add(include);
+            }
+
             if (configForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 m_Config.TargetName = configForm.targetList.GetItemText(configForm.targetList.SelectedItem);
@@ -1290,6 +1311,9 @@ namespace MDStudio
                 m_Config.Pal = configForm.modePAL.Checked;
 
                 m_Config.MegaUSBPath = configForm.megaUSBPath.Text;
+
+                m_Config.Asm68kIncludePaths = new string[configForm.listIncludes.Items.Count];
+                configForm.listIncludes.Items.CopyTo(m_Config.Asm68kIncludePaths, 0);
 
                 m_Config.Save();
 
