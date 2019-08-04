@@ -25,6 +25,17 @@ In the configuration panel you can set:
 
 ![](https://github.com/gouky/MDStudio/blob/master/mdstudio_screen.jpg)
 
+# Features
+
+- Source Level debugging
+- Breakpoint
+- Profiler
+- CRam Viewer
+
+In-progress:
+- VDP Register viewer
+- VDP Value helper
+
 # Pre-requisites
 
 MDStudio can be built using Visual Studio 2017 and use SDL2 for the emulator rendering part. It use DGen as Megadrive emulator and the text editor control from DigitalRune.
@@ -44,6 +55,10 @@ Matt Phillips
 
 DGen - http://dgen.sourceforge.net/
 DigitalRune .NET TextEditor Control
+
+# Contact
+
+mdstudio@gouky.com
 
 # History
 
