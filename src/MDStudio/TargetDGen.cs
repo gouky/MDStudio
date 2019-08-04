@@ -149,34 +149,43 @@ namespace MDStudio
 
         public override bool AddBreakpoint(uint addr)
         {
-            DGenThread.GetDGen().AddBreakpoint((int)addr);
-            return true;
+            if (DGenThread.GetDGen() != null)
+                return DGenThread.GetDGen().AddBreakpoint((int)addr) != 0;
+            else
+                return false;
         }
 
         public override bool AddWatchpoint(uint fromAddr, uint toAddr)
         {
-            return DGenThread.GetDGen().AddWatchpoint((int)fromAddr, (int)toAddr) != 0;
+            if (DGenThread.GetDGen() != null)
+                return DGenThread.GetDGen().AddWatchpoint((int)fromAddr, (int)toAddr) != 0;
+            else
+                return false;
         }
 
         public override void RemoveBreakpoint(uint addr)
         {
-            DGenThread.GetDGen().ClearBreakpoint((int)addr);
+            if (DGenThread.GetDGen() != null)
+                DGenThread.GetDGen().ClearBreakpoint((int)addr);
         }
 
         public override void RemoveWatchpoint(uint addr)
         {
-            DGenThread.GetDGen().ClearWatchpoint((int)addr);
+            if (DGenThread.GetDGen() != null)
+                DGenThread.GetDGen().ClearWatchpoint((int)addr);
         }
 
         public override void RemoveAllBreakpoints()
         {
-            DGenThread.GetDGen().ClearBreakpoints();
+            if (DGenThread.GetDGen() != null)
+                DGenThread.GetDGen().ClearBreakpoints();
         }
 
         public override void RemoveAllWatchPoints()
         {
             //TODO
-            DGenThread.GetDGen().ClearBreakpoints();
+            if (DGenThread.GetDGen() != null)
+                DGenThread.GetDGen().ClearBreakpoints();
         }
 
         public override byte GetVDPRegisterValue(int index)
