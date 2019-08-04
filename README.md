@@ -49,12 +49,13 @@ MDStudio is released under GPL V3 license term.
 # Credits
 
 Nicolas 'Gouky' Hamel
+
 Matt Phillips
 
 3rd party library:
 
-DGen - http://dgen.sourceforge.net/
-DigitalRune .NET TextEditor Control
+- DGen - http://dgen.sourceforge.net/
+- DigitalRune .NET TextEditor Control
 
 # Contact
 
