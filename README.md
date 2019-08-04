@@ -64,4 +64,4 @@ mdstudio@gouky.com
 # History
 
 Version 0.1:
-	- Initial release
+- Initial release
