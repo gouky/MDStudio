@@ -1,0 +1,15 @@
+﻿src/Debug
+src/DGenInterface/Debug
+src/DGenInterface/Release
+src/DGenInterface/DGenInterface.vcxproj.user
+src/DGenLib/DGenLib.vcxproj.user
+src/DGenLib/Debug
+src/DGenLib/Release
+src/MDStudio/bin
+src/MDStudio/obj
+src/Release
+src/TiTAN-dev/Debug
+src/TiTAN-dev/Release
+src/TiTAN-dev/TiTAN-dev.vcxproj.user
+src/UMDK/Debug
+src/UMDK/UMDK.vcxproj.user
