@@ -46,9 +46,15 @@ void md_vdp::reset()
 md_vdp::md_vdp(md& md): belongs(md)
 {
 	vram = (mem + 0x00000);
+#if VRAM_128KB
+	cram = (mem + 0x20000);
+	vsram = (mem + 0x20080);
+	dirt = (mem + 0x20100); // VRAM/CRAM/Reg dirty buffer bitfield
+#else
 	cram = (mem + 0x10000);
 	vsram = (mem + 0x10080);
 	dirt = (mem + 0x10100); // VRAM/CRAM/Reg dirty buffer bitfield
+#endif
 	// Also in 0x34 are global dirt flags (inclduing VSRAM this time)
 	Bpp = Bpp_times8 = 0;
 	reset();
@@ -99,7 +105,12 @@ unsigned char md_vdp::dma_mem_read(int addr)
  */
 int md_vdp::poke_vram(int addr,unsigned char d)
 {
+#if VRAM_128KB
+  addr &= 0x1ffff;
+#else
   addr&=0xffff;
+#endif
+
   if (vram[addr]!=d)
   {
     // Store dirty information down to 256 byte level in bits
@@ -215,8 +226,13 @@ unsigned short md_vdp::readword()
   unsigned short result=0x0000;
   switch(rw_mode)
   {
+#if VRAM_128KB
+    case 0x00: result = (vram[(rw_addr + 0) & 0x1ffff] << 8) +
+                         vram[(rw_addr + 1) & 0x1ffff]; break;
+#else
     case 0x00: result=( vram[(rw_addr+0)&0xffff]<<8)+
                         vram[(rw_addr+1)&0xffff]; break;
+#endif
     case 0x20: result=( cram[(rw_addr+0)&0x007f]<<8)+
                         cram[(rw_addr+1)&0x007f]; break;
     case 0x10: result=(vsram[(rw_addr+0)&0x007f]<<8)+
@@ -237,7 +253,11 @@ unsigned char md_vdp::readbyte()
   unsigned char result=0x00;
   switch(rw_mode)
   {
+#if VRAM_128KB
+    case 0x00: result= vram[(rw_addr+0)&0x1ffff]; break;
+#else
     case 0x00: result= vram[(rw_addr+0)&0xffff]; break;
+#endif
     case 0x20: result= cram[(rw_addr+0)&0x007f]; break;
     case 0x10: result=vsram[(rw_addr+0)&0x007f]; break;
   }
@@ -277,11 +297,20 @@ int md_vdp::command(uint16_t cmd)
 {
   if (cmd_pending) // If this is the second word of a command
   {
-    uint16_t A14_15 = (cmd & 0x0003) << 14;
-    rw_addr = (rw_addr & 0xffff3fff) | A14_15;
+#if VRAM_128KB
+    uint32_t A14_16 = ((uint32_t)cmd & 0x0007) << 14; // 128kb VRAM mode, 17 bits in address
+#else
+    uint16_t A14_15 = (cmd & 0x0003) << 14; // 64kb VRAM mode, 16 bits in address
+#endif
 
-    // Copy rw_addr to mirror register
+#if VRAM_128KB
+	rw_addr = (rw_addr & 0x00003fff) | A14_16;
+#else
+	rw_addr = (rw_addr & 0xffff3fff) | A14_15;
+
+	// Copy rw_addr to mirror register
     rw_addr = (rw_addr & 0x0000ffff) | (rw_addr << 16);
+#endif
 
     // CD{4,3,2}
     uint16_t CD4_2 = (cmd & 0x0070);

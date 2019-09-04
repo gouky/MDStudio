@@ -173,13 +173,13 @@
 		which = get_word(tile_line + xoff);
 
 #if (FRONT == 0) && (PLANE == 1)
-		draw_tile_solid(which, scan, where);
+		draw_tile_solid(PLANE, which, scan, where);
 #elif FRONT == 1
 		if (which >> 15)
-			draw_tile(which, scan, where);
+			draw_tile(PLANE, which, scan, where);
 #else
 		if (!(which >> 15))
-			draw_tile(which, scan, where);
+			draw_tile(PLANE, which, scan, where);
 #endif
 
 #if PLANE == 0

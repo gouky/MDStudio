@@ -22,30 +22,30 @@
 int pal_dirty;
 
 // Macros, to route draw_tile and draw_tile_solid to the right handler
-#define draw_tile(which, line, where) \
+#define draw_tile(plane, which, line, where) \
 	switch(Bpp)\
 	  {\
 	  case 1:\
-	    draw_tile1((which),(line),(where)); break;\
+	    draw_tile1((plane),(which),(line),(where)); break;\
 	  case 2:\
-	    draw_tile2((which),(line),(where)); break;\
+	    draw_tile2((plane),(which),(line),(where)); break;\
 	  case 3:\
-	    draw_tile3((which),(line),(where)); break;\
+	    draw_tile3((plane),(which),(line),(where)); break;\
 	  case 4:\
-	    draw_tile4((which),(line),(where)); break;\
+	    draw_tile4((plane),(which),(line),(where)); break;\
 	  }
 
-#define draw_tile_solid(which, line, where) \
+#define draw_tile_solid(plane, which, line, where) \
 	switch(Bpp)\
 	  {\
 	  case 1:\
-	    draw_tile1_solid((which),(line),(where)); break;\
+	    draw_tile1_solid((plane),(which),(line),(where)); break;\
 	  case 2:\
-	    draw_tile2_solid((which),(line),(where)); break;\
+	    draw_tile2_solid((plane),(which),(line),(where)); break;\
 	  case 3:\
-	    draw_tile3_solid((which),(line),(where)); break;\
+	    draw_tile3_solid((plane),(which),(line),(where)); break;\
 	  case 4:\
-	    draw_tile4_solid((which),(line),(where)); break;\
+	    draw_tile4_solid((plane),(which),(line),(where)); break;\
 	  }
 
 // Silly utility function, get a big-endian word
@@ -112,28 +112,28 @@ void drawtile4_solid(int which, int line, unsigned char *where);
 }
 
 // Pass off these calls to assembler counterparts
-inline void md_vdp::draw_tile1_solid(int which, int line, unsigned char *where)
+inline void md_vdp::draw_tile1_solid(int plane, int which, int line, unsigned char *where)
   { drawtile1_solid(which, line, where); }
 
-inline void md_vdp::draw_tile1(int which, int line, unsigned char *where)
+inline void md_vdp::draw_tile1(int plane, int which, int line, unsigned char *where)
   { drawtile1(which, line, where); }
 
-inline void md_vdp::draw_tile2_solid(int which, int line, unsigned char *where)
+inline void md_vdp::draw_tile2_solid(int plane, int which, int line, unsigned char *where)
   { drawtile2_solid(which, line, where); }
 
-inline void md_vdp::draw_tile2(int which, int line, unsigned char *where)
+inline void md_vdp::draw_tile2(int plane, int which, int line, unsigned char *where)
   { drawtile2(which, line, where); }
 
-inline void md_vdp::draw_tile3_solid(int which, int line, unsigned char *where)
+inline void md_vdp::draw_tile3_solid(int plane, int which, int line, unsigned char *where)
   { drawtile3_solid(which, line, where); }
 
-inline void md_vdp::draw_tile3(int which, int line, unsigned char *where)
+inline void md_vdp::draw_tile3(int plane, int which, int line, unsigned char *where)
   { drawtile3(which, line, where); }
 
-inline void md_vdp::draw_tile4_solid(int which, int line, unsigned char *where)
+inline void md_vdp::draw_tile4_solid(int plane, int which, int line, unsigned char *where)
   { drawtile4_solid(which, line, where); }
 
-inline void md_vdp::draw_tile4(int which, int line, unsigned char *where)
+inline void md_vdp::draw_tile4(int plane, int which, int line, unsigned char *where)
   { drawtile4(which, line, where); }
 
 #else // WITH_X86_TILES
@@ -143,8 +143,35 @@ static bool has_zero_nibbles(uint32_t u32)
 	return (((u32 - 0x11111111) & ~u32 & 0x88888888)) ? true : false;
 }
 
+#if VRAM_128KB
+inline unsigned int md_vdp::get_vram_bank_tiles(int plane)
+{
+	// Reg 1 bit 7 = 128KB VRAM enable
+	if ((reg[1] & (1 << 7)) == 0)
+	{
+		// 64KB VRAM mode
+		return 0;
+	}
+
+	switch (plane)
+	{
+	case PLANE_A:
+		// Reg E bit 0 = plane A tile data in upper 64kb VRAM
+		return (reg[14] & 1) ? 0x10000 : 0;
+	case PLANE_B:
+		// Reg E bits 0 and 4 = plane B tile data in upper 64kb VRAM
+		return ((reg[14] & 1) && (reg[14] & (1 << 4))) ? 0x10000 : 0;
+	case PLANE_S:
+		// Reg 6 bit 5 = sprite tile data in upper 64kb VRAM
+		return (reg[6] & (1 << 5)) ? 0x10000 : 0;
+	default:
+		return 0;
+	}
+}
+#endif
+
 // Blit tile solidly, for 1 byte-per-pixel
-inline void md_vdp::draw_tile1_solid(int which, int line, unsigned char *where)
+inline void md_vdp::draw_tile1_solid(int plane, int which, int line, unsigned char *where)
 {
   unsigned tile, pal;
 
@@ -153,10 +180,16 @@ inline void md_vdp::draw_tile1_solid(int which, int line, unsigned char *where)
   if(which & 0x1000) // y flipped
     line ^= 7; // take from the bottom, instead of the top
 
+  unsigned int bank = 0;
+
+#if VRAM_128KB
+  bank = get_vram_bank_tiles(plane);
+#endif
+
   if(reg[12] & 2) // interlace
-    tile = *(unsigned*)(vram + ((which&0x7ff) << 6) + (line << 3));
+    tile = *(unsigned*)(vram + bank + ((which&0x7ff) << 6) + (line << 3));
   else
-    tile = *(unsigned*)(vram + ((which&0x7ff) << 5) + (line << 2));
+    tile = *(unsigned*)(vram + bank + ((which&0x7ff) << 5) + (line << 2));
 
   // Blit the tile!
   if(which & 0x800) // x flipped
@@ -182,7 +215,7 @@ inline void md_vdp::draw_tile1_solid(int which, int line, unsigned char *where)
 }
 
 // Blit tile, leaving color zero transparent, for 1 byte per pixel
-inline void md_vdp::draw_tile1(int which, int line, unsigned char *where)
+inline void md_vdp::draw_tile1(int plane, int which, int line, unsigned char *where)
 {
   unsigned tile, pal;
 
@@ -191,10 +224,17 @@ inline void md_vdp::draw_tile1(int which, int line, unsigned char *where)
   if(which & 0x1000) // y flipped
     line ^= 7; // take from the bottom, instead of the top
 
-  if(reg[12] & 2) // interlace
-    tile = *(unsigned*)(vram + ((which&0x7ff) << 6) + (line << 3));
+  unsigned int bank = 0;
+
+#if VRAM_128KB
+  bank = get_vram_bank_tiles(plane);
+#endif
+
+  if (reg[12] & 2) // interlace
+	  tile = *(unsigned*)(vram + bank + ((which & 0x7ff) << 6) + (line << 3));
   else
-    tile = *(unsigned*)(vram + ((which&0x7ff) << 5) + (line << 2));
+	  tile = *(unsigned*)(vram + bank + ((which & 0x7ff) << 5) + (line << 2));
+
   // If the tile is all 0's, why waste the time?
   if(!tile) return;
 
@@ -248,7 +288,7 @@ inline void md_vdp::draw_tile1(int which, int line, unsigned char *where)
 }
 
 // Blit tile solidly, for 2 byte-per-pixel
-inline void md_vdp::draw_tile2_solid(int which, int line, unsigned char *where)
+inline void md_vdp::draw_tile2_solid(int plane, int which, int line, unsigned char *where)
 {
   unsigned tile, temp, *pal;
   unsigned short *wwhere = (unsigned short*)where;
@@ -259,10 +299,16 @@ inline void md_vdp::draw_tile2_solid(int which, int line, unsigned char *where)
   if(which & 0x1000) // y flipped
     line ^= 7; // take from the bottom, instead of the top
 
-  if(reg[12] & 2) // interlace
-    tile = *(unsigned*)(vram + ((which&0x7ff) << 6) + (line << 3));
+  unsigned int bank = 0;
+
+#if VRAM_128KB
+  bank = get_vram_bank_tiles(plane);
+#endif
+
+  if (reg[12] & 2) // interlace
+	  tile = *(unsigned*)(vram + bank + ((which & 0x7ff) << 6) + (line << 3));
   else
-    tile = *(unsigned*)(vram + ((which&0x7ff) << 5) + (line << 2));
+	  tile = *(unsigned*)(vram + bank + ((which & 0x7ff) << 5) + (line << 2));
 
   // Blit the tile!
   if(which & 0x800) // x flipped
@@ -290,7 +336,7 @@ inline void md_vdp::draw_tile2_solid(int which, int line, unsigned char *where)
 }
 
 // Blit tile, leaving color zero transparent, for 2 byte per pixel
-inline void md_vdp::draw_tile2(int which, int line, unsigned char *where)
+inline void md_vdp::draw_tile2(int plane, int which, int line, unsigned char *where)
 {
   unsigned tile, *pal;
   unsigned short *wwhere = (unsigned short*)where;
@@ -300,10 +346,17 @@ inline void md_vdp::draw_tile2(int which, int line, unsigned char *where)
   if(which & 0x1000) // y flipped
     line ^= 7; // take from the bottom, instead of the top
 
-  if(reg[12] & 2) // interlace
-    tile = *(unsigned*)(vram + ((which&0x7ff) << 6) + (line << 3));
+  unsigned int bank = 0;
+
+#if VRAM_128KB
+  bank = get_vram_bank_tiles(plane);
+#endif
+
+  if (reg[12] & 2) // interlace
+	  tile = *(unsigned*)(vram + bank + ((which & 0x7ff) << 6) + (line << 3));
   else
-    tile = *(unsigned*)(vram + ((which&0x7ff) << 5) + (line << 2));
+	  tile = *(unsigned*)(vram + bank + ((which & 0x7ff) << 5) + (line << 2));
+
   // If the tile is all 0's, why waste the time?
   if(!tile) return;
 
@@ -356,7 +409,7 @@ inline void md_vdp::draw_tile2(int which, int line, unsigned char *where)
     }
 }
 
-inline void md_vdp::draw_tile3_solid(int which, int line, unsigned char *where)
+inline void md_vdp::draw_tile3_solid(int plane, int which, int line, unsigned char *where)
 {
   unsigned tile, temp, *pal;
   uint24_t *wwhere = (uint24_t *)where;
@@ -367,10 +420,16 @@ inline void md_vdp::draw_tile3_solid(int which, int line, unsigned char *where)
   if(which & 0x1000) // y flipped
     line ^= 7; // take from the bottom, instead of the top
 
-  if(reg[12] & 2) // interlace
-    tile = *(unsigned*)(vram + ((which&0x7ff) << 6) + (line << 3));
+  unsigned int bank = 0;
+
+#if VRAM_128KB
+  bank = get_vram_bank_tiles(plane);
+#endif
+
+  if (reg[12] & 2) // interlace
+	  tile = *(unsigned*)(vram + bank + ((which & 0x7ff) << 6) + (line << 3));
   else
-    tile = *(unsigned*)(vram + ((which&0x7ff) << 5) + (line << 2));
+	  tile = *(unsigned*)(vram + bank + ((which & 0x7ff) << 5) + (line << 2));
 
   // Blit the tile!
   if(which & 0x800) // x flipped
@@ -397,7 +456,7 @@ inline void md_vdp::draw_tile3_solid(int which, int line, unsigned char *where)
   *pal = temp;
 }
 
-inline void md_vdp::draw_tile3(int which, int line, unsigned char *where)
+inline void md_vdp::draw_tile3(int plane, int which, int line, unsigned char *where)
 {
   unsigned tile, *pal;
   uint24_t *wwhere = (uint24_t *)where;
@@ -407,10 +466,17 @@ inline void md_vdp::draw_tile3(int which, int line, unsigned char *where)
   if(which & 0x1000) // y flipped
     line ^= 7; // take from the bottom, instead of the top
 
-  if(reg[12] & 2) // interlace
-    tile = *(unsigned*)(vram + ((which&0x7ff) << 6) + (line << 3));
+  unsigned int bank = 0;
+
+#if VRAM_128KB
+  bank = get_vram_bank_tiles(plane);
+#endif
+
+  if (reg[12] & 2) // interlace
+	  tile = *(unsigned*)(vram + bank + ((which & 0x7ff) << 6) + (line << 3));
   else
-    tile = *(unsigned*)(vram + ((which&0x7ff) << 5) + (line << 2));
+	  tile = *(unsigned*)(vram + bank + ((which & 0x7ff) << 5) + (line << 2));
+
   // If it's empty, why waste the time?
   if(!tile) return;
 
@@ -496,7 +562,7 @@ inline void md_vdp::draw_tile3(int which, int line, unsigned char *where)
 }
 
 // Blit tile solidly, for 4 byte-per-pixel
-inline void md_vdp::draw_tile4_solid(int which, int line, unsigned char *where)
+inline void md_vdp::draw_tile4_solid(int plane, int which, int line, unsigned char *where)
 {
   unsigned tile, temp, *pal;
   unsigned *wwhere = (unsigned*)where;
@@ -507,10 +573,16 @@ inline void md_vdp::draw_tile4_solid(int which, int line, unsigned char *where)
   if(which & 0x1000) // y flipped
     line ^= 7; // take from the bottom, instead of the top
 
-  if(reg[12] & 2) // interlace
-    tile = *(unsigned*)(vram + ((which&0x7ff) << 6) + (line << 3));
+  unsigned int bank = 0;
+
+#if VRAM_128KB
+  bank = get_vram_bank_tiles(plane);
+#endif
+
+  if (reg[12] & 2) // interlace
+	  tile = *(unsigned*)(vram + bank + ((which & 0x7ff) << 6) + (line << 3));
   else
-    tile = *(unsigned*)(vram + ((which&0x7ff) << 5) + (line << 2));
+	  tile = *(unsigned*)(vram + bank + ((which & 0x7ff) << 5) + (line << 2));
 
   // Blit the tile!
   if(which & 0x800) // x flipped
@@ -538,7 +610,7 @@ inline void md_vdp::draw_tile4_solid(int which, int line, unsigned char *where)
 }
 
 // Blit tile, leaving color zero transparent, for 4 byte per pixel
-inline void md_vdp::draw_tile4(int which, int line, unsigned char *where)
+inline void md_vdp::draw_tile4(int plane, int which, int line, unsigned char *where)
 {
   unsigned tile, *pal;
   unsigned *wwhere = (unsigned*)where;
@@ -548,10 +620,17 @@ inline void md_vdp::draw_tile4(int which, int line, unsigned char *where)
   if(which & 0x1000) // y flipped
     line ^= 7; // take from the bottom, instead of the top
 
-  if(reg[12] & 2) // interlace
-    tile = *(unsigned*)(vram + ((which&0x7ff) << 6) + (line << 3));
+  unsigned int bank = 0;
+
+#if VRAM_128KB
+  bank = get_vram_bank_tiles(plane);
+#endif
+
+  if (reg[12] & 2) // interlace
+	  tile = *(unsigned*)(vram + bank + ((which & 0x7ff) << 6) + (line << 3));
   else
-    tile = *(unsigned*)(vram + ((which&0x7ff) << 5) + (line << 2));
+	  tile = *(unsigned*)(vram + bank + ((which & 0x7ff) << 5) + (line << 2));
+
   // If the tile is all 0's, why waste the time?
   if(!tile) return;
 
@@ -648,7 +727,7 @@ void md_vdp::draw_window(int line, int front)
 		which = get_word(((unsigned char *)vram) +
 				 (pl + (add & ((size - 1) << 1))));
 		if ((which >> 15) == front)
-			draw_tile(which, (line & 7), where);
+			draw_tile(PLANE_W, which, (line & 7), where);
 	skip:
 		add += 2;
 		where += Bpp_times8;
@@ -674,12 +753,18 @@ inline void md_vdp::get_sprite_info(struct sprite_info& info, int index)
 	// causing info.tile to point to a bad address and crashing.
 	info.inter = ((reg[12] >> 1) & 1);
 
+	unsigned int bank = 0;
+
+#if VRAM_128KB
+	bank = get_vram_bank_tiles(PLANE_S);
+#endif
+
 	// Properties
 	prop = get_word(info.sprite + 4);
 	info.prio = (prop >> 15);
 	info.xflip = (prop >> 11);
 	info.yflip = (prop >> 12);
-	info.tile = (uint32_t *)(vram + ((prop & 0x07ff) << (5 + info.inter)));
+	info.tile = (uint32_t *)(vram + bank + ((prop & 0x07ff) << (5 + info.inter)));
 
 	if (info.inter)
 		info.y = ((info.y & 0x3fe) >> 1);
@@ -972,7 +1057,7 @@ void md_vdp::draw_sprites(int line, bool front)
 		  for(tx = xend; tx >= x; tx -= 8)
 		    {
 		      if(tx > -8 && tx < 320)
-			draw_tile(which, ty, where);
+			draw_tile(PLANE_S, which, ty, where);
 		      which += ysize;
 		      where -= Bpp_times8;
 		    }
@@ -982,7 +1067,7 @@ void md_vdp::draw_sprites(int line, bool front)
 		  for(tx = x; tx <= xend; tx += 8)
 		    {
 		      if(tx > -8 && tx < 320)
-			draw_tile(which, ty, where);
+			draw_tile(PLANE_S, which, ty, where);
 		      which += ysize;
 		      where += Bpp_times8;
 		    }
@@ -1009,7 +1094,7 @@ void md_vdp::draw_sprites(int line, bool front)
 		      int xo;
 
 		      memcpy(tile.t1, where, Bpp_times8);
-		      draw_tile(which, ty, tile.t1);
+		      draw_tile(PLANE_S, which, ty, tile.t1);
 		      for (xx = tx, xo = 0; (xo != 8); ++xo, ++xx)
 			if (sprite_mask[(line + 0x80)][(xx + 0x80)] >= i)
 			  memcpy(&dest[(xx * (int)Bpp)],
@@ -1028,7 +1113,7 @@ void md_vdp::draw_sprites(int line, bool front)
 		      int xo;
 
 		      memcpy(tile.t1, where, Bpp_times8);
-		      draw_tile(which, ty, tile.t1);
+		      draw_tile(PLANE_S, which, ty, tile.t1);
 		      for (xx = tx, xo = 0; (xo != 8); ++xo, ++xx)
 			if (sprite_mask[(line + 0x80)][(xx + 0x80)] >= i)
 			  memcpy(&dest[(xx * (int)Bpp)],

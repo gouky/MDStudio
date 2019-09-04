@@ -123,14 +123,26 @@ struct sndinfo {
 
 int get_md_palette(unsigned char pal[256],unsigned char *cram);
 
+enum DrawPlane
+{
+	PLANE_A,
+	PLANE_B,
+	PLANE_S,
+	PLANE_W
+};
+
 class md;
 class md_vdp
 {
 public:
   // Next three lines are the state of the VDP
   // They have to be public so we can save and load states
-  // and draw the screen.
+  // and draw the screen.c
+#if VRAM_128KB
+  uint8_t mem[(0x20100 + 0x35)]; //0x20+0x10+0x4+1 for dirt
+#else
   uint8_t mem[(0x10100 + 0x35)]; //0x20+0x10+0x4+1 for dirt
+#endif
   uint8_t *vram, *cram, *vsram;
   uint8_t reg[0x20];
   int rw_mode,rw_addr,rw_dma;
@@ -148,14 +160,14 @@ private:
   int putword(unsigned short d);
   int putbyte(unsigned char d);
   // Used by draw_scanline to render the different display components
-  void draw_tile1(int which, int line, unsigned char *where);
-  void draw_tile1_solid(int which, int line, unsigned char *where);
-  void draw_tile2(int which, int line, unsigned char *where);
-  void draw_tile2_solid(int which, int line, unsigned char *where);
-  void draw_tile3(int which, int line, unsigned char *where);
-  void draw_tile3_solid(int which, int line, unsigned char *where);
-  void draw_tile4(int which, int line, unsigned char *where);
-  void draw_tile4_solid(int which, int line, unsigned char *where);
+  void draw_tile1(int plane, int which, int line, unsigned char *where);
+  void draw_tile1_solid(int plane, int which, int line, unsigned char *where);
+  void draw_tile2(int plane, int which, int line, unsigned char *where);
+  void draw_tile2_solid(int plane, int which, int line, unsigned char *where);
+  void draw_tile3(int plane, int which, int line, unsigned char *where);
+  void draw_tile3_solid(int plane, int which, int line, unsigned char *where);
+  void draw_tile4(int plane, int which, int line, unsigned char *where);
+  void draw_tile4_solid(int plane, int which, int line, unsigned char *where);
   void draw_window(int line, int front);
   void draw_sprites(int line, bool front);
   void draw_plane_back0(int line);
@@ -189,6 +201,11 @@ private:
   struct bmap *bmap;
   unsigned char *dest;
   md& belongs;
+
+#if VRAM_128KB
+  inline unsigned int get_vram_bank_tiles(int plane);
+#endif
+
 public:
   md_vdp(md&);
   ~md_vdp();
