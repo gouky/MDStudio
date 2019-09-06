@@ -112,7 +112,8 @@ namespace MDStudio
         {
             new Tuple<int,int>( 320, 240 ),
             new Tuple<int,int>( 640, 480 ),
-            new Tuple<int,int>( 960, 720 )
+            new Tuple<int,int>( 960, 720 ),
+            new Tuple<int,int>( 1280, 720 ),
         });
 
         public static readonly ReadOnlyCollection<Tuple<char, string>> kRegions = new ReadOnlyCollection<Tuple<char, string>>(new[]

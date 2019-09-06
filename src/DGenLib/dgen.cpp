@@ -319,8 +319,13 @@ void	EndFrame()
 	SDL_Rect	dst;
 
 	src.x = src.y = 0;
-	src.w = 320;
 	src.h = 240;
+
+#if VDP_H56_MODE
+	src.w = 448;
+#else
+	src.w = 320;
+#endif
 
 	dst.x = dst.y = 0;
 	dst.w = sdlWindowWidth;

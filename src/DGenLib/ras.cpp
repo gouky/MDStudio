@@ -703,6 +703,15 @@ void md_vdp::draw_window(int line, int front)
   pl = (reg[3] << 10) + ((y&0x3f)*size*2);
 
   // Wide(320) or narrow(256)?
+#if VDP_H56_MODE
+  if (reg[1] & 1)
+  {
+	  // 16:9 enhanced mode
+	  w = 54;
+	  start = -8;
+  }
+  else
+#endif
   if(reg[12] & 1)
     {
       w = 40;
@@ -742,7 +751,12 @@ inline void md_vdp::get_sprite_info(struct sprite_info& info, int index)
 
 	// Get the sprite's location
 	info.y = get_word(info.sprite);
+
+#if VDP_H56_MODE
+	info.x = (get_word(info.sprite + 6) & 0x3ff);
+#else
 	info.x = (get_word(info.sprite + 6) & 0x1ff);
+#endif
 
 	// Interlace?
 	// XXX
@@ -813,9 +827,26 @@ void md_vdp::sprite_masking_overflow(int line)
 	masking_effective = (sprite_overflow_line == (line - 1));
 	// Set sprites and dots limits for the current line.
 	if (reg[12] & 1) {
+
+#if VDP_H56_MODE
+		frame_limit = 142;
+		line_limit = 36;
+#else
 		frame_limit = 80;
 		line_limit = 20;
-		dots = 320;
+#endif
+
+#if VDP_H56_MODE
+		if (reg[1] & 1)
+		{
+			// 16:9 enhanced mode
+			dots = 448;
+		}
+		else
+#endif
+		{
+			dots = 320;
+		}
 	}
 	else {
 		frame_limit = 64;
@@ -975,6 +1006,16 @@ void md_vdp::sprite_mask_generate()
 {
 	int i;
 
+	int width = 320;
+
+#if VDP_H56_MODE
+	if (reg[1] & 1)
+	{
+		// 16:9 enhanced mode
+		width = 448;
+	}
+#endif
+
 	memset(sprite_mask, 0xff, sizeof(sprite_mask));
 	for (i = (sprite_count - 1); (i >= 0); --i) {
 		sprite_info info;
@@ -984,7 +1025,7 @@ void md_vdp::sprite_mask_generate()
 		if (info.prio)
 			continue;
 		// Don't bother with hidden sprites.
-		if ((info.x >= 320) || ((info.x + info.w) < 0))
+		if ((info.x >= width) || ((info.x + info.w) < 0))
 			continue;
 		if ((info.y >= 256) || ((info.y + info.h) < 0))
 			continue;
@@ -1039,7 +1080,18 @@ void md_vdp::draw_sprites(int line, bool front)
 	  xend += dots;
 	  ysize = ((info.h - 8) >> 3);
 	  // Render if this sprite's on this line
-	  if(xend > -8 && x < 320 && yoff >= 0 && yoff <= (ysize<<3)+7)
+
+	  int width = 320;
+
+#if VDP_H56_MODE
+	  if (reg[1] & 1)
+	  {
+		  // 16:9 enhanced mode
+		  width = 448;
+	  }
+#endif
+
+	  if(xend > -8 && x < width && yoff >= 0 && yoff <= (ysize<<3)+7)
 	    {
 	      ty = yoff & 7;
 	      // y flipped?
@@ -1056,7 +1108,7 @@ void md_vdp::draw_sprites(int line, bool front)
 		  where = dest + (xend * (int)Bpp);
 		  for(tx = xend; tx >= x; tx -= 8)
 		    {
-		      if(tx > -8 && tx < 320)
+		      if(tx > -8 && tx < width)
 			draw_tile(PLANE_S, which, ty, where);
 		      which += ysize;
 		      where -= Bpp_times8;
@@ -1066,7 +1118,7 @@ void md_vdp::draw_sprites(int line, bool front)
 		  where = dest + (x * (int)Bpp);
 		  for(tx = x; tx <= xend; tx += 8)
 		    {
-		      if(tx > -8 && tx < 320)
+		      if(tx > -8 && tx < width)
 			draw_tile(PLANE_S, which, ty, where);
 		      which += ysize;
 		      where += Bpp_times8;
@@ -1089,7 +1141,7 @@ void md_vdp::draw_sprites(int line, bool front)
 		if (which & 0x800) {
 		  where = dest + (xend * (int)Bpp);
 		  for (tx = xend; (tx >= x); tx -= 8) {
-		    if ((tx > -8) && (tx < 320)) {
+		    if ((tx > -8) && (tx < width)) {
 		      int xx;
 		      int xo;
 
@@ -1108,7 +1160,7 @@ void md_vdp::draw_sprites(int line, bool front)
 		else {
 		  where = dest + (x * (int)Bpp);
 		  for (tx = x; (tx <= xend); tx += 8) {
-		    if ((tx > -8) && (tx < 320)) {
+		    if ((tx > -8) && (tx < width)) {
 		      int xx;
 		      int xo;
 
@@ -1306,7 +1358,11 @@ void md_vdp::draw_scanline(struct bmap *bits, int line)
       // The display is off, paint it black
       // Do it a dword at a time
       unsigned *destl = (unsigned*)dest;
+#if VDP_H56_MODE
+	  for (i = 0; i < (112 * Bpp); ++i) destl[i] = 0;
+#else
       for(i = 0; i < (80 * Bpp); ++i) destl[i] = 0;
+#endif
     }
 
   // If we're in narrow (256) mode, cut off the messy edges

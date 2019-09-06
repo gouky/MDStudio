@@ -76,6 +76,15 @@
 #endif
 
 	// Wide or narrow?
+#if VDP_H56_MODE
+	if (reg[1] & 1)
+	{
+		// 16:9 enhanced mode
+		w = 54;
+		xstart = -8;
+	}
+	else
+#endif
 	if (reg[12] & 1) {
 		w = 40;
 		xstart = -8;
