@@ -47,7 +47,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>VRAM_128KB=1;WITH_MUSA;WITH_CZ80;WITH_DEBUGGER;WITH_PROFILER;_CRT_SECURE_NO_WARNINGS;NO_COMPLETION;_DZ80_EXCLUDE_SCRIPT;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>VDP_H56_MODE=1;VRAM_128KB=1;WITH_MUSA;WITH_CZ80;WITH_DEBUGGER;WITH_PROFILER;_CRT_SECURE_NO_WARNINGS;NO_COMPLETION;_DZ80_EXCLUDE_SCRIPT;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SDL2_PATH)\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -69,7 +69,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>VRAM_128KB=1;WITH_MUSA;WITH_CZ80;WITH_DEBUGGER;WITH_PROFILER;_CRT_SECURE_NO_WARNINGS;NO_COMPLETION;_DZ80_EXCLUDE_SCRIPT;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>VDP_H56_MODE=1;VDP_H54_MODE=1;VRAM_128KB=1;WITH_MUSA;WITH_CZ80;WITH_DEBUGGER;WITH_PROFILER;_CRT_SECURE_NO_WARNINGS;NO_COMPLETION;_DZ80_EXCLUDE_SCRIPT;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SDL2_PATH)\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -119,6 +119,7 @@
     <ClCompile Include="rc.cpp" />
     <ClCompile Include="romload.c" />
     <ClCompile Include="save.cpp" />
+    <ClCompile Include="sdl_pad.cpp" />
     <ClCompile Include="sn76496.c" />
     <ClCompile Include="star\cpudebug.c" />
     <ClCompile Include="star\star.c" />
@@ -149,6 +150,7 @@
     <ClInclude Include="rc.h" />
     <ClInclude Include="romload.h" />
     <ClInclude Include="sdl\pd-defs.h" />
+    <ClInclude Include="sdl_pad.h" />
     <ClInclude Include="sn76496.h" />
     <ClInclude Include="star\cpudebug.h" />
     <ClInclude Include="star\starcpu.h" />

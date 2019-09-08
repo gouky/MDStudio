@@ -11,6 +11,7 @@ extern "C"
 }
 
 #include "sdl/pd-defs.h"
+#include "sdl_pad.h"
 
 #ifdef WITH_MUSA
 extern "C" {
@@ -42,6 +43,8 @@ int sdlWindowHeight;
 static unsigned char*	mdpal = NULL;
 static struct sndinfo	sndi;
 static struct bmap		mdscr;
+
+sdl::Gamepad* g_sdlGamepad = NULL;
 
 /// Circular buffer and related functions.
 typedef struct
@@ -170,6 +173,9 @@ int InitDGen(int windowWidth, int windowHeight, HWND parent, int pal, char regio
 
 	sdlWindowWidth = windowWidth;
 	sdlWindowHeight = windowHeight;
+
+	// Init gamepad
+	g_sdlGamepad = sdl::Gamepad::FindAvailableController(0);
 
 	//<	Init  screen
 	mdscr.bpp	= 32;
@@ -300,6 +306,12 @@ int		Shutdown()
 	free(sndi.lr);
 	free(cbuf.data.i16);
 
+	if (g_sdlGamepad)
+	{
+		delete g_sdlGamepad;
+		g_sdlGamepad = NULL;
+	}
+
 	return 1;
 }
 
@@ -383,14 +395,35 @@ unsigned long pd_usecs(void)
  */
 void	ProcessInputs()
 {
-	SDL_Event event;
-
-	const Uint8 *keystate = SDL_GetKeyboardState(NULL);
-
-	while (SDL_PollEvent(&event))
+	if (g_sdlGamepad)
 	{
-		switch(event.type)
+		SDL_Event event;
+		while (SDL_PollEvent(&event)) {}
+
+		g_sdlGamepad->Poll();
+
+		int buttonOffMask = ~0;
+		s_DGenInstance->pad[0] = buttonOffMask;
+
+		s_DGenInstance->pad[0] &= g_sdlGamepad->CheckButton(sdl::GamepadButtons::DPAD_UP) ? ~MD_UP_MASK : buttonOffMask;
+		s_DGenInstance->pad[0] &= g_sdlGamepad->CheckButton(sdl::GamepadButtons::DPAD_DOWN) ? ~MD_DOWN_MASK : buttonOffMask;
+		s_DGenInstance->pad[0] &= g_sdlGamepad->CheckButton(sdl::GamepadButtons::DPAD_LEFT) ? ~MD_LEFT_MASK : buttonOffMask;
+		s_DGenInstance->pad[0] &= g_sdlGamepad->CheckButton(sdl::GamepadButtons::DPAD_RIGHT) ? ~MD_RIGHT_MASK : buttonOffMask;
+		s_DGenInstance->pad[0] &= g_sdlGamepad->CheckButton(sdl::GamepadButtons::BUTTON_X) ? ~MD_A_MASK : buttonOffMask;
+		s_DGenInstance->pad[0] &= g_sdlGamepad->CheckButton(sdl::GamepadButtons::BUTTON_A) ? ~MD_B_MASK : buttonOffMask;
+		s_DGenInstance->pad[0] &= g_sdlGamepad->CheckButton(sdl::GamepadButtons::BUTTON_B) ? ~MD_C_MASK : buttonOffMask;
+		s_DGenInstance->pad[0] &= g_sdlGamepad->CheckButton(sdl::GamepadButtons::START) ? ~MD_START_MASK : buttonOffMask;
+	}
+	else
+	{
+		SDL_Event event;
+
+		const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+
+		while (SDL_PollEvent(&event))
 		{
+			switch (event.type)
+			{
 			case SDL_KEYDOWN:
 			{
 				for (int i = 0; i < eInput_COUNT; i++)
@@ -413,8 +446,9 @@ void	ProcessInputs()
 					}
 				}
 			}
-			
+
 			break;
+			}
 		}
 	}
 }

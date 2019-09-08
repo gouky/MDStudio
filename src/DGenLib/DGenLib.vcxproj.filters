@@ -144,6 +144,9 @@
     <ClCompile Include="musa\m68kops.c">
       <Filter>Source Files\68k_cpus\musa</Filter>
     </ClCompile>
+    <ClCompile Include="sdl_pad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ckvp.h">
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="musa\m68kops.h">
       <Filter>Source Files\68k_cpus\musa</Filter>
+    </ClInclude>
+    <ClInclude Include="sdl_pad.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
