@@ -150,6 +150,7 @@ namespace MDStudio
             "BLE",
             "BLS",
             "BLT",
+            "BLO",
             "BMI",
             "BNE",
             "BPL",
